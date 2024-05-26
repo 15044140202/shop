@@ -1,0 +1,38 @@
+/* template/SetMenu.wxss */
+
+.sysset{
+  width: 100%;
+  height: 80rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 25rpx;
+  border-bottom: solid #bfbfbf 2rpx;
+}
+.titel{
+  display: flex;
+  flex-direction: row;
+  justify-self: center;
+  align-items: center;
+}
+.shopInfoSet{
+  width: 100%;
+  height: 80rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 25rpx;
+  border-bottom: solid #bfbfbf 2rpx;
+  position:'relative';
+  z-index: 1;
+}
+.top_titel{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #0097ff;
+  height: 100rpx;
+}

@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index"
+  },
+  "navigationBarTextStyle": "white",
+  "navigationBarTitleText": "会员级别列表",
+  "navigationBarBackgroundColor": "#0097ff"
+}

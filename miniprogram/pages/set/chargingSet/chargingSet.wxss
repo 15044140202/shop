@@ -1,0 +1,16 @@
+/* pages/set/chargingSet/chargingSet.wxss */
+page{
+  background-color: #eee;
+}
+.border{
+  background-color: #fff;
+}
+.titel{
+  height: 100rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid 1rpx #999;
+  margin-left: 30rpx;
+}

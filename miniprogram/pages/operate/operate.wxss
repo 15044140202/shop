@@ -1,0 +1,57 @@
+/* pages/operate/operate.wxss */
+.titel{
+  display: flex;
+  flex-direction: row;
+  height: 150rpx;
+  background-color: #0097ff;
+}
+.image_1{
+  flex: 9;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  height: 120rpx;
+}
+
+.table_border{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.table{
+  display: flex;
+  flex-direction: column;
+  height: 210rpx;
+  width: 210rpx;
+  border-radius:8%;
+  background: #cccccc;
+  margin: 30rpx 20rpx 0rpx 20rpx;
+}
+.table van-icon{
+  height: 35rpx;
+  width: 35rpx;
+  margin: 10rpx;
+}
+.table_titel{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.POPUP{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.popupview{
+  height: 70rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9;
+  
+}

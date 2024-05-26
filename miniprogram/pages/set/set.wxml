@@ -1,0 +1,44 @@
+<!--pages/set/set.wxml-->
+<import src="/template/SetMenu/SetMenu" />
+
+<view class="border">
+  <!-- 店铺LOGO  以及店铺名称信息设置 -->
+  <navigator class="logo" url='./shopSet/shopSet'>
+    <image src="{{shopLogo}}" mode="scaleToFill" />
+    <view class="logo_name">
+      <text style="font-size: 40rpx;">世达桌球俱乐部</text>
+      <text style="font-size: 25rpx; color: #6d6969; margin-top: 10rpx;">店铺设置</text>
+    </view>
+  </navigator>
+  <!-- 系统设置 -->
+  <template is="Menu" data="{{...MenuData.set}}" />
+  <!-- 公告管理 -->
+  <template is="Menu" data="{{...MenuData.notice}}" />
+  <!-- 区域  分割线 -->
+  <view style="height: 50rpx; width: 100%; background-color: #efefef;"></view>
+  <!-- 公告管理 -->
+  <template is="Menu" data="{{...MenuData.charging}}" />
+  <!-- 会员级别设置 -->
+  <template is="Menu" data="{{...MenuData.vipset}}" />
+  <!-- 商品管理 -->
+  <template is="Menu" data="{{...MenuData.commodity}}" />
+  <!-- 区域  分割线----------------------------------- -->
+  <view style="height: 50rpx; width: 100%; background-color: #efefef;"></view>
+  <!-- 商品管理 -->
+  <template is="Menu" data="{{...MenuData.vipmanagement}}" />
+  <!-- 短信群发 -->
+  <template is="Menu" data="{{...MenuData.masstexting}}" />
+  <!-- 区域  分割线----------------------------------- -->
+  <view style="height: 50rpx; width: 100%; background-color: #efefef;"></view>
+  <!-- 优惠券/团购券管理 -->
+  <template is="Menu" data="{{...MenuData.coupon}}" />
+  <!-- 套餐/包场管理 -->
+  <template is="Menu" data="{{...MenuData.setmeal}}" />
+  <!-- 预定管理 -->
+  <template is="Menu" data="{{...MenuData.reserve}}" />
+  <!-- 区域  分割线----------------------------------- -->
+  <view style="height: 50rpx; width: 100%; background-color: #efefef;"></view>
+  <!-- 系统只用指南 -->
+  <template is="Menu" data="{{...MenuData.handbook}}" />
+
+</view>

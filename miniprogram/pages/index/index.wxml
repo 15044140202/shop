@@ -1,0 +1,2 @@
+
+<van-button type="primary" bind:tap="databaseTest">数据库测试</van-button>

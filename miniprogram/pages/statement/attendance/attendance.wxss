@@ -1,0 +1,20 @@
+/* pages/statement/attendance/attendance.wxss */
+page{
+  background-color: #eee;
+}
+.border{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: start;
+  background-color: #fff;
+  margin: 10rpx;
+  border-radius: 3%;
+  height: auto;
+}
+.time{
+  display: flex;
+  flex-direction: column;
+  justify-self: start;
+  margin-top:  10rpx;
+}

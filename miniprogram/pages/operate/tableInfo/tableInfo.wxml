@@ -1,0 +1,33 @@
+<!--pages/operate/tableInfo/tableInfo.wxml-->
+<view class="titel" style="background-color: #efeff4;">
+  <text style="color: #999999;">桌台码绑定</text>
+</view>
+<!-- 下面是计费规则  和  灯号设置-->
+<view style="background-color: #fff;">
+  <view class="costRule">
+    <text style="font-size: 35rpx;">计费规则</text>
+    <picker header-text='选择计费规则' value="{{chargingSelect}}" range='{{charging}}' range-key="{{'name'}}" bindchange='chargingSelect'>
+      <text style="font-size: 35rpx; margin-right: 35rpx;">{{chargingSelect > -1 ? charging[chargingSelect].name : '未绑定'}}</text>
+    </picker>
+  </view>
+  <view class="costRule">
+    <view class="lightSign">
+      <text style="font-size: 35rpx;">灯号</text>
+      <van-switch active-color="#07c160" inactive-color="#999999" checked="{{ checked }}" bind:change="_lightCtrl" />
+    </view>
+    <text style="font-size: 35rpx; margin-right: 35rpx;">{{optNum}}</text>
+  </view>
+</view>
+<!-- 桌台名称 -->
+<view style="background-color: #fff; margin-top: 40rpx;">
+  <view class="costRule">
+    <text style="font-size: 35rpx;">桌台名称</text>
+    <input style="width: 180rpx; margin-right: 20rpx;" type="text" value="{{shopInfo.shop.tableSum[optNum-1].tableName}}" focus="false" bindinput="bindKeyInput" />
+  </view>
+</view>
+<!-- 按钮 -->
+<button type="primary" style="margin: 40rpx 40rpx 0rpx 40rpx ;" bind:tap="saveData">保存桌台名称</button>
+<button style="margin: 40rpx 40rpx 0rpx 40rpx ;" bind:tap="goto" >下载桌台码贴</button>
+<button style="margin: 40rpx 40rpx 0rpx 40rpx ;" bind:tap="removeTap">解除绑定</button>
+<button style="margin: 40rpx 40rpx 0rpx 40rpx ;">设备管理</button>
+<van-dialog id="van-dialog" />

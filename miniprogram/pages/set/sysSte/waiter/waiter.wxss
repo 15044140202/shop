@@ -1,0 +1,24 @@
+/* pages/set/sysSte/waiter/waiter.wxss */
+page{
+  background-color: #eee;
+}
+.list_titel{
+  height: 80rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  border-bottom: solid 1rpx #ccc;
+}
+.witer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 80rpx;
+  background-color: #fff;
+  border-bottom: solid 1rpx #ccc;
+  padding-left: 70rpx;
+  padding-right: 50rpx;
+}

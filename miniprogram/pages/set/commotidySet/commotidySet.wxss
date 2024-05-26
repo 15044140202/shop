@@ -1,0 +1,4 @@
+/* pages/set/commoditySet/commotidySet.wxss */
+.border{
+  height: 100%;
+}

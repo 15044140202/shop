@@ -1,0 +1,63 @@
+<!--pages/set/sysSte/waiter/waiter.wxml-->
+<!-- waiter(服务员)  cashier(收银员)  manager(经理)  finance(财务) -->
+<view style="height: 50rpx; border-bottom: solid 1rpx #ccc;"></view>
+<view class="list_titel">
+  <text style="margin-left: 30rpx; font-size: 35rpx; ">吧员--列表</text>
+  <view class="list_titel">
+    <button style="margin-right: 30rpx;" type="primary" size="mini" bind:tap="add" mark:mymark='cashier'>添加新员工</button>
+    <van-icon style="margin-right: 50rpx;" size='45rpx' name='setting-o' bind:tap="set" mark:mymark='cashier'></van-icon>
+  </view>
+</view>
+<view class="witer" wx:for="{{member}}" wx:key="index" wx:if="{{item.position === 'cashier'}}">
+<view>
+<text>{{item.name}} -电话 : </text>
+<text>{{item.telephone}}</text>
+</view>
+<van-icon size="45rpx" name="delete-o" bind:tap="delete" mark:index='{{index}}'></van-icon>
+</view>
+<view style="height: 50rpx; border-bottom: solid 1rpx #ccc;"></view>
+<view class="list_titel">
+  <text style="margin-left: 30rpx; font-size: 35rpx;">经理--列表</text>
+  <view class="list_titel">
+    <button style="margin-right: 30rpx;" type="primary" size="mini" bind:tap="add" mark:mymark='manager' >添加新员工</button>
+    <van-icon style="margin-right: 50rpx;" size='45rpx' name='setting-o' bind:tap="set" mark:mymark='manager'></van-icon>
+  </view>
+</view>
+<view class="witer" wx:for="{{member}}" wx:key="index" wx:if="{{item.position === 'manager'}}">
+<view>
+<text>{{item.name}} -电话 : </text>
+<text>{{item.telephone}}</text>
+</view>
+<van-icon size="45rpx" name="delete-o" bind:tap="delete" mark:index='{{index}}'></van-icon>
+</view>
+<view style="height: 50rpx; border-bottom: solid 1rpx #ccc;"></view>
+<view class="list_titel">
+  <text style="margin-left: 30rpx; font-size: 35rpx;">服务员--列表</text>
+  <view class="list_titel">
+    <button style="margin-right: 30rpx;" type="primary" size="mini" bind:tap="add" mark:mymark='waiter' >添加新员工</button>
+    <van-icon style="margin-right: 50rpx;" size='45rpx' name='setting-o' bind:tap="set" mark:mymark='waiter'></van-icon>
+  </view>
+</view>
+<view class="witer" wx:for="{{member}}" wx:key="index" wx:if="{{item.position === 'waiter'}}">
+<view>
+<text>{{item.name}} -电话 : </text>
+<text>{{item.telephone}}</text>
+</view>
+<van-icon size="45rpx" name="delete-o" bind:tap="delete" mark:index='{{index}}'></van-icon>
+</view>
+<view style="height: 50rpx; border-bottom: solid 1rpx #ccc;"></view>
+<view class="list_titel">
+  <text style="margin-left: 30rpx; font-size: 35rpx;">会计--列表</text>
+  <view class="list_titel">
+    <button style="margin-right: 30rpx;" type="primary" size="mini" bind:tap="add" mark:mymark='finance'>添加新员工</button>
+    <van-icon style="margin-right: 50rpx;" size='45rpx' name='setting-o' bind:tap="set" mark:mymark='finance' ></van-icon>
+  </view>
+</view>
+<view class="witer" wx:for="{{member}}" wx:key="index" wx:if="{{item.position === 'finance'}}">
+<view>
+<text>{{item.name}} -电话 : </text>
+<text>{{item.telephone}}</text>
+</view>
+<van-icon size="45rpx" name="delete-o" bind:tap="delete" mark:index='{{index}}'></van-icon>
+</view>
+<van-dialog id="van-dialog" />

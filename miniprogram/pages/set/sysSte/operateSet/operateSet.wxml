@@ -1,0 +1,102 @@
+<!--pages/set/sysSte/operateSet/operateSet.wxml-->
+<import src="../../../../template/SetMenu/SetMenu" />
+<template is="titel" data="{{titel}}" />
+<view class="border">
+  <view class='titel'>
+    <van-tag type="primary" size='large'>开台设置 ↓ </van-tag>
+  </view>
+  <view class="titel_1">
+    <text>自助开台时检测距离</text>
+    <switch style="margin-right: 30rpx;" checked="{{operateSet.startSet.detectDistance}}" bindchange="set" mark:name='startSet' mark:name2="detectDistance" />
+  </view>
+  <view class="titel_1">
+    <text>新顾客需要电话授权</text>
+    <switch style="margin-right: 30rpx;" checked="{{operateSet.startSet.phoneImpower}}" bindchange="set" mark:name="startSet" mark:name2="phoneImpower" />
+  </view>
+  <view class="titel_1" hidden="{{!operateSet.startSet.phoneImpower}}">
+    <view style="display: flex;flex-direction: row; justify-content: space-between; align-items: center; width: 400rpx; ">
+      <text style="margin-left: 50rpx; ">剩余数量</text>
+      <text style="margin-right: 50rpx;">{{operateSet.startSet.degree}}次</text>
+    </view>
+    <picker style="margin-right: 50rpx;" bindchange="pakerOnChange" value="{{pakerIndex}}" range="{{paker}}">
+      <button type="primary" size="mini">立即充值</button>
+    </picker>
+  </view>
+</view>
+<view class="border" style="margin-top: 30rpx;">
+  <view class='titel'>
+    <van-tag type="primary" size='large'>结账设置 ↓ </van-tag>
+  </view>
+  <view class="titel_1">
+    <text>商品费需立即支付</text>
+    <switch style="margin-right: 30rpx;" checked="{{operateSet.settleAmountsSet.commotidyAtOncePay}}" bindchange="set" mark:name='settleAmountsSet' mark:name2='commotidyAtOncePay' />
+  </view>
+  <view class="titel_1">
+    <view>
+      <text>代付</text>
+      <text style="font-size: 25rpx; color: #999;">(代付人扫桌台码可代付)</text>
+    </view>
+    <switch style="margin-right: 30rpx;" checked="{{operateSet.settleAmountsSet.payFor}}" bindchange="set" mark:name='settleAmountsSet' mark:name2='payFor' />
+  </view>
+  <view hidden="{{!operateSet.settleAmountsSet.payFor}}" class="titel_1">
+    <text>扫码支付</text>
+    <picker style="margin-right: 50rpx;" mode="selector" value="{{operateSet.settleAmountsSet.scanQrPay}}" range="{{sacnMode}}" bindchange='change'>
+      <text>{{sacnMode[operateSet.settleAmountsSet.scanQrPay]}}</text>
+    </picker>
+  </view>
+</view>
+<view class="border" style="margin-top: 30rpx;">
+  <view class='titel'>
+    <van-tag type="primary" size='large'>商品设置 ↓ </van-tag>
+  </view>
+  <view class="titel_1">
+    <text>商品不允许客户端自助下单</text>
+    <switch style="margin-right: 30rpx;" checked="{{operateSet.commotidySet.selfBuy}}" bindchange="set" mark:name='commotidySet' mark:name2="selfBuy" />
+  </view>
+</view>
+<view class="border" style="margin-top: 30rpx;">
+  <view class='titel'>
+    <van-tag type="primary" size='large'>客户端设置 ↓ </van-tag>
+  </view>
+  <view class="titel_1">
+    <text>不显示积分</text>
+    <switch style="margin-right: 30rpx;" checked="{{operateSet.clientSet.integralNoDisplay}}" bindchange="set" mark:name='clientSet' mark:name2='integralNoDisplay' />
+  </view>
+  <view class="titel_1">
+    <text>充值赠送金额分开显示</text>
+    <switch style="margin-right: 30rpx;" checked="{{operateSet.clientSet.amountSeparateDispaly}}" bindchange="set" mark:name='clientSet' mark:name2='amountSeparateDispaly' />
+  </view>
+  <view class="titel_1">
+    <text>顾客自助换台</text>
+    <switch style="margin-right: 30rpx;" checked="{{operateSet.clientSet.selfExchange}}" bindchange="set" mark:name='clientSet' mark:name2='selfExchange' />
+  </view>
+  <view class="titel_1">
+    <text>顾客自助并台</text>
+    <switch style="margin-right: 30rpx;" checked="{{operateSet.clientSet.selfMerge}}" bindchange="set" mark:name='clientSet' mark:name2='selfMerge' />
+  </view>
+  <view class="titel_1">
+    <text>顾客端显示单价</text>
+    <switch style="margin-right: 30rpx;" checked="{{operateSet.clientSet.displayPrice}}" bindchange="set" mark:name='clientSet' mark:name2="displayPrice" />
+  </view>
+</view>
+<view class="border" style="margin-top: 30rpx;">
+  <view class='titel'>
+    <van-tag type="primary" size='large'>打扫设置 ↓ </van-tag>
+  </view>
+  <view class="titel_1">
+    <view>
+      <text>启用打扫模式</text>
+      <text style="font-size: 25rpx; color: #999;">(长按空台)</text>
+    </view>
+    <switch style="margin-right: 30rpx;" checked="{{operateSet.sweepSet.sweep}}" bindchange="set" mark:name='sweepSet' mark:name2='sweep' />
+  </view>
+  <view class="titel_1">
+    <text>打扫时长</text>
+    <input style="margin-left: 320rpx; width: 120rpx; text-align: right;" type="text" value='{{operateSet.sweepSet.sweepTime}}' bindinput="set" mark:name='sweepSet.sweepTime' />
+    <text style="margin-right: 50rpx;">分钟</text>
+  </view>
+</view>
+<button style="margin:50rpx;" type="primary" bind:tap="save">提交</button>
+
+
+<view style="height: 100rpx;"></view>

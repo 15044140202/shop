@@ -1,0 +1,15 @@
+<!--pages/oder/oder.wxml-->
+<view class="border">
+  <text>员工登记</text>
+  <view class="titel">
+  <text>姓名:</text>
+  <input style="border: 1rpx solid #000;" type="nickname" bindblur='input' mark:name ='name'/>
+  </view>
+  <view  class="titel">
+  <text>电话:</text>
+  <button style="width: 350rpx; text-align: left;" size="mini" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">
+    <text>{{telephone === '' ? '点击验证' :telephone}}</text>
+  </button>
+  </view>
+</view>
+<button type="primary" style="margin: 60rpx;" bind:tap="confirm">确定</button>

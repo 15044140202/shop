@@ -1,0 +1,33 @@
+<!--pages/operate/manager/manager.wxml-->
+<view wx:for="{{table_data}}" wx:key="index">
+  <view wx:if="{{index === 0}}" class="row">
+    <view class="tableNum">
+      <text>桌台号码</text>
+    </view>
+    <view class="tableNum">
+      <text>桌台名称</text>
+    </view>
+    <view class="tableNum" style="width: 30%; ">
+      <text>开台状态</text>
+    </view>
+    <view class="tableNum" style="width: 30%;">
+      <text>年费截止日期</text>
+    </view>
+  </view>
+  <view class="row">
+    <view class="tableNum">
+      <text>{{item.tableNum}}</text>
+    </view>
+    <view class="tableNum">
+      <text>{{item.tableName}}</text>
+    </view>
+    <view class="tableNum" style="width: 30%; ">
+      <text>{{item.tableState}}</text>
+    </view>
+    <view class="tableNum" style="width: 30%;">
+      <text>{{item.useEndTime}}</text>
+    </view>
+  </view>
+</view>
+<button type="primary" style="margin :10%;" bind:tap="addNewTable">添加新桌台</button>
+<button type="primary" style="margin :10%;" bind:tap="renew"><text>一键续费\n(剩余不足一个月的桌台)</text></button>

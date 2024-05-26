@@ -1,0 +1,16 @@
+/* pages/operate/manager/manager.wxss */
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-self: start;
+}
+
+.tableNum {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+  height: 80rpx;
+  border: solid #0097ff 1rpx;
+}

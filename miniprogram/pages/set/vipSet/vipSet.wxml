@@ -1,0 +1,6 @@
+<!--pages/set/vipSet/vipSet.wxml-->
+<view style="background-color: white;">
+  <van-cell wx:for="{{vipInfo}}" wx:key="index" size='large' title="{{item.name}}" is-link value="{{item.vipSum}}人" arrow-direction='' bind:longpress="delete" bind:tap="goto" mark:index='{{index}}' />
+</view>
+<button type="primary" style="margin:  50rpx;" bind:tap="newVipLevel">新增会员级别</button>
+<van-dialog id="van-dialog" />

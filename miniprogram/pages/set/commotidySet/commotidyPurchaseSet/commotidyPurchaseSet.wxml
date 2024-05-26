@@ -1,0 +1,38 @@
+<!--pages/set/commotidySet/commotidyPurchaseSet/commotidyPurchaseSet.wxml-->
+<van-tabs active="{{ active }}">
+  <van-tab wx:for="{{commotidy}}" wx:key="index" title="{{item.name}}">
+    <view class="border1" wx:for="{{item.commotidy}}" wx:key="index_1" wx:for-item="item_1" wx:for-index="index1" bind:tap="addCommotidy" mark:class='{{index}}' mark:index="{{index1}}">
+      <view class='titel'>
+        <image style="height: 150rpx; width: 150rpx; border-radius: 10%; border: solid 1rpx #ccc ; margin: 10rpx;" src="{{item_1.picId === '' ? 'cloud://cloud-4g9re7jfd5333736.636c-cloud-4g9re7jfd5333736-1325756030/image/没有图片.png' : item_1.picId}}" />
+        <view class="titel_1">
+          <text>{{item_1.name}}</text>
+          <text>售价:{{item_1.sellCost}}</text>
+        </view>
+      </view>
+      <text style="color: #aaa; margin-right: 30rpx;">库存数量: {{item_1.sum}} {{item_1.units}}</text>
+    </view>
+  </van-tab>
+</van-tabs>
+
+<van-submit-bar price="{{sum}}" button-text="提交" bind:submit="save" tip="{{ true }}" button-type='primary'>
+  <van-icon name="cart-o" size='80rpx' bind:tap="hidden"></van-icon>
+  <view hidden="{{inventory}}" slot="tip">
+    <view class="list">
+      <view>
+        <text style="font-size: 35rpx;">入库清单:</text>
+        <text>(商品丢失可做负数入库)\n</text>
+      </view>
+      <view>
+      <van-icon name = 'arrow-down' size = '50rpx' bind:tap="hidden"></van-icon>
+      </view>
+    </view>
+    <view wx:for="{{addCommotidy}}" wx:key="index" class="list">
+      <text style="font-size: 32rpx;">{{commotidy[item.class].commotidy[item.index].name}}</text>
+      <view class="list_1">
+        <input style="width: 50rpx; font-size: 32rpx;" type="text" value="{{item.sum}}" bindinput="input" mark:index='{{index}}' />
+        <text style="font-size: 32rpx;">{{commotidy[item.class].commotidy[item.index].units}}</text>
+        <van-icon style="margin-left:30rpx;" size="40rpx" name='close' bind:tap="delete" mark:index='{{index}}' />
+      </view>
+    </view>
+  </view>
+</van-submit-bar>

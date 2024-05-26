@@ -1,0 +1,35 @@
+<!--template/SetMenu.wxml-->
+<!-- 设置界面的  模版 -->
+<template name="titel">
+  <view class="top_titel">
+    <text style="color: #fff;">{{titel}}</text>
+  </view>
+</template>
+
+<template name="Menu">
+  <view class="sysset" bind:tap="goto" mark:to="{{to}}">
+    <view class="titel">
+      <van-icon name="{{logo1}}" color="#a7c0d1" size="50rpx" style="margin-right:30rpx;" />
+      <text style="font-size: 30rpx;">{{name}}</text>
+    </view>
+    <van-icon name="arrow" size="50rpx" color="#a7c0d1" style="margin-right:35rpx;" />
+  </view>
+</template>
+<!-- 系统设置 界面的模版 -->
+<template name="sysSet">
+  <view style="background-color: white;" bind:tap="goto" mark:to="{{to}}">
+    <view class="sysset" style="height:85rpx">
+      <text style="font-size: 38rpx;">{{name}}</text>
+      <van-icon name="arrow" size="50rpx" color="#a7c0d1" style="margin-right:40rpx;" />
+    </view>
+  </view>
+</template>
+<!-- 店铺信息设置 界面的模版 -->
+<template name="shopInfoSet">
+  <view style="background-color: white;" bind:tap="goto" mark:to="{{to}}">
+    <view class="shopInfoSet" style="height:85rpx">
+      <text style="font-size: 35rpx;">{{titel}}</text>
+      <text style="font-size: 35rpx; margin-right: 80rpx;">{{info}}</text>
+    </view>
+  </view>
+</template>

@@ -1,0 +1,46 @@
+/* pages/set/shopSet/shopSet.wxss */
+.sysset{
+  width: 100%;
+  height: 80rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 25rpx;
+  border-bottom: solid #bfbfbf 2rpx;
+}
+
+page{
+  background-color: #efeff4;
+}
+.inputFont{
+  text-align: right;
+}
+.border{
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  overflow-x:hidden;
+}
+.titel{
+  display: flex;
+  flex-direction: column;
+  justify-self: start;
+  align-items: flex-start;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+.logo{
+  width: 200rpx;
+  height: 200rpx;
+  position: absolute;
+  z-index: 3;
+  background: #999;
+  top: 35rpx;
+  right: 80rpx;
+  border-radius: 10%;
+}
+.logo .image{
+  border-radius: 10%;
+}

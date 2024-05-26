@@ -1,0 +1,8 @@
+<!--pages/set/sysSte/waiter/newWaiter/newWaiter.wxml-->
+<view style=" background-color: #fff; width: 100%; height: 500rpx; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+<image src="{{imgBuff}}" mode="aspectFit"/>
+</view>
+<view style=" display: flex; flex-direction: column; justify-content: center; align-items: center;">
+<text>要加入的人打开微信扫一扫即可</text>
+<text>有效时间10分钟</text>
+</view>

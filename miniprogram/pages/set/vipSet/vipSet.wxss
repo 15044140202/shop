@@ -1,0 +1,4 @@
+/* pages/set/vipSet/vipSet.wxss */
+page{
+  background-color: #eee;
+}

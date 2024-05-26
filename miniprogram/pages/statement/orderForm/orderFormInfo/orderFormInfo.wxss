@@ -1,0 +1,34 @@
+/* pages/operate/inShopCustomer/orderFormInfo/orderFormInfo.wxss */
+page{
+  background-color: #eee;
+}
+.border{
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-self: start;
+
+}
+.titel{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 100rpx;
+  border-bottom: solid 5rpx #ccc;
+}
+.info{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 60rpx;
+}
+.log{
+  display: flex;
+  flex-direction: row;
+  justify-items: start;
+  align-items: center;
+  height: 80rpx;
+
+}

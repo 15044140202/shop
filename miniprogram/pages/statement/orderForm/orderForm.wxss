@@ -1,0 +1,17 @@
+/* pages/statement/orderForm/orderForm.wxss */
+page{
+  background-color: #eee;
+}
+.border{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  margin-top: 20rpx;
+  height: 140rpx;
+  border-radius: 10%;
+}
+.front{
+  margin-left: 30rpx;
+}

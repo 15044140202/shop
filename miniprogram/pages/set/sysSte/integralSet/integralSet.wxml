@@ -1,0 +1,43 @@
+<!--pages/set/sysSte/integralSet/integralSet.wxml-->
+<import src="../../../../template/SetMenu/SetMenu" />
+<template is="titel" data="{{titel}}" />
+<view class='outBorder' style="background-color: white;">
+<!-- 台费积分 -->
+  <view class="border">
+    <text style="font-size: 38rpx;">台费积分</text>
+    <switch style="margin-right: 50rpx;" checked="{{integral.tableCost.values}}" mark:select='tableCost' bindchange="change" />
+  </view>
+  <view class="border" hidden="{{!integral.tableCost.values}}">
+    <text style="font-size: 32rpx; margin-left: 50rpx;">消费</text>
+    <input class="input" type="text" value='{{integral.tableCost.everyCost}}' mark:every="tableCost"	bindinput='every' />
+    <text style="font-size: 32rpx; ">元获得</text>
+    <input class="input"  type="text" value='{{integral.tableCost.giveValues}}' mark:give="tableCost" bindinput='give' />
+    <text style="font-size: 32rpx;margin-right: 200rpx; ">积分</text>
+  </view>
+  <!-- 商品积分 -->
+  <view class="border">
+    <text style="font-size: 38rpx;">商品积分</text>
+    <switch style="margin-right: 50rpx;" mark:select='commotidy' checked="{{integral.commotidy.values}}" bindchange="change" />
+  </view>
+  <view class="border" hidden="{{!integral.commotidy.values}}">
+    <text style="font-size: 32rpx; margin-left: 50rpx;">消费</text>
+    <input class="input" type="text" value='{{integral.commotidy.everyCost}}' mark:every='commotidy'	bindinput='every' />
+    <text style="font-size: 32rpx; ">元获得</text>
+    <input class="input"  type="text" value='{{integral.commotidy.giveValues}}' mark:give='commotidy' bindinput='give' />
+    <text style="font-size: 32rpx;margin-right: 200rpx; ">积分</text>
+  </view>
+  <!-- 充值积分 -->
+  <view class="border">
+    <text style="font-size: 38rpx;">充值积分</text>
+    <switch style="margin-right: 50rpx;" mark:select='stored' checked="{{integral.stored.values}}" bindchange="change" />
+  </view>
+  <view class="border" hidden="{{!integral.stored.values}}">
+    <text style="font-size: 32rpx; margin-left: 50rpx;">充值</text>
+    <input class="input" type="text" value='{{integral.stored.everyCost}}' mark:every='stored' 	bindinput='every' />
+    <text style="font-size: 32rpx; ">元获得</text>
+    <input class="input"  type="text" value='{{integral.stored.giveValues}}' mark:give='stored' bindinput='give' />
+    <text style="font-size: 32rpx;margin-right: 200rpx; ">积分</text>
+  </view>
+</view>
+
+<button type="primary" style="margin: 50rpx;" bind:tap="save">提交</button>

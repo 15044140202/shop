@@ -1,0 +1,5 @@
+/* pages/set/sysSte/sysSte.wxss */
+@import '/template/SetMenu/SetMenu.wxss';
+page{
+  background-color: #efeff4;
+}

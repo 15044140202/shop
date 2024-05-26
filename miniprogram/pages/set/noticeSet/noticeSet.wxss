@@ -1,0 +1,19 @@
+/* pages/set/noticeSet/noticeSet.wxss */
+page{
+  background-color: #ddd;
+}
+.showBorder{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  margin-top: 10rpx;
+  height: 150rpx;
+}
+.titel{
+  margin-left: 30rpx;
+}
+.endTime{
+  margin-right: 30rpx;
+}

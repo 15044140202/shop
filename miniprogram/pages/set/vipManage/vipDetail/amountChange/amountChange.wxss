@@ -1,0 +1,22 @@
+/* pages/set/vipManage/vipDetail/amountChange/amountChange.wxss */
+page{
+  background-color: #eee;
+}
+.border{
+  background-color: #fff;
+  margin-top: 10rpx;
+}
+.border text{
+  font-size: 38rpx;
+}
+
+.titel{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 5%;
+  height: 80rpx;
+  width: 90%;
+  border-bottom: solid 1rpx #ccc;
+}

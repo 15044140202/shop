@@ -1,0 +1,8 @@
+<!--pages/set/sysSte/suggest/suggest.wxml-->
+<view class="titel">
+  <text style="color: #999; margin-left: 50rpx;">意见/建议</text>
+</view>
+<view class="titel_1">
+  <textarea style="width: 90%; height: 500rpx;" placeholder="请留下您的建议或者问题,如果必要工作人员会电话通知您处理结果!(每个用户只能留言一条,多次留言会覆盖!)" bindinput='suggestText' />
+</view>
+<button type="primary" style="margin-top: 50rpx; width: 80%;" bind:tap="save">提交</button>

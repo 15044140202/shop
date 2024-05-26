@@ -1,0 +1,103 @@
+/* pages/satement/statement.wxss */
+.titel{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-self: center;
+  height: 270rpx;
+  background: #0097ff;
+  color: #ccc;
+}
+.name{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 80rpx;
+  width: 100%;
+}
+.name van-icon{
+  margin-left: 15rpx;
+}
+.amount{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.amount image{
+  width: 70rpx;
+  height: 70rpx;
+}
+.sum{
+  display: flex;
+  width: 380rpx;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.search{
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  align-self: flex-end;
+  margin-right: 20rpx;
+  margin-bottom: 10rpx;
+}
+.search image{
+  height: 50rpx;
+  width: 50rpx;
+}
+.titel_2{
+  display: flex;
+  flex-direction: row;
+  margin: 10rpx 10rpx 0rpx 10rpx;
+  border-bottom:2rpx solid #cccccc;
+}
+.titel_2_1{
+  width: 8rpx;
+  background: #0097ff;
+}
+.titel_3{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background: #efefef;
+  margin: 0rpx 10rpx 10rpx 10rpx;
+  height: 70rpx;
+}
+.title_4{
+  height: 130rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  justify-items: center;
+  flex-wrap: wrap;
+}
+.cash{
+  width: 33%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.title_5{
+  height: 260rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  justify-items: center;
+  flex-wrap: wrap;
+}
+.title_6{
+  height: 910rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  justify-items: center;
+  flex-wrap: wrap;
+}

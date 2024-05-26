@@ -1,0 +1,103 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/statement/statement",
+    "pages/operate/operate",
+    "pages/set/set",
+    "pages/index/index",
+    "template/SetMenu",
+    "pages/statement/cash/cash",
+    "utils/utils",
+    "pages/statement/turnover/turnover",
+    "pages/operate/tableInfo/tableInfo",
+    "pages/set/sysSte/sysSte",
+    "pages/set/sysSte/lightSet/lightSet",
+    "pages/set/sysSte/wxAccount/wxAccount",
+    "pages/set/sysSte/waiter/waiter",
+    "pages/set/sysSte/suggest/suggest",
+    "pages/set/sysSte/printerSet/printerSet",
+    "pages/set/sysSte/operateSet/operateSet",
+    "pages/set/sysSte/integralSet/integralSet",
+    "pages/set/sysSte/doorSet/doorSet",
+    "pages/set/sysSte/deviceManage/deviceManage",
+    "pages/set/shopSet/shopSet",
+    "pages/set/noticeSet/noticeSet",
+    "pages/set/noticeSet/newNotice/newNopice",
+    "pages/set/chargingSet/chargingSet",
+    "pages/set/chargingSet/newCharging/newCharging",
+    "pages/set/chargingSet/newCharging/timeSegment/timeSegment",
+    "pages/oder/oder",
+    "pages/set/sysSte/waiter/set/set",
+    "pages/set/sysSte/waiter/newWaiter/newWaiter",
+    "pages/set/sysSte/operateSet/topUp/topUp",
+    "pages/set/vipSet/vipSet",
+    "pages/set/vipSet/vipInfoSet/vipInfoSet",
+    "pages/set/commotidySet/commotidySet",
+    "pages/set/commotidySet/commotidyClassSet/commotidyClassSet",
+    "pages/set/commotidySet/commotidyPurchaseSet/commotidyPurchaseSet",
+    "pages/set/commotidySet/commotidyNameSet/commotidyNameSet",
+    "pages/set/commotidySet/commotidyNameSet/addNewCommotidy/addNewCommotidy",
+    "pages/set/commotidySet/listSearch/listSearch",
+    "pages/set/vipManage/vipManage",
+    "pages/set/vipManage/vipDetail/vipDetail",
+    "pages/set/vipManage/vipDetail/amountChange/amountChange",
+    "pages/set/shortMassageSend/shortMassageSend",
+    "pages/operate/manager/manager",
+    "pages/operate/outSell/outSell",
+    "pages/operate/message/message",
+    "pages/operate/inShopCustomer/inShopCustomer",
+    "pages/operate/my/my",
+    "pages/statement/orderForm/orderFormInfo/orderFormInfo",
+    "pages/statement/orderForm/orderForm",
+    "pages/statement/attendance/attendance",
+    "pages/operate/tableInfo/tableQr/tableQr"
+  ],
+  "usingComponents": {
+    "van-icon": "@vant/weapp/icon/index",
+    "van-button": "@vant/weapp/button/index",
+    "van-config-provider": "@vant/weapp/config-provider/index",
+    "van-popup": "@vant/weapp/popup/index",
+    "van-picker": "@vant/weapp/picker/index",
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-switch": "@vant/weapp/switch/index",
+    "van-tab": "@vant/weapp/tab/index",
+    "van-tabs": "@vant/weapp/tabs/index",
+    "van-calendar": "@vant/weapp/calendar/index",
+    "van-tag": "@vant/weapp/tag/index",
+    "van-datetime-picker": "@vant/weapp/datetime-picker/index"
+  },
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "自助球厅-商家版",
+    "navigationBarBackgroundColor": "#0097ff",
+    "backgroundTextStyle": "dark",
+    "backgroundColor": "#ffffff"
+  },
+  "tabBar": {
+    "color": "#000000",
+    "selectedColor": "#0097ff",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/statement/statement",
+        "text": "报表",
+        "iconPath": "/icon/报表-.png",
+        "selectedIconPath": "/icon/报表.png"
+      },
+      {
+        "pagePath": "pages/operate/operate",
+        "text": "营业",
+        "iconPath": "/icon/钱钱-.png",
+        "selectedIconPath": "/icon/钱钱.png"
+      },
+      {
+        "pagePath": "pages/set/set",
+        "text": "设置",
+        "iconPath": "/icon/设置-.png",
+        "selectedIconPath": "/icon/设置.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

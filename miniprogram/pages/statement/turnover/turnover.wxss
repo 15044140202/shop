@@ -1,0 +1,31 @@
+/* pages/statement/turnover/turnover.wxss */
+.charts {
+  width: 750rpx;
+  height: 500rpx;
+}
+.titel{
+  display: flex;
+  justify-items: flex-start;
+  align-items: flex-end;
+  height: 80rpx;
+  background: #efeff4;
+  border-bottom: solid #999 2rpx;
+}
+.border{
+  display: flex;
+  flex-direction: column;
+}
+.date{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 80rpx;
+  margin-left: 35rpx;
+  border-bottom: solid #efeff4 2rpx;
+}
+.date van-icon{
+  height: 30rpx;
+  width: 30rpx;
+  margin-right: 25rpx;
+}

@@ -1,0 +1,30 @@
+/* pages/set/commotidySet/commotidyNameSet/addNewCommotidy/addNewCommotidy.wxss */  
+page{
+  background-color: #eee;
+}
+.pic{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: auto;
+  margin:20rpx;
+  border-bottom: solid #ccc 1rpx;
+}
+.pic van-image{
+  border: solid 1rpx #ccc;
+}
+.picR{
+  display: flex;
+  flex-direction: column;
+  width: 500rpx;
+}
+.titel{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 80rpx;
+  width: 90%;
+  border-bottom: #ccc solid 1rpx;
+  margin: auto;
+}

@@ -1,0 +1,44 @@
+/* pages/login/login.wxss */
+.login{
+  display: flex;
+  flex-direction: column;
+  height:700;
+}
+.title{
+  display: flex;
+  justify-content: center;
+  height: 60rpx;
+  width: 100%;
+  background: #0097ff;
+  color: #ffffff;
+}
+.input{
+  display: flex;
+  flex-direction: row;
+  border: solid #bfbfbf 2rpx;
+  width: 90%;
+  height: 60rpx;
+  margin-top: 10rpx;
+}
+.inputBorder{
+  margin-top: 20rpx;
+  margin-left: 20rpx;
+}
+.telephoneCode{
+  display: flex;
+  flex-direction: row;
+  margin-right: 80rpx;
+}
+.telephoneCode button{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: #bfbfbf;
+  margin-top: 10rpx;
+}
+.codeInput{
+  border: solid #bfbfbf 2rpx;
+  height: 60rpx;
+  margin-top: 10rpx;
+}

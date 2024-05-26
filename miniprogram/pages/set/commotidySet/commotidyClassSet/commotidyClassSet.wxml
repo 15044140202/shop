@@ -1,0 +1,19 @@
+<!--pages/set/commotidySet/commotidyClassSet/commotidyClassSet.wxml-->
+<view wx:for="{{commotidy}}" wx:key="index" class='titel' bind:longpress="delete" mark:index='{{index}}'>
+<text style="margin-left: 30rpx; font-size: 38rpx;">{{item.name}}</text>
+<text style="margin-right: 30rpx; font-size: 38rpx;">{{item.commotidy.length}}  种商品</text>
+</view>
+
+<button style="margin:60rpx" type="primary" bind:tap="tap">新增商品分类</button>
+
+<van-dialog
+  use-slot
+  title="新建分类名称输入框"
+  show="{{ show }}"
+  show-cancel-button
+  bind:close="onClose"
+  bind:confirm='dialogtap'
+>
+  <input style="height: 80rpx; text-align: center; border: solid #eee 1rpx;margin-top: 50rpx; margin-bottom: 50rpx;" type="text" value="{{newClass.name}}" placeholder='请输入分类名称:' bindinput="input" />
+</van-dialog>
+<van-dialog id="van-dialog" />

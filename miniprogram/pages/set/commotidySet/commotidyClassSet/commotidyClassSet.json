@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "van-dialog": "@vant/weapp/dialog/index"
+  },
+  "navigationBarTitleText": "添加商品分类"
+}

@@ -1,0 +1,64 @@
+<!--pages/set/shopSet/shopSet.wxml-->
+<view class="border">
+  <view class="titel">
+    <view style="height: 60rpx; width: 60%;"></view>
+    <text style="margin-left: 60rpx; font-size:30rpx; color: #999;">店铺信息设置</text>
+    <view style="height: 60rpx;  width: 60%;"></view>
+    <!-- 店铺头像 -->
+    <view style="background-color: white; width: 100%;">
+      <view class="sysset" style="height:85rpx">
+        <text style="font-size: 35rpx;">店铺头像</text>
+      </view>
+    </view>
+  </view>
+  <!-- 店铺名称 -->
+  <view style="background-color: white;">
+    <view class="sysset" style="height:85rpx">
+      <text style="font-size: 35rpx;">{{shopInfo.shopName.titel}}</text>
+      <input class="inputFont" type="text" value="{{shopInfo.shopName.info}}" style="margin-right: 45rpx;" confirm-type="done" bindconfirm="nameSet" />
+    </view>
+  </view>
+  <!-- 上班时间 -->
+  <view style="background-color: white;">
+    <view class="sysset" style="height:85rpx">
+      <text style="font-size: 35rpx;">{{shopInfo.openTime.titel}}</text>
+      <input class="inputFont" type="text" value="{{shopInfo.openTime.info}}" style="margin-right: 45rpx;" confirm-type="done" bindconfirm="openTimeSet" />
+    </view>
+  </view>
+  <!-- 上班时间 -->
+  <view style="background-color: white;">
+    <view class="sysset" style="height:85rpx">
+      <text style="font-size: 35rpx;">{{shopInfo.closeTime.titel}}</text>
+      <input class="inputFont" type="text" value="{{shopInfo.closeTime.info}}" style="margin-right: 45rpx;" confirm-type="done" bindconfirm="closeTimeSet" />
+    </view>
+  </view>
+  <!-- 电话号码 -->
+  <view style="background-color: white;">
+    <view class="sysset" style="height:85rpx">
+      <text style="font-size: 35rpx;">{{shopInfo.telephoneNum.titel}}</text>
+      <input class="inputFont" type="text" value="{{shopInfo.telephoneNum.info}}" style="margin-right: 45rpx;" confirm-type="done" bindconfirm="telephoneSet" />
+    </view>
+  </view>
+  <!-- 店铺地址 -->
+  <view style="background-color: white;">
+    <view class="sysset" style="height:85rpx">
+      <text style="font-size: 35rpx;">{{shopInfo.shopAdd.titel}}</text>
+      <input class="inputFont" type="text" value="{{shopInfo.shopAdd.info}}" style="margin-right: 45rpx;" confirm-type="done" bindconfirm="shopAddSet" />
+    </view>
+  </view>
+  <!-- 开业日期 -->
+  <view style="background-color: white;">
+    <view class="sysset" style="height:85rpx">
+      <text style="font-size: 35rpx;">{{shopInfo.foundTime.titel}}</text>
+      <input class="inputFont" type="text" value="{{shopInfo.foundTime.info}}" style="margin-right: 45rpx;" confirm-type="done" bindconfirm="foundTimeSet" />
+    </view>
+  </view>
+  <!-- 店铺简介 -->
+  <view style="padding-left: 35rpx; margin-top: 35rpx; height: 60rpx;">公司简介</view>
+  <textarea value="{{shopInfo.intro.info}}" confirm-type="done" bindconfirm="introSet" style="background-color: #efeff4; width: 90%; margin-left: 5%; border: #ddd solid 1rpx; " />
+
+  <view class="logo" bind:tap="logoSet">
+    <!-- 头像框 -->
+    <image class="image" style="height: 200rpx; width: 200rpx;" src="{{shopLogo}}" />
+  </view>
+</view>

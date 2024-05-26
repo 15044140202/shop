@@ -1,0 +1,7 @@
+<!--pages/operate/tableInfo/tableQr/tableQr.wxml-->
+
+<canvas type="2d" id="myCanvas" style=" border: 1rpx #eee solid; width: 90%; margin: 5%;">
+
+</canvas>
+<button type="default" style="margin: 50rpx;" bind:tap="downTableQr">下载桌台码</button>
+<button type="{{saveButton}}" disabled="{{saveButtonDisabled}}" style="margin: 50rpx;" bind:tap="saveQr" >保存桌台码</button>

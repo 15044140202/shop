@@ -1,0 +1,19 @@
+/* pages/oder/oder.wxss */
+page{
+  background-color: #eee;
+}
+.border{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100rpx;
+}
+.titel{
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  height: 80rpx;
+  margin-top: 30rpx;
+}

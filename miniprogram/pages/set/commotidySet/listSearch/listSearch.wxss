@@ -1,0 +1,27 @@
+/* pages/set/commotidySet/listSearch/listSearch.wxss */
+page{
+  background-color: #eee;
+}
+.titel{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 80rpx;
+  border-bottom: solid 1rpx #ccc;
+  width: 100%;
+  text-align: left;
+  padding-left: 5%;
+}
+.border{
+  display: flex;
+  flex-direction: row;
+
+}
+.info{
+  display: flex;
+  flex-direction: column;
+}
+.one{
+  width: 33%;
+}

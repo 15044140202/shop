@@ -1,0 +1,37 @@
+<!--pages/set/noticeSet/noticeSet.wxml-->
+<van-tabs active="{{ active }}" color='#06ad56' animated>
+<!-- 展示的 公告 -->
+  <van-tab title="生效中">
+    <view class="showBorder" wx:for="{{showNotice}}" wx:key="index" bind:tap="niticeSet" bind:longpress="delete_notice"  mark:notice='showNotice' mark:index='{{index}}'>
+      <view class="titel" >
+        <text style="font-size: 38rpx;">{{item.titel}}</text>
+        <view class="tag">
+          <van-tag round type="success" style="margin-left: 20rpx;">发表:{{item.author}}</van-tag>
+          <van-tag round type="primary" style="margin-left: 20rpx;">浏览:{{item.lookSum}}</van-tag>
+          <van-tag round type="warning" style="margin-left: 20rpx;">到期:{{item.endTime}}</van-tag>
+        </view>
+      </view>
+      <view class="endTime">
+        <text style="color: #999; font-size: 38rpx;">{{item.startTime}}</text>
+      </view>
+    </view>
+    <button style='width: 90%; margin-top: 50rpx;' type="primary" bind:tap="gotoNewNotice">新公告</button>
+  </van-tab>
+  <!-- 过期的 公告 -->
+  <van-tab title="已过期">
+    <view class="showBorder" wx:for="{{endNotice}}" wx:key="index" bind:longpress="delete_notice" bind:tap="niticeSet" mark:notice='endNotice' mark:index='{{index}}'>
+      <view class="titel" >
+        <text style="font-size: 38rpx;">{{item.titel}}</text>
+        <view class="tag">
+          <van-tag round type="success" style="margin-left: 20rpx;">发表:{{item.aothor}}</van-tag>
+          <van-tag round type="primary" style="margin-left: 20rpx;">浏览:{{item.lookSum}}</van-tag>
+          <van-tag round type="warning" style="margin-left: 20rpx;">到期:{{item.endTime}}</van-tag>
+        </view>
+      </view>
+      <view class="endTime">
+        <text style="color: #999; font-size: 38rpx;">{{item.startTime}}</text>
+      </view>
+    </view>
+  </van-tab>
+</van-tabs>
+

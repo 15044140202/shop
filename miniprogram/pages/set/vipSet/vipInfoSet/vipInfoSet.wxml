@@ -1,0 +1,104 @@
+<!--pages/set/vipSet/vipInfoSet/vipInfoSet.wxml-->
+<import src="../../../../template/SetMenu/SetMenu" />
+<template is="titel" data="{{titel}}" />
+<view class='border'>
+  <view class="titel">
+    <text style="font-size: 35rpx;">会员级别名称:</text>
+    <input type="text" style="text-align: right;font-size: 35rpx; margin-right: 50rpx;" value="{{vipInfo[getIndex].name}}" 	bindblur='input' mark:name1='name' mark:name2='' />
+  </view>
+</view>
+<view style="height: 30rpx;"></view>
+<!-- 台费设置********************** -->
+<view class='border'>
+  <view class="titel">
+    <van-tag type="primary" size='large'>台费设置 ↓ </van-tag>
+  </view>
+  <view class="titel">
+    <view>
+      <text style="font-size: 35rpx;">台费默认折扣</text>
+      <van-icon style="margin-left: 20rpx; " size='40rpx' name='{{tableDiscountIO === true ?"arrow-down":"arrow-up"}}' bind:tap="hiddenTap" mark:name='tableDiscountIO'></van-icon>
+    </view>
+    <view class="input">
+      <input type="text" style="width: 200rpx; text-align: right;font-size: 35rpx; margin-right: 20rpx;" value="{{vipInfo[getIndex].defaultDiscount}}" bindinput='input' mark:name1='defaultDiscount' mark:name2='' />
+      <text>折</text>
+    </view>
+  </view>
+  <view wx:for="{{vipInfo[getIndex].chargingDiscount}}" wx:key="index" class="titel" hidden="{{tableDiscountIO}}">
+    <text style="font-size: 35rpx; margin-left: 30rpx;">{{item.name}}</text>
+    <view class="input">
+      <input type="text" style="text-align: right;font-size: 35rpx; margin-right: 20rpx;" value="{{item.discount}}" bindinput='input' mark:name1='chargingDiscount' mark:name2='.[{{index}}].discount' />
+      <text>折</text>
+    </view>
+  </view>
+  <view class="titel" hidden="{{getIndex == 0}}">
+    <text style="font-size: 35rpx;">允许卡扣台费</text>
+    <switch checked="{{vipInfo[getIndex].tableCardDeduct}}" bindchange="change" mark:name='tableCardDeduct' />
+  </view>
+
+</view>
+<view style="height: 30rpx;"></view>
+<!-- 商品费设置 -->
+<view class='border'>
+  <view class="titel">
+    <van-tag type="primary" size='large'>商品费设置 ↓ </van-tag>
+  </view>
+  <view class="titel">
+    <text style="font-size: 35rpx;">商品费折扣</text>
+    <view class="input">
+      <input type="text" style="width: 200rpx; text-align: right;font-size: 35rpx; margin-right: 20rpx;" value="{{vipInfo[getIndex].commotidyCostDiscount}}" bindinput='input' mark:name1='commotidyCostDiscount' mark:name2='' />
+      <text>折</text>
+    </view>
+  </view>
+  <view class="titel"  hidden='{{getIndex == 0}}'>
+    <text style="font-size: 35rpx;">允许卡扣商品费</text>
+    <switch checked="{{vipInfo[getIndex].commotidyCardDeduct}}" bindchange="change" mark:name='commotidyCardDeduct' />
+  </view>
+</view>
+<view style="height: 30rpx;"></view>
+<!-- 存款规则设置 -->
+<view class='border' hidden='{{getIndex == 0}}'>
+  <view class="titel">
+    <van-tag type="primary" size='large'>存款规则设置 ↓ </van-tag>
+  </view>
+  <view wx:for="{{vipInfo[getIndex].saveMoney}}" wx:key="index" class="saveMoney">
+    <text>{{item.name}}</text>
+    <view class="saveInput">
+      <input type="text" value="{{item.amount}}" bindinput="input" mark:name1='saveMoney' mark:name2='[{{index}}]..amount' />
+      <text>元, 送</text>
+      <input type="text" value="{{item.give}}" bindinput="input" mark:name1='saveMoney' mark:name2='[{{index}}].give' />
+      <text>元</text>
+    </view>
+  </view>
+  <view class="titel">
+    <van-tag round type="success" size='medium' bind:tap="addNewSave">添加新的存款方式</van-tag>
+  </view>
+</view>
+<view style="height: 30rpx;"></view>
+<!-- 其他设置 -->
+<view class='border'>
+  <view class="titel">
+    <text style="font-size: 35rpx;">允许自动升级</text>
+    <switch checked="{{vipInfo[getIndex].autoLevelUp}}" bindchange="change" mark:name='autoLevelUp' />
+  </view>
+  <view class="titel" hidden='{{getIndex == 0}}'>
+    <text style="font-size: 35rpx;">升级到本级需要的积分</text>
+    <view class="input">
+      <input type="text" style="width: 200rpx; text-align: right;font-size: 35rpx; margin-right: 20rpx;" value="{{vipInfo[getIndex].needIntegral}}" bindinput='input' mark:name1='needIntegral' mark:name2='' />
+      <text>分</text>
+    </view>
+  </view>
+  <view class="titel" hidden='{{getIndex == 0}}'>
+    <text style="font-size: 35rpx;">余额为0时不享受折扣</text>
+    <switch checked="{{vipInfo[getIndex].noBlanceDiscount}}" bindchange="change" mark:name='noBlanceDiscount' />
+  </view>
+  <view class="titel" hidden='{{getIndex == 0}}'>
+    <text style="font-size: 35rpx;">不允许自助办卡</text>
+    <switch checked="{{vipInfo[getIndex].autoApply}}" bindchange="change" mark:name='autoApply' />
+  </view>
+  <view class="titel">
+    <text style="font-size: 35rpx;">允许练球</text>
+    <switch checked="{{vipInfo[getIndex].practiseBall}}" bindchange="change" mark:name='practiseBall' />
+  </view>
+</view>
+<button type="primary" style="margin:50rpx;" bind:tap="save">保存</button>
+<view style="height: 200rpx;"></view>

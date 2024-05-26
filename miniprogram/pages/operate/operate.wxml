@@ -1,0 +1,53 @@
+<!--pages/operate/operate.wxml-->
+<!-- 营业界面导航按钮栏 -->
+<view class="titel">
+  <view class="image_1" wx:for="{{menu_data}}" wx:key="index" bind:tap="goto" mark:path="{{item.path}}">
+    <van-icon name="{{item.iconName}}" size="70rpx" color="#ffffff" />
+    <text style="color: #ffffff; font-size: 26rpx;">{{item.titel_name}}</text>
+  </view>
+  <van-icon name="sort" color="{{sortColor}}" style="margin-top:50rpx; margin-right:20rpx" />
+</view>
+<!-- 桌台实时信息 界面-->
+<view class="table_border">
+  <view class="table" style="background-color:{{item.state === '自助开台' ? '#1aad19':''}};" wx:for="{{tableState}}" wx:key="index" bind:tap="tableTap" bind:longpress="tableLongPress" mark:tableMark="{{index}}">
+    <van-icon name="volume-o" color="#fff" />
+    <view class="table_titel">
+      <text style="font-size: 50rpx; color:{{item.state === '自助开台' ? '#fff':'#999'}}; margin-bottom: 20rpx;">{{item.tableCost === '' ? '空闲' : item.tableCost}}</text>
+      <text style="font-size: 30rpx; color: {{item.state === '自助开台' ? '#fff':'#999'}};">{{index + 1}}号台</text>
+    </view>
+  </view>
+  <view class="table" style="background-color: #0097ff;" bind:tap="tableManager">
+    <text style="margin-left: 10rpx; margin-top: 10rpx; color: #fff;">管理</text>
+    <view class="table_titel" style="margin: -20rpx;">
+      <image src="../../icon/桌台.png" style="height: 150rpx; width: 150rpx;" mode="scaleToFill"/>
+    </view>
+  </view>
+</view>
+<!-- 桌台信息弹出层 -->
+<van-popup round class="POPUP" position="bottom" show="{{tableCtrlShow }}" bind:close="tableCtrlClose">
+  <text class="popupview" style="background-color:{{color1}}; color:#fff" bind:tap="open">{{'开台('}}{{optNum}}{{'号台)'}}</text>
+  <text class="popupview" style="background-color: {{color1}};color:#fff" bind:tap="tapLight">{{switchName}}</text>
+  <text class="popupview" style="background-color: {{color1}};color:#fff" bind:tap="tapTableInfo">修改桌台信息</text>
+  <text class="popupview" style="background-color: rgb(43, 42, 42); height: 10rpx;"></text>
+  <text class="popupview" style="background-color: {{color1}};color:#fff" bind:tap="tableCtrlClose">取消</text>
+</van-popup>
+
+<!-- 桌台信息长按弹出层 -->
+<van-popup round class="POPUP" position="bottom" show="{{longPressShow }}" bind:close="longPressClose">
+  <text class="popupview" style="background-color:{{color1}}; color:#fff" bind:tap="timedOpen">押金定时开台</text>
+  <text class="popupview" style="background-color: {{color1}};color:#fff" bind:tap="couponOpen">团购券开台</text>
+  <text class="popupview" style="background-color: {{color1}};color:#fff" bind:tap="sweepOpenLight">打扫开灯</text>
+  <text class="popupview" style="background-color: rgb(43, 42, 42); height: 10rpx;"></text>
+  <text class="popupview" style="background-color: {{color1}};color:#fff" bind:tap="longPressClose">取消</text>
+</van-popup>
+<van-dialog
+  use-slot
+  confirmButtonText="取消"
+  title="功能选项"
+  show="{{ show }}"
+  bind:close="onClose"
+>
+<view wx:for="{{options}}" wx:key="index" bind:tap="tap" mark:item='{{item}}' >
+ <button type="primary" style="margin: 35rpx;">{{item}}</button>
+</view>
+</van-dialog>

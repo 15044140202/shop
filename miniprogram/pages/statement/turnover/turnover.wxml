@@ -1,0 +1,21 @@
+<!--pages/statement/turnover/turnover.wxml-->
+<!-- 营业额走势图 -->
+<view class="charts">
+  <canvas canvas-id="OkJFRGvSCMIemruYSgfuLQZuZqkFxSGB" id="OkJFRGvSCMIemruYSgfuLQZuZqkFxSGB" class="charts" bindtouchend="tap"/>
+</view>
+<!-- 营业额列表标题栏 -->
+<view class="titel">
+<text style="font-size: 30rpx; margin-left: 30rpx; margin-bottom: 10rpx; color: #999999;">营业额列表</text>
+</view>
+<!-- 下面是营业额列表 -->
+<view class="boeder">
+<navigator wx:for="{{TurnoverList}}" url="">
+  <view class="date">
+    <text style="font-size: 35rpx">{{item.date}}</text>
+    <view>
+      <text style="color: #999; font-size: 35rpx;" >￥{{item.turnover}}</text>
+      <van-icon name="arrow" color="#999" />
+    </view>
+  </view>
+</navigator>
+</view>

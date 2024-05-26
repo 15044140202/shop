@@ -1,0 +1,85 @@
+/* pages/set/chargingSet/newCharging/newCharging.wxss */
+page {
+  background-color: #eee;
+}
+
+.input {
+  text-align: right;
+  margin-right: 30rpx;
+  width: 400rpx;
+}
+
+.name {
+  height: 80rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid #ccc 1rpx;
+  background-color: #fff;
+}
+
+.timeSet {
+  background-color: #fff;
+  margin-top: 50rpx;
+}
+
+.titel {
+  height: 80rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid #ccc 1rpx;
+  background-color: #fff;
+  margin-left: 30rpx;
+}
+
+.period {
+  height: 80rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: solid #ccc 1rpx;
+  background-color: #fff;
+  margin-left: 30rpx;
+}
+
+.advancedSet {
+  background-color: #eee;
+}
+
+.advancedSetTitel {
+  height: 80rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid #ccc 1rpx;
+  margin-left: 30rpx;
+}
+
+.tableShowBorder {
+  background: #fff;
+  margin-top: 50rpx;
+}
+
+.tableBorder {
+  display: flex;
+  flex-direction: row;
+  justify-items: start;
+  flex-wrap: wrap;
+  margin-left:30rpx;
+  margin-top:30rpx;
+  gap: 30rpx;
+}
+
+.table {
+  height: 145rpx;
+  width: 145rpx;
+  border: solid #999 1rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

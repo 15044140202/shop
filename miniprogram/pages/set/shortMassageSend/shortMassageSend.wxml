@@ -1,0 +1,26 @@
+<!--pages/set/shortMassageSend/shortMassageSend.wxml-->
+<import src="../../../template/SetMenu/SetMenu" />
+<template is="titel" data="{{titel1}}" />
+<view class="border">
+<view class='advancedSetTitel'>
+  <text style="margin-left: 50rpx; font-size: 38rpx;">标题</text>
+  <input value="{{titel}}" style="text-align: right; margin-right: 50rpx;" type="text"  placeholder="最多20字" bindinput="input" mark:name='titel' />
+</view>
+<textarea style="background-color: #fff; width: 90%; margin-left: 5%; height: 450rpx; font-size: 35rpx;" value="{{content}}" bindinput="input" mark:name='content' placeholder="短信最多70字,微信消息无限制,微信消息和短息同时选择时,优先发微信消息,微信消息发送不成功再发短信."/>
+</view>
+<view class='advancedSetTitel'>
+  <text style="margin-left: 50rpx; font-size: 38rpx;">发送微信消息</text>
+  <switch checked="{{select.wxMassage}}" bindchange="change" mark:name='wxMassage'/>
+</view>
+<view class='advancedSetTitel'>
+  <text style="margin-left: 50rpx; font-size: 38rpx;">发送短信消息</text>
+  <switch checked="{{select.shortMassage}}" bindchange="change" mark:name='shortMassage'/>
+</view>
+<view class='advancedSetTitel'>
+  <text style="margin-left: 50rpx; font-size: 38rpx;">会员级别选择</text>
+  <picker mode="selector" value="{{pikeSelect}}" >
+    
+  </picker>
+</view>
+
+

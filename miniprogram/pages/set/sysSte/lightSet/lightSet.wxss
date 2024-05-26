@@ -1,0 +1,17 @@
+/* pages/set/sysSte/lightSet/lightSet.wxss */
+page{
+  background-color: #efeff4;
+}
+.titel{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.titel_1{
+  width: 350rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 50rpx;
+}

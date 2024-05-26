@@ -1,0 +1,14 @@
+/* pages/set/shortMassageSend/shortMassageSend.wxss */
+@import '../../../template/SetMenu/SetMenu.wxss';
+
+page{
+  background-color: #eee;
+}
+.advancedSetTitel {
+  height: 100rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid #ccc 1rpx;
+}

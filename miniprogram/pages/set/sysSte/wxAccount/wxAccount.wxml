@@ -1,0 +1,11 @@
+<!--pages/set/sysSte/wxAccount/wxAccount.wxml-->
+<view class="titel">
+<text style=" margin-left: 50rpx; color: #999; ">收款账号设置,只有老板可设置</text>
+</view>
+<view class="titel_1">
+<text style="margin-left: 50rpx; font-size: 38rpx;">商户号:</text>
+<input type="text" value='{{proceedsAccount}}' placeholder='商户号联系客服申请' bindblur='proceedsAccount'/>
+</view>
+<button class="button" type="primary" bind:tap="save">保存</button>
+<button class="button">申请支付商户</button>
+<button class="button">支付测试</button>

@@ -1,0 +1,16 @@
+<!--pages/set/sysSte/sysSte.wxml-->
+<import src="/template/SetMenu/SetMenu"/>
+<!-- 系统设置 -->
+<template is="sysSet" data="{{...menuData.operateSet}}" />
+<template is="sysSet" data="{{...menuData.waiter}}" />
+<view style="height: 35rpx;"></view>
+<template is="sysSet" data="{{...menuData.wxAccount}}"/>
+<template is="sysSet" data="{{...menuData.lightSet}}"/>
+<template is="sysSet" data="{{...menuData.printerSet}}"/>
+<template is="sysSet" data="{{...menuData.doorSet}}"/>
+<template is="sysSet" data="{{...menuData.deviceManage}}"/>
+<view style="height: 35rpx;"></view>
+<template is="sysSet" data="{{...menuData.integralSet}}"/>
+<view style="height: 35rpx;"></view>
+<template is="sysSet" data="{{...menuData.suggest}}"/>
+

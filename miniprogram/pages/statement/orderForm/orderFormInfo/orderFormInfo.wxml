@@ -1,0 +1,51 @@
+<!--pages/operate/inShopCustomer/orderFormInfo/orderFormInfo.wxml-->
+<view class="border">
+  <view class="titel">
+    <text style="font-size: 38rpx; padding-left: 30rpx;">{{orderForm[index].tableNum}} 号台</text>
+    <text style=" padding-right:30rpx ">{{orderForm[index].orderName}}</text>
+  </view>
+  <view class="info">
+    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">订单编号: </text>
+    <text style=" padding-right:30rpx ">{{orderForm[index].orderNum}}</text>
+  </view>
+  <view class="info">
+    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">开始时间: </text>
+    <text style=" padding-right:30rpx ">{{orderForm[index].startTime}}</text>
+  </view>
+  <view class="info">
+    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">结束时间: </text>
+    <text style=" padding-right:30rpx ">{{orderForm[index].endTime}}</text>
+  </view>
+  <view class="info">
+    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">结账方式: </text>
+    <text style=" padding-right:30rpx ">{{orderForm[index].payMode}}</text>
+  </view>
+  <view class="info">
+    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">开台人: </text>
+    <text style=" padding-right:30rpx ">{{orderForm[index].openPerson.openPersonName}}</text>
+  </view>
+  <view class="info">
+    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">本次积分: </text>
+    <text style=" padding-right:30rpx ">{{orderForm[index].integral}} 分</text>
+  </view>
+  <view style=" height: 30rpx; border-bottom: 1rpx #999 solid;"></view>
+  <view class="info">
+    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">桌台费: </text>
+    <text style=" padding-right:30rpx ">{{orderForm[index].tableCost}} 元</text>
+  </view>
+  <view class="info">
+    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">商品费: </text>
+    <text style=" padding-right:30rpx ">{{orderForm[index].commotidyCost}} 元</text>
+  </view>
+  <view style=" height: 30rpx; border-bottom: 1rpx #999 solid;"></view>
+  <view class="info" style="margin-bottom: 50rpx; margin-top: 30rpx;">
+    <text style="font-size: 38rpx; padding-left: 30rpx; color: #999;">消费总额: </text>
+    <text style=" padding-right:30rpx; font-size: 38rpx;">{{orderForm[index].commotidyCost + orderForm[index].tableCost}} 元</text>
+  </view>
+</view>
+<view style="margin-left: 30rpx; margin-top: 20rpx;">日志:</view>
+<view class="border" style="margin-top: 20rpx;">
+  <view wx:for="{{orderForm[index].log}}" wx:key="index" class="log">
+  <text style="margin-left: 30rpx; ">{{item}}</text>
+  </view>
+</view>

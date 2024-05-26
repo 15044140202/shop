@@ -1,0 +1,42 @@
+/* pages/set/vipSet/vipInfoSet/vipInfoSet.wxss */
+@import '../../../../template/SetMenu//SetMenu.wxss';
+page{
+  background-color: #eee;
+}
+.border{
+  background-color: #fff;
+}
+.titel{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 50rpx;
+  height: 80rpx;
+  border-bottom: solid #ccc 1rpx;
+}
+.input{
+  display: flex;
+  flex-direction: row;
+  justify-self: start;
+  margin-right: 50rpx;
+}
+.saveMoney{
+  display: flex;
+  flex-direction: row;
+  justify-self: start;
+  align-items: center;
+  height: 80rpx;
+  margin-left: 50rpx;
+  border-bottom: solid #ccc 1rpx;
+}
+.saveInput{
+  display: flex;
+  flex-direction: row;
+  justify-self: start;
+  align-items: center;
+  margin-left: 50rpx;
+}
+.saveInput input{
+  width: 120rpx;
+  text-align: center;
+}

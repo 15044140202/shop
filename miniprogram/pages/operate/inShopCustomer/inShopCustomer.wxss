@@ -1,0 +1,18 @@
+/* pages/operate/inShopCustomer/inShopCustomer.wxss */
+page {
+  background-color: #eee;
+}
+.titel{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  height: 160rpx;
+  padding-left: 30rpx;
+  border-radius: 5%;
+  margin-top: 30rpx;
+}
+.openPerson{
+  margin-left: 20rpx;
+}

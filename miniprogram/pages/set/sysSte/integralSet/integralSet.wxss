@@ -1,0 +1,18 @@
+/* pages/set/sysSte/integralSet/integralSet.wxss */
+@import '../../../../template/SetMenu//SetMenu.wxss';
+page{
+  background-color: #eee;
+}
+.border{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 30rpx;
+  height: 80rpx;
+  border-bottom: solid 1rpx #ccc;
+}
+.input{
+  width: 80rpx;
+  text-align: center;
+}

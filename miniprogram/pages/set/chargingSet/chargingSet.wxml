@@ -1,0 +1,12 @@
+<!--pages/set/chargingSet/chargingSet.wxml-->
+<view class='border'>
+  <view class="titel" wx:for="{{charging}}" wx:key="index" bind:tap="goto" mark:mymark='{{index}}' bind:longpress="longPress" mark:index='{{index}}'>
+    <text style="font-size: 38rpx;">{{item.name}}</text>
+    <view style=" margin-right:35rpx">
+      <text style="color: #999;">{{bindTableCount[index]}}台</text>
+      <van-icon name="arrow" color='#999' />
+    </view>
+  </view>
+</view>
+<button type="primary" style="margin:30rpx " bind:tap="gotoNew">新增计费方式</button>
+<van-dialog id="van-dialog" />

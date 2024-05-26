@@ -1,0 +1,4 @@
+/* pages/set/sysSte/waiter/newWaiter/newWaiter.wxss */
+page{
+  background-color: #eee;
+}

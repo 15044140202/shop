@@ -1,0 +1,25 @@
+<!--pages/set/chargingSet/newCharging/timeSegment/timeSegment.wxml-->
+<view style="display: flex; flex-direction: column; justify-content: center; height: 140rpx; border-bottom: solid #bbb 1rpx; ">
+  <text style="color: #888; font-size: 30rpx; margin-left: 50rpx;">设置时间段的价格</text>
+</view>
+<view class="titel">
+  <view class="titel_1">
+    <text>开始时间</text>
+    <picker style="margin-right: 50rpx;" mode="time" bindchange="onStartTime" value="{{startTime}}">{{startTime}} </picker>
+  </view>
+  <view class="titel_1">
+    <text>结束时间</text>
+    <picker style="margin-right: 50rpx;" mode="time" bindchange="onEndTime" value="{{endTime}}">{{endTime}} </picker>
+  </view>
+  <view class="titel_1">
+    <text>散客价格</text>
+    <view style="display: flex; flex-direction: row; align-items: center;  margin-right: 50rpx;">
+      <input style="width: 200rpx; text-align: right; font-size: 35rpx;" type="text" bindinput='priceSet' value="{{price}}" />
+      <text>元/小时</text>
+    </view>
+  </view>
+</view>
+<button type="primary" style=" margin:50rpx;" bind:tap="confirm">确定</button>
+<picker mode="time" bindchange="onStartTime" value="{{startTime}}"></picker>
+
+<picker mode="time" bindchange="onEndTime" start="09:01" end="21:01" value="{{endTime}}"></picker>

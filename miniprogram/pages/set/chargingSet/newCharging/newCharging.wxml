@@ -1,0 +1,125 @@
+<!--pages/set/chargingSet/newCharging/newCharging.wxml-->
+<view style="margin:50rpx;">
+  <text style="color: #888;">设置计费规则</text>
+</view>
+<!-- 名称设置 -->
+<view class='name'>
+  <text style="margin-left: 30rpx;">名称</text>
+  <input class="input" type="text" placeholder="如:中式八球" bindblur='nameData' value="{{name}}" />
+</view>
+<!-- 时间段设置 -->
+<view class="timeSet">
+  <view class='titel'>
+    <text style="color:#888; font-size: 30rpx;">时间段设置</text>
+    <van-icon name='question-o' style="margin-right: 50rpx;"></van-icon>
+  </view>
+  <view class='titel' wx:for="{{timeSegment}}" wx:key="index" bind:tap="gotoTimeSegment" mark:mymark='{{index}}'>
+    <text>从 {{item.startTime}} 到 {{item.endTime}}</text>
+    <view style="margin-right: 50rpx;">
+      <text style="color: #999;">{{item.price > 0 ? item.price + '元/小时' :'未设置' }}</text>
+      <van-icon color='#999' name='arrow'></van-icon>
+    </view>
+  </view>
+  <view style="height: 60rpx; display: flex; flex-direction: column; justify-content: center; align-content: center; border-bottom:  solid #ccc 1rpx;">
+    <van-tag catch:tap="addNewTimeSegment" type='primary' style="margin-left:30rpx;">添加新时段</van-tag>
+  </view>
+</view>
+<!-- 周期设置 -->
+<view class="timeSet">
+  <view class='titel'>
+    <text style="color:#888; font-size: 30rpx;">周期设置</text>
+  </view>
+  <view class='titel' bind:tap="minuteTap">
+    <text>-按分钟计费</text>
+    <view hidden="{{minuteHidden}}">
+      <van-icon style="margin-right: 50rpx;" color='#09bb07' name='success'></van-icon>
+    </view>
+  </view>
+  <view class='titel' bind:tap="periodTap">
+    <text>-按周期计费</text>
+    <view hidden="{{periodHidden}}">
+      <van-icon style="margin-right: 50rpx;" color='#09bb07' name='success'></van-icon>
+    </view>
+  </view>
+  <view class="period" hidden="{{periodHidden}}">
+    <input style="width: 120rpx; text-align: center;" type="text" bindblur='periodTime' value="{{periodCost.periodTime}}" />
+    <text>分钟计费一次,不足</text>
+    <input style="width: 80rpx; text-align: center;" type="text" bindblur='freeTime' value="{{periodCost.freeTime}}" />
+    <text>分钟不计</text>
+  </view>
+  <view class='titel' bind:tap="costTap">
+    <text>-按金额计费</text>
+    <view hidden="{{costHidden}}">
+      <van-icon style="margin-right: 50rpx;" color='#09bb07' name='success'></van-icon>
+    </view>
+  </view>
+  <view class='period' hidden="{{costHidden}}">
+    <text style="margin-left: 40rpx;">每次增加</text>
+    <input style="width: 120rpx; text-align: center;" type="text" bindblur='everyCost' value="{{costCost.everyCost}}" />
+    <text>元,不足</text>
+    <input style="width: 80rpx; text-align: center;" type="text" bindblur='freeCost' value="{{costCost.freeCost}}" />
+    <text>元不收</text>
+  </view>
+</view>
+<!-- 起步价设置 -->
+<view class="timeSet">
+  <view class='titel'>
+    <text style="color:#888; font-size: 30rpx;">起步价设置</text>
+  </view>
+  <view class='titel'>
+    <text>使用起步价</text>
+    <switch checked="{{startCost.value}}" bindchange="startCost" style="margin-right: 30rpx;" />
+  </view>
+  <view class='period' hidden="{{!startCost.value}}">
+    <text>开台</text>
+    <input style="width: 100rpx; text-align: center;" type="text" value='{{startCost.startTime}}' bindinput='startCostSet' mark:name='startTime' />
+    <text>分钟后,最低消费</text>
+    <input style="width: 100rpx; text-align: center;" type="text" value='{{startCost.startCost}}' bindinput='startCostSet' mark:name='startCost' />
+    <text>元</text>
+  </view>
+  <view style="height: 60rpx; display: flex; flex-direction: column; justify-content: center; align-content: center; border-bottom:  solid #ccc 1rpx;">
+    <van-tag catch:tap="advancedSet" type='primary' style="margin-left:30rpx;">{{advancedSetHidden===false ? '隐藏高级设置':'显示高级设置'}}</van-tag>
+  </view>
+</view>
+<!-- 高级设置 -->
+<view class="advancedSet" hidden="{{advancedSetHidden}}" bind:tap="advancedSet">
+  <view class='advancedSetTitel'>
+    <view>
+      <text>启用开台押金</text>
+      <text style="font-size: 20rpx; color: #999;">(结账剩余自动退还)</text>
+    </view>
+    <switch checked="{{cashPledge}}" catch:tap="cashPledge" style="margin-right: 30rpx;" />
+  </view>
+  <view class='period' hidden="{{!cashPledge}}" wx:for="{{pledge}}" wx:key="index"  catchtap="input">
+    <text style="color: #999;">自定义名称 : </text>
+    <input style="width: 300rpx; text-align: left; padding-left: 30rpx;" type="text" catchtap="input" bindinput='input' mark:index="{{index}}" mark:item = "name" value="{{item.name}}" />
+    <text style="color: #999;">押金 : </text>
+    <input style="width: 80rpx; text-align: center;" type="number" catchtap="input" bindinput='input' value="{{item.pledge}}"  mark:index="{{index}}" mark:item = "pledge"/>
+    <text style="color: #999;">元</text>
+  </view>
+  <view class='period' hidden="{{!cashPledge}}"   catchtap="input">
+    <text style="color:red;">押金金额为0时,客户端不会显示此选项!</text>
+  </view>
+
+  <view class='advancedSetTitel'   catchtap="input">
+    <text>启动余额提醒</text>
+    <switch checked="{{balanceWarn}}" catch:tap="balanceWarn" style="margin-right: 30rpx;" />
+  </view>
+</view>
+<view class="tableShowBorder">
+  <view style="border-bottom:#999 solid 1rpx; margin-left: 30rpx; height: 80rpx; display: flex; flex-direction: column; justify-content: center;">
+    <text style="color: #999;">使用本计费规则的桌台</text>
+  </view>
+  <view class="tableBorder">
+    <view class="table" wx:for="{{charging[index].bindTable}}" wx:key="index" bind:tap="tableTap">
+      <text>{{item}}号台</text>
+    </view>
+  </view>
+</view>
+
+<view style="height:400rpx">
+  <button type="primary" style="margin:50rpx;" bind:tap="save">保存</button>
+  <button type="default" style="margin:50rpx;">模拟计费</button>
+</view>
+
+<van-dialog id="van-dialog" />

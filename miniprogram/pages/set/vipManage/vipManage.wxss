@@ -1,0 +1,25 @@
+/* pages/set/vipManage/vipManage.wxss */
+page{
+  background-color: #eee;
+}
+.border1{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  border: solid 1rpx #ccc;
+  width: 100%;
+  margin-top: 10rpx;
+}
+.titel{
+  display: flex;
+  flex-direction: row;
+}
+.titel_1{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 20rpx;
+  margin-bottom: 20rpx;
+}

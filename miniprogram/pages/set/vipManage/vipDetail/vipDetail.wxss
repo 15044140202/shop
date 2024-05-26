@@ -1,0 +1,31 @@
+/* pages/set/vipManage/vipDetaill/vipDetail.wxss */
+.pic{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: auto;
+  margin:20rpx;
+  border-bottom: solid #ccc 1rpx;
+}
+.picR{
+  display: flex;
+  flex-direction: column;
+  width: 500rpx;
+}
+.titel{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 80rpx;
+  width: 90%;
+  border-bottom: #ccc solid 1rpx;
+  margin-left: 5%;
+}
+.input{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100rpx;
+}

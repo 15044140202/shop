@@ -1,0 +1,59 @@
+<!--pages/set/vipManage/vipDetaill/vipDetail.wxml-->
+<view class="pic">
+  <image style="height: 180rpx; width: 180rpx; border-radius: 10%; border: solid 1rpx #ccc ; margin: 10rpx;" src="{{vipList[index].image === '' ? 'cloud://cloud-4g9re7jfd5333736.636c-cloud-4g9re7jfd5333736-1325756030/image/没有图片.png' : vipList[index].image}}" />
+  <view class="picR">
+    <view class="titel">
+      <text>名称:</text>
+      <text>{{vipList[index].name}}</text>
+    </view>
+    <view class="titel">
+      <text>积分:</text>
+      <text>{{vipList[index].integral}} 分</text>
+    </view>
+    <view class="titel">
+      <text>余额:</text>
+      <van-icon style="margin-left: 160rpx;" size='45rpx' name='edit' bind:tap="amountChange"></van-icon>
+      <text>{{vipList[index].amount}} 元</text>
+    </view>
+  </view>
+</view>
+<view class="titel">
+  <text>电话:</text>
+  <view>
+   <text style="color: #999; margin-right: 30rpx;">{{vipList[index].telephone}}</text>
+   <van-icon name="phone-o" size="38rpx" bind:tap="call" mark:index="{{index}}"></van-icon>
+  </view>
+</view>
+<view class="titel">
+  <text>总消费金额:</text>
+  <text style="color: #999;">{{vipList[index].allCost}} 元</text>
+</view>
+<view class="titel">
+  <text>生日:</text>
+  <text style="color: #999;">{{vipList[index].birthday}}</text>
+</view>
+<view class="titel">
+  <text>最后消费时间:</text>
+  <text style="color: #999;">{{vipList[index].lastTime}}</text>
+</view>
+<view class="titel">
+  <text>首次消费时间:</text>
+  <text style="color: #999;">{{vipList[index].startTime}}</text>
+</view>
+<button style="margin: 50rpx;" bind:tap="lookAmountChange">查看余额变动记录</button>
+<button style="margin: 50rpx;" bind:tap="giveCoupon">送券</button>
+<button type="primary" style="margin: 50rpx;" bind:tap="save">{{buttonText}}</button>
+
+<van-dialog use-slot title="修改余额" show="{{ show }}" show-cancel-button bind:close="onClose" bind:confirm="onConfirm">
+  <view class="input">
+    <text style=" font-size: 28rpx; color: red; ">增加直接输入金额,减少请代 - 号</text>
+  </view>
+  <view class="input">
+    <input style="text-align: right; width: 240rpx;" value="{{amount}}" type="number" bindinput="input" placeholder="请输入金额" mark:name='amount' />
+    <text style="width: 80rpx; margin-left: 30rpx;">元</text>
+  </view>
+  <view class="input">
+    <input style="text-align: right; width: 240rpx;" value="{{reason}}" type="text" bindinput="input" placeholder="请输入修改理由" mark:name='reason' />
+    <text style="width: 80rpx; margin-left: 30rpx;">理由</text>
+  </view>
+</van-dialog>

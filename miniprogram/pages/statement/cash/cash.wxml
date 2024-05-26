@@ -1,0 +1,21 @@
+<!--pages/statement/cash/cash.wxml-->
+
+<view class="pie">
+  <view class="charts">
+    <canvas canvas-id="NvEQKyCeVTorlEmrKznhGMuBrZPTQxwH" id="NvEQKyCeVTorlEmrKznhGMuBrZPTQxwH" class="charts" bindtouchend="tap"/>
+  </view>
+  <text style="font-size: 30rpx; margin-left: 20rpx; color: #999999;">会员卡列表</text>
+</view>
+<!-- 下面是 分类账单明细 -->
+<view class="border1" wx:for="{{TodayDataObj}}" wx:key="index">
+  <block wx:if="{{(sort=='cash' && item.cashCost!=='0')||(sort=='wx' && item.wxCost!=='0')||(sort=='vip' && item.vipCost!=='0')||(sort=='vipOwe' && item.vipOweCost!=='0')||(sort=='cashCoupon' && item.cashCouponCost!=='0')||(sort=='mtCoupon' && item.mtCouponCost!=='0')||(sort=='dyCoupon' && item.dyCouponCost!=='0')}}">
+      <view class="border2">
+        <text style="font-size:32rpx;margin-left: 25rpx;">{{item.tableNum}}号台 - {{item.accountsPerson}}</text>
+        <text style="color:#999999; font-size: 30rpx;margin-left: 25rpx;">{{item.endTime}}</text>
+      </view>
+      <view class="border3">
+        <text style="font-size: 35rpx;">￥{{item.cashCost + item.wxCost + item.vipCost + item.cashCouponCost + item.mtCouponCost + item.dyCouponCost}}</text>
+        <van-icon name="arrow" color="#999" />
+      </view>
+  </block>
+</view>
