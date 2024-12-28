@@ -14,7 +14,7 @@
   </van-tab>
 </van-tabs>
 
-<van-submit-bar  wx:if="{{!hidden}}" price="{{sum}}" button-text="支付" bind:submit="pay" tip="{{ true }}" button-type='primary'>
+<van-submit-bar  wx:if="{{!hidden}}" price="{{sum}}" button-text="支付" bind:submit="payCommotidyCost" tip="{{ true }}" button-type='primary'>
   <van-icon name="cart-o" size='80rpx' bind:tap="hidden"></van-icon>
   <view hidden="{{inventory}}" slot="tip">
     <view class="list">
@@ -27,11 +27,12 @@
     </view>
     <view wx:for="{{addCommotidy}}" wx:key="index" class="list">
       <text style="font-size: 32rpx;">{{commotidy[item.class].commotidy[item.index].name}}</text>
-      <view class="list_1">
-        <input style="width: 50rpx; font-size: 32rpx;" type="text" value="{{item.sum}}" bindinput="input" mark:index='{{index}}' />
-        <text style="font-size: 32rpx;">{{commotidy[item.class].commotidy[item.index].units}}</text>
+      <view class="list_1" style="height: 100%;">
+        <input style="height: 100%; width: 100rpx; text-align: center; font-size: 32rpx;" type="text" value="{{item.sum}}" bindinput="input" mark:index='{{index}}' />
+        <view style="font-size: 32rpx;">{{commotidy[item.class].commotidy[item.index].units}}</view>
         <van-icon style="margin-left:30rpx;" size="40rpx" name='close' bind:tap="delete" mark:index='{{index}}' />
       </view>
     </view>
   </view>
 </van-submit-bar>
+<van-dialog id="van-dialog" />

@@ -8,6 +8,7 @@ Page({
    */
   data: {
     vipList: [],
+    vipHeadImage: [],
 
     startSum: 1,
     endSum: 40,
@@ -17,12 +18,12 @@ Page({
     console.log(e)
   },
   async onSearch(e) {
-    app.showLoading('加载中...',true)
+    app.showLoading('加载中...', true)
     console.log(e.detail)
     const res = await this.getOneVipInfo(appData.shopInfo.shopFlag, /\D/.test(e.detail) === false ? e.detail : 'null', /\D/.test(e.detail) === false ? 'null' : e.detail)
     if (res === 'noVipInfo') { //没有此会员
       wx.hideLoading();
-      app.showToast('无此会员','error');
+      app.showToast('无此会员', 'error');
       return;
     } else {
       var vipInfo = [res];
@@ -116,9 +117,16 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
-    this.getdata()
-
+  async onLoad(options) {
+    await this.getdata()
+    //循环 下载会员头像
+    for (let index = 0; index < this.data.vipList.length; index++) {
+      const element = this.data.vipList[index];
+      this.data.vipHeadImage.push(await app.getHeadImage(element.image === '' ? 'cloud://billiards-0g53628z5ae826bc.6269-billiards-0g53628z5ae826bc-1326882458/image/没有图片.png' : element.image))
+    }
+    this.setData({
+      vipHeadImage: this.data.vipHeadImage
+    })
   },
 
   /**
@@ -170,15 +178,17 @@ Page({
         title: '数据加载中!'
       });
       await this.getdata();
+      //下载没有下载的vip头像
+      //循环 下载会员头像
+      for (let index = this.data.vipHeadImage.length; index < this.data.vipList.length; index++) {
+        const element = this.data.vipList[index];
+        this.data.vipHeadImage.push(await app.getHeadImage(element.image === '' ? 'cloud://billiards-0g53628z5ae826bc.6269-billiards-0g53628z5ae826bc-1326882458/image/没有图片.png' : element.image))
+      }
+      this.setData({
+        vipHeadImage: this.data.vipHeadImage
+      })
       console.log(this.data.list);
       wx.hideLoading();
     }
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
   }
 })

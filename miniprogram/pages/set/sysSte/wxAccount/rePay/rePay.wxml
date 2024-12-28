@@ -1,0 +1,16 @@
+<!--pages/set/sysSte/wxAccount/rePay/rePay.wxml-->
+<view class="order">
+  <text style="font-size: 38rpx;">单号:</text>
+  <input type="text" style="font-size: 28rpx; width: 350rpx;" value="{{order}}" 	placeholder="请输入订单号" bindinput="input" mark:item="order"/>
+  <van-icon name="scan" size="38px" bind:tap="scan"></van-icon>
+</view>
+<view class="order">
+  <text style="font-size: 38rpx;">订单总金额:</text>
+  <input  style="text-align: left; width: 300rpx;" type="number" value="{{orderAmount}}"	placeholder="请如实填写订单总金额" bindinput="input" mark:item="orderAmount" />
+</view>
+<view class="order">
+  <text style="font-size: 38rpx;">退款金额:</text>
+  <input style="text-align: left; width: 300rpx;" type="number" value="{{amount}}"	placeholder="不可大于订单金额" bindinput="input" mark:item="amount" />
+</view>
+<button style="margin: 80rpx;" type="primary" disabled="{{order === '' || amount === ''}}" bind:tap="rePay">退款</button>
+<van-dialog id="van-dialog" />

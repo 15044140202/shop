@@ -1,6 +1,7 @@
 {
   "miniprogramRoot": "miniprogram/",
   "cloudfunctionRoot": "cloudfunctions/",
+  "cloudcontainerRoot": ".cloudbase/",
   "setting": {
     "urlCheck": true,
     "es6": true,
@@ -41,7 +42,7 @@
     ],
     "minifyWXSS": true
   },
-  "appid": "wxde963d2c3e796c4e",
+  "appid": "wxad610929898d4371",
   "projectname": "quickstart-wx-cloud",
   "libVersion": "2.20.1",
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",

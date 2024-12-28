@@ -1,0 +1,15 @@
+/* pages/set/sysSte/deviceManage/camera/camera.wxss */
+@import '../../../../../template/SetMenu/SetMenu.wxss';
+.cameraList{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  height: 80rpx;
+  margin-left: 10%;
+}
+.scan{
+  display: flex;
+  flex-direction: row;
+}

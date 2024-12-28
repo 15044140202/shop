@@ -34,6 +34,7 @@ exports.main = async (event) => {
       return {
         openid:openid,
         userInfo:res.data[0].userInfo,
+        orderList:res.data[0].orderList
       }
     }
   }

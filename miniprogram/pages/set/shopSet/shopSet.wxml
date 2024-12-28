@@ -14,51 +14,51 @@
   <!-- 店铺名称 -->
   <view style="background-color: white;">
     <view class="sysset" style="height:85rpx">
-      <text style="font-size: 35rpx;">{{shopInfo.shopName.titel}}</text>
-      <input class="inputFont" type="text" value="{{shopInfo.shopName.info}}" style="margin-right: 45rpx;" confirm-type="done" bindconfirm="nameSet" />
+      <text style="font-size: 35rpx;">店铺名称</text>
+      <input class="inputFont" type="text" value="{{shopInfo.shop.shopName}}" style="margin-right: 45rpx;" bindinput="tap" mark:item="shopName"/>
     </view>
   </view>
   <!-- 上班时间 -->
   <view style="background-color: white;">
     <view class="sysset" style="height:85rpx">
-      <text style="font-size: 35rpx;">{{shopInfo.openTime.titel}}</text>
-      <input class="inputFont" type="text" value="{{shopInfo.openTime.info}}" style="margin-right: 45rpx;" confirm-type="done" bindconfirm="openTimeSet" />
+      <text style="font-size: 35rpx;">上班时间</text>
+      <input class="inputFont" type="text" value="{{shopInfo.shop.openTime}}" style="margin-right: 45rpx;" bindinput="tap" mark:item="openTime" />
     </view>
   </view>
-  <!-- 上班时间 -->
+  <!-- 下班时间 -->
   <view style="background-color: white;">
     <view class="sysset" style="height:85rpx">
-      <text style="font-size: 35rpx;">{{shopInfo.closeTime.titel}}</text>
-      <input class="inputFont" type="text" value="{{shopInfo.closeTime.info}}" style="margin-right: 45rpx;" confirm-type="done" bindconfirm="closeTimeSet" />
+      <text style="font-size: 35rpx;">下班时间</text>
+      <input class="inputFont" type="text" value="{{shopInfo.shop.closeTime}}" style="margin-right: 45rpx;" bindinput="tap" mark:item="closeTime"/>
     </view>
   </view>
   <!-- 电话号码 -->
   <view style="background-color: white;">
     <view class="sysset" style="height:85rpx">
-      <text style="font-size: 35rpx;">{{shopInfo.telephoneNum.titel}}</text>
-      <input class="inputFont" type="text" value="{{shopInfo.telephoneNum.info}}" style="margin-right: 45rpx;" confirm-type="done" bindconfirm="telephoneSet" />
+      <text style="font-size: 35rpx;">电话号码</text>
+      <input class="inputFont" type="text" value="{{shopInfo.telephone}}" style="margin-right: 45rpx;" bindinput="tap" mark:item="phone"/>
     </view>
   </view>
   <!-- 店铺地址 -->
   <view style="background-color: white;">
     <view class="sysset" style="height:85rpx">
-      <text style="font-size: 35rpx;">{{shopInfo.shopAdd.titel}}</text>
-      <input class="inputFont" type="text" value="{{shopInfo.shopAdd.info}}" style="margin-right: 45rpx;" confirm-type="done" bindconfirm="shopAddSet" />
+      <text style="font-size: 35rpx;">店铺地址</text>
+      <input class="inputFont" type="text" value="{{shopInfo.shop.shopAdd}}" style="margin-right: 45rpx;" bindinput="tap" mark:item="shopAdd"/>
     </view>
   </view>
   <!-- 开业日期 -->
   <view style="background-color: white;">
     <view class="sysset" style="height:85rpx">
-      <text style="font-size: 35rpx;">{{shopInfo.foundTime.titel}}</text>
-      <input class="inputFont" type="text" value="{{shopInfo.foundTime.info}}" style="margin-right: 45rpx;" confirm-type="done" bindconfirm="foundTimeSet" />
+      <text style="font-size: 35rpx;">开业时间</text>
+      <input class="inputFont" type="text" value="{{shopInfo.shop.foundTime}}" style="margin-right: 45rpx;" bindinput="tap" mark:item="foundTime"/>
     </view>
   </view>
   <!-- 店铺简介 -->
-  <view style="padding-left: 35rpx; margin-top: 35rpx; height: 60rpx;">公司简介</view>
-  <textarea value="{{shopInfo.intro.info}}" confirm-type="done" bindconfirm="introSet" style="background-color: #efeff4; width: 90%; margin-left: 5%; border: #ddd solid 1rpx; " />
-
+  <view style="padding-left: 35rpx; margin-top: 35rpx; height: 60rpx;">店铺简介</view>
+  <textarea value="{{shopInfo.shop.intro}}" bindinput="tap" mark:item="intro" style="background-color: #fff; width: 90%; margin-left: 5%; border: #ddd solid 1rpx; border-radius: 20rpx;" />
   <view class="logo" bind:tap="logoSet">
-    <!-- 头像框 -->
     <image class="image" style="height: 200rpx; width: 200rpx;" src="{{shopLogo}}" />
   </view>
 </view>
+<button type="primary" style="margin:80rpx" bind:tap="tap" mark:item="save">保存</button>
+<view style="height: 150rpx;"></view>

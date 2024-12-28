@@ -1,6 +1,6 @@
 <!--pages/set/vipManage/vipDetaill/vipDetail.wxml-->
 <view class="pic">
-  <image style="height: 180rpx; width: 180rpx; border-radius: 10%; border: solid 1rpx #ccc ; margin: 10rpx;" src="{{vipList[index].image === '' ? 'cloud://cloud-4g9re7jfd5333736.636c-cloud-4g9re7jfd5333736-1325756030/image/没有图片.png' : vipList[index].image}}" />
+  <image style="height: 180rpx; width: 180rpx; border-radius: 10%; border: solid 1rpx #ccc ; margin: 10rpx;" src="{{vipHeadImage}}" />
   <view class="picR">
     <view class="titel">
       <text>名称:</text>
@@ -26,7 +26,7 @@
 </view>
 <view class="titel">
   <text>总消费金额:</text>
-  <text style="color: #999;">{{vipList[index].allCost}} 元</text>
+  <text style="color: #999;">{{vipList[index].totalTableCost}} 元</text>
 </view>
 <view class="titel">
   <text>生日:</text>

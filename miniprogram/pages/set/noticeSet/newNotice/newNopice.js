@@ -51,6 +51,8 @@ Page({
         name: 'amendArrayDatabase_fg',
         data: {
           collection: 'notice',
+          flag:'shopFlag',
+          flagInfo:appData.shopInfo.shopFlag,
           record: 'notice',
           arrayFlag: 'flag',
           data: p
@@ -249,6 +251,6 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage() {
-
+    return appData.globalShareInfo;
   }
 })

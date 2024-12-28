@@ -1,11 +1,13 @@
 // pages/set/set.js
 const utils = require('../../utils/light')
 const app = getApp()
+const appData = app.globalData;
 Page({
   /**
    * 页面的初始数据
    */
   data: {
+    shopInfo: appData.shopInfo,
     shopLogo: '',
     MenuData: {
       set: {
@@ -46,11 +48,13 @@ Page({
       },
       coupon: {
         logo1: 'coupon-o',
-        name: "优惠券/团购券管理"
+        name: "优惠券/团购券/营销管理",
+        to:'./marketing/marketing'
       },
       setmeal: {
         logo1: 'discount-o',
-        name: "套餐/包场管理"
+        name: "包时段/套餐管理",
+        to: './setmeal/setmeal'
       },
       reserve: {
         logo1: 'todo-list-o',
@@ -60,8 +64,7 @@ Page({
         logo1: 'question-o',
         name: "系统使用指南"
       }
-    },
-    shopLogo: 'https://636c-cloud1-4ga7jm4aad5de5c5-1324387207.tcb.qcloud.la/image/logo.png?sign=c6e59dead3a4eb455fca0e138d50a990&t=1712451692'
+    }
   },
   async goto(e) {
     var itemType = 'set';
@@ -89,10 +92,10 @@ Page({
         var itemSum = 8;
         break;
     }
-    if(itemSum === -1){//不鉴别权限的项目
-    }else{
-      if (await app.power(itemType,itemSum,itemName) === false) {
-        app.showToast('没有权限','error');
+    if (itemSum === -1) { //不鉴别权限的项目
+    } else {
+      if (await app.power(itemType, itemSum, itemName) === false) {
+        app.showToast('没有权限', 'error');
         return;
       }
     }
@@ -106,13 +109,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
-    //判断shopInfo.logoId 是否为空   如果为空  使用默认LOGO 
-    if (app.globalData.shopLogo === '') {
-      const url = await utils.getLogo(app.globalData.shopInfo.logoId)
-      app.globalData.shopLogo = url
-    }
+    //获取店铺Logo
     this.setData({
-      shopLogo: app.globalData.shopLogo
+      shopLogo: await app.getHeadImage(this.data.shopInfo.logoId)
     })
   },
 
@@ -126,7 +125,17 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow() {
+  async onShow() {
+    if (appData.shopInfo.shopFlag === this.data.shopInfo.shopFlag) { //判断有没有切换店铺
+      return;
+    }
+    this.setData({
+      shopInfo:appData.shopInfo
+    })
+    //获取店铺Logo
+    this.setData({
+      shopLogo: await app.getHeadImage(this.data.shopInfo.logoId)
+    })
 
   },
 
@@ -162,6 +171,6 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage() {
-
+    return appData.globalShareInfo;
   }
 })

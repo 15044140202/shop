@@ -1,5 +1,16 @@
 <!--template/SetMenu.wxml-->
 <!-- 设置界面的  模版 -->
+<template name="titel_video">
+  <view style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin:50rpx; height: 80rpx;">
+  <text style="color: #888;">{{titelName}}</text>
+  <view style="display: flex; flex-direction: column; justify-content: center;">
+    <van-icon name="video-o" size="60rpx" bind:tap="{{video_tap}}" />
+    <view style="color: #999;">演示视频</view>
+  </view>
+</view>
+</template>
+
+
 <template name="titel">
   <view class="top_titel">
     <text style="color: #fff;">{{titel}}</text>

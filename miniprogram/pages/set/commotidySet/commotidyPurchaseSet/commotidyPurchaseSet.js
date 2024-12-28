@@ -1,6 +1,7 @@
 // pages/set/commotidySet/commotidyPurchaseSet/commotidyPurchaseSet.js
 const app = getApp();
 const appData = app.globalData;
+import Dialog from '@vant/weapp/dialog/dialog';
 const utils = require('../../../../utils/light');
 Page({
 
@@ -14,84 +15,63 @@ Page({
     inventoryHidden: false,
     sum: 0
   },
-  async save(){
+  async save() {
+    var payMode = '微信';
     this.deletZero();
-    if(this.data.addCommotidy.length != 0){
-      for (let index = 0; index < this.data.addCommotidy.length; index++) {
-        const element = this.data.addCommotidy[index];
-        this.data.commotidy[element.class].commotidy[element.index].sum = parseInt(this.data.commotidy[element.class].commotidy[element.index].sum) + parseInt(element.sum)
-      }
-      console.log(this.data.commotidy)
-      const res = await app.callFunction({
-        name:'amendDatabase_fg',
-        data:{
-          collection:'commotidy',
-          flagName:'shopFlag',
-          flag:appData.shopInfo.shopFlag,
-          objName:'commotidy',
-          data:this.data.commotidy
-        }
-      })
-      if(res === 'ok'){
-        wx.showToast({
-          title: '提交成功!',
-          icon:'success'
-        })
-        //提交入库记录
-        var commotidyList = []
-        for (let index = 0; index < this.data.addCommotidy.length; index++) {
-          const element = this.data.addCommotidy[index];
-          commotidyList.push({
-            name:this.data.commotidy[element.class].commotidy[element.index].name,
-            sum:element.sum,
-            price:this.data.commotidy[element.class].commotidy[element.index].primeCost
-          })
-        }
-        const list = {
-          status:appData.status,
-          time:utils.getNowTime(),
-          commotidy:commotidyList,
-          amount:this.data.sum/100
-        }
-        //先获取一下列表,以免空列表保存失败!
-        console.log('获取列表:' + this.getList(appData.shopInfo.shopFlag))
-        //向后追加 入库信息
-        const r = await app.callFunction({
-          name:'addArrayDatabase_fg',
-          data:{
-            collection:'commotidy',
-            shopFlag:appData.shopInfo.shopFlag,
-            objName:'list',
-            data:list
-          }
-        })
-        if(r === 'ok'){
-          console.log('修改记录保存成功!')
-        }else{
-          wx.showToast({
-            title: '提交记录保存失败!',
-            icon:'error'
-          })
-        }
-        this.setData({
-          commotidy:this.data.commotidy,
-          addCommotidy:[],
-          sum:0
-        })
-        return;
-      }else{
-        wx.showToast({
-          title: '提交失败!',
-          icon:'error'
-        })
-      }
-
-    }else{
-      return;
+    //修改库存数量 //先处理本地商品数据
+    for (let index = 0; index < this.data.addCommotidy.length; index++) {
+      const element = this.data.addCommotidy[index];
+      this.data.commotidy[element.class].commotidy[element.index].sum = parseInt(this.data.commotidy[element.class].commotidy[element.index].sum) + parseInt(element.sum)
     }
 
+    console.log(this.data.commotidy)
+    //生成入库记录
+    var commotidyList = []
+    for (let index = 0; index < this.data.addCommotidy.length; index++) {
+      const element = this.data.addCommotidy[index];
+      commotidyList.push({
+        name: this.data.commotidy[element.class].commotidy[element.index].name,
+        sum: -element.sum,
+        price: this.data.commotidy[element.class].commotidy[element.index].primeCost
+      })
+    }
+    const list = {//进货记录
+      status: appData.status,
+      time: app.getNowTime(),
+      commotidy: commotidyList,
+      amount: this.data.sum / 100
+    }
+    const order = {//进货单
+      orderName: '进货单',
+      status: appData.status,
+      time: app.getNowTime(),
+      commotidy: commotidyList,
+      amount: this.data.sum / 100,
+      payMode: payMode
+    }
+    //修改商品库存数量
+    const res = await app.callFunction({
+      name: 'commotidyPurchase',
+      data: {
+        shopFlag: appData.shopInfo.shopFlag,
+        addCommotidy: this.data.addCommotidy,
+        list: list,
+        date: app.getNowDate(),
+        orderData: order
+      }
+    })
+    if (res !== 'ok') {
+      app.showToast('入库失败!','error')
+    }
+    this.setData({
+      commotidy: this.data.commotidy,
+      addCommotidy: [],
+      sum: 0
+    })
+    app.showToast('入库成功!','success')
+    return;
   },
-  async getList(shopFlag){
+  async getList(shopFlag) {
     const res = await wx.cloud.callFunction({
       name: 'getDatabaseArray_fg',
       data: {
@@ -102,9 +82,9 @@ Page({
         endSum: 20
       }
     })
-    return res ;
+    return res;
   },
-  deletZero(){
+  deletZero() {
     var newdata = [];
     for (let index = 0; index < this.data.addCommotidy.length; index++) {
       const element = this.data.addCommotidy[index];
@@ -135,10 +115,11 @@ Page({
     console.log(e)
     for (let index = 0; index < this.data.addCommotidy.length; index++) {
       const element = this.data.addCommotidy[index];
-      if (element.class === e.mark.class && element.index === e.mark.index) {//已经添加过的商品
+      if (element.class === e.mark.class && element.index === e.mark.index) { //已经添加过的商品
         this.setData({
-          [`addCommotidy[${index}].sum`]:this.data.addCommotidy[index].sum + 1
+          [`addCommotidy[${index}].sum`]: this.data.addCommotidy[index].sum + 1
         })
+        this.getSum()
         return;
       }
     }
@@ -151,28 +132,29 @@ Page({
     this.setData({
       addCommotidy: this.data.addCommotidy
     })
+    this.getSum()
     console.log(this.data.addCommotidy)
   },
   input(e) {
-    if(e.detail.value === '' ){
-      this.data.addCommotidy[e.mark.index].sum = '0'
-    }else{
+    if (e.detail.value === '') {
+      this.data.addCommotidy[e.mark.index].sum = 0;
+    } else {
       this.setData({
-        [`addCommotidy[${e.mark.index}].sum`]: e.detail.value
+        [`addCommotidy[${e.mark.index}].sum`]: parseInt(e.detail.value)
       })
     }
     this.getSum()
     console.log(this.data.addCommotidy[e.mark.index].sum)
   },
-  getSum(){
+  getSum() {
     var sum = 0
     for (let index = 0; index < this.data.addCommotidy.length; index++) {
       const element = this.data.addCommotidy[index];
-      sum = sum +parseFloat( this.data.commotidy[element.class].commotidy[element.index].primeCost)* parseInt(element.sum)
+      sum = sum + parseFloat(this.data.commotidy[element.class].commotidy[element.index].primeCost) * parseInt(element.sum)
     }
     console.log(sum)
     this.setData({
-      sum:sum * 100
+      sum: sum * 100
     })
   },
 
@@ -243,6 +225,6 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage() {
-
+    return appData.globalShareInfo;
   }
 })

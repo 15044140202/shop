@@ -22,7 +22,7 @@
 <view style="background-color: #fff; margin-top: 40rpx;">
   <view class="costRule">
     <text style="font-size: 35rpx;">桌台名称</text>
-    <input style="width: 180rpx; margin-right: 20rpx;" type="text" value="{{shopInfo.shop.tableSum[optNum-1].tableName}}" focus="false" bindinput="bindKeyInput" />
+    <input style="height: 100%; width: 180rpx; text-align: center; margin-right: 20rpx;" type="text" value="{{shopInfo.shop.tableSum[optNum-1].tableName}}" focus="false" bindinput="bindKeyInput" />
   </view>
 </view>
 <!-- 按钮 -->

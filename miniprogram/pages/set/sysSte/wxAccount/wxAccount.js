@@ -2,12 +2,56 @@
 const app = getApp();
 const appData = app.globalData;
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
     proceedsAccount: ''
+  },
+  apply(){
+    app.showToast('请联系客服!','none')
+  },
+  async goto(e){
+    console.log(e.mark)
+    //检测权限
+    if (e.mark.item === 'rePay') {
+      if (await app.power('systemSet', '7', '退款/部分退款')) {
+        console.log('有权限');
+      } else {
+        app.showToast('没有权限', 'error');
+        return;
+      }
+    }
+    wx.navigateTo({
+      url: `./${e.mark.item}/${e.mark.item}`,
+    })
+  },
+  async payTest() {
+    const res = await app.callFunction({
+      name: 'unifiedOrder',
+      data: {
+        amount: '1',
+        description: '账号测试',
+        sub_mchid: this.data.proceedsAccount,
+        out_trade_no: new Date().getTime() + '2024n06y06r'
+      }
+    })
+    console.log(res)
+    if (res === undefined) { //错误
+      app.showToast('支付数据错误!', 'error')
+      return;
+    }
+    // 唤起微信支付组件，完成支付
+    try {
+      const payRes_ = await app.requestPayment(res)
+      console.log(payRes_)
+      if (payRes_.errMsg === "requestPayment:ok") {
+        app.showToast('支付成功!', 'success')
+      }
+    } catch (error) {
+      console.log(error)
+      app.showToast('支付失败!', 'error')
+    }
   },
   async save() {
     if (this.data.proceedsAccount === '') {
@@ -17,16 +61,16 @@ Page({
       })
     } else {
       const res = await app.callFunction({
-        name:'amendDatabase_fg',
-        data:{
-          collection:'shopAccount',
-          flagName:'shopFlag',
-          flag:appData.shopInfo.shopFlag,
-          objName:'proceedsAccount',
-          data:this.data.proceedsAccount
+        name: 'amendDatabase_fg',
+        data: {
+          collection: 'shopAccount',
+          flagName: 'shopFlag',
+          flag: appData.shopInfo.shopFlag,
+          objName: 'proceedsAccount',
+          data: this.data.proceedsAccount
         }
       })
-      res === 'ok' ? app.showToast('保存成功!','success') : app.showToast('保存失败!','error')
+      res === 'ok' ? app.showToast('保存成功!', 'success') : app.showToast('保存失败!', 'error')
     }
   },
   proceedsAccount(e) {
@@ -83,13 +127,6 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
 
   }
 })

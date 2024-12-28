@@ -1,0 +1,36 @@
+page{
+  background-color: #efeff4;
+}
+.titel{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.titel_1{
+  width: 350rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 50rpx;
+}
+.lightBorder{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+.light{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  height: 120rpx;
+}
+.switch{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}

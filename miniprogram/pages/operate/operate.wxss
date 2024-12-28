@@ -14,7 +14,14 @@
   width: 90%;
   height: 120rpx;
 }
-
+.red-dot::before {  
+  content: '';  
+  width: 25rpx;  
+  height: 25rpx;  
+  background-color: red;  
+  border-radius: 50%;  
+  transform: translate(-30rpx, 5rpx);  
+}  
 .table_border{
   display: flex;
   flex-direction: row;
@@ -54,4 +61,34 @@
   align-items: center;
   background-color: #f9f9f9;
   
+}
+.cashPledge{
+  height: 80rpx;
+  width: 100%;
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30rpx;
+}
+
+.payMode{
+  height: 120rpx;
+  width: 120rpx;
+  background-color: #1aad19;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  margin: 30rpx;
+  border-radius: 10%;
+}
+.payModeBorder{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
 }

@@ -36,3 +36,4 @@
     </view>
   </view>
 </van-submit-bar>
+<van-dialog id="van-dialog" />

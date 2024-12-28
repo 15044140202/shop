@@ -1,0 +1,60 @@
+<!--pages/set/marketing/marketing.wxml-->
+<import src="../../../template/SetMenu/SetMenu" />
+<template is="titel_video" data="{{titelName:'营销活动设置',video_tap:'video_tap'}}" />
+<view style="width: 100%; height: 50rpx; background-color: #0097ff;"></view>
+<view class="luckSudoku">
+	<!-- 项目名称 -->
+	<view class="item" bind:tap="tap" mark:item="luckSudoku">
+		<view style="height: 100%; display: flex;flex-direction: row; justify-content: center; align-items: center;">
+			<view style="width: 30rpx; height: 30rpx; border-radius: 100%; background-color: #0097ff;"></view>
+			<text style="font-size: 35rpx; margin-left: 10rpx;">幸运九宫格</text>
+		</view>
+		<van-icon name="{{itemSelect === 'luckSudoku' ? 'arrow-down' : 'arrow'}}" size="35rpx" style="margin-right:10rpx;"></van-icon>
+	</view>
+	<!-- 是否开启按钮 -->
+	<view class="item" style="width: 90%; margin-left: 5%; color: #999;" wx:if="{{itemSelect === 'luckSudoku'}}">
+		<text style="font-size: 35rpx; color: #000; ">是否开启</text>
+		<switch checked="{{luckSudoku.switch}}" bindchange="tap" mark:item="luckSudokuSwitch" />
+	</view>
+	<!-- 项目奖项设置 -->
+	<view style="width: 100%; border-bottom: 1rpx #ccc solid;" wx:if="{{itemSelect === 'luckSudoku'}}" wx:for="{{luckSudoku.prize}}" wx:key="index">
+		<view class="item" style="width: 90%; margin-left: 5%; color: #999;">
+			<view class="input">
+				<text style="color: #000;">{{'奖项' + (index+1) + '名称:'}}</text>
+				<input style="width:200rpx; height: 100%; text-align: center;" type="text" value="{{luckSudoku.prize[index].name}}" placeholder="输入奖项名称" bind:input="input" mark:item="luckSudokuPrizeName" mark:index="{{index}}" />
+			</view>
+			<view class="input">
+				<text style="color: #000;">{{'总数量:'}}</text>
+				<input style="width:100rpx; height: 100%; text-align: center;" type="number" value="{{luckSudoku.prize[index].totalSum}}" placeholder="输入奖项数量" bind:input="input" mark:item="luckSudokuPrizeTotalSum" mark:index="{{index}}" />
+			</view>
+		</view>
+		<view class="input" style=" color: #999; font-size: 28rpx; margin-left:50rpx">
+			<text style="color: red;">{{'该项出现概率:' + luckSudoku.prize[index].probability +'%'}}</text>
+		</view>
+	</view>
+	<!-- 项目起始时间 -->
+	<view class="item" style="width: 90%; margin-left: 5%; color: #999;" wx:if="{{itemSelect === 'luckSudoku'}}">
+		<text style="font-size: 35rpx; color: #000; ">起始时间 : </text>
+		<picker mode="date" bindchange="change" mark:item="luckSudokuStartDate">
+			<text>{{luckSudoku.startDate}}</text>
+		</picker>
+	</view>
+	<!-- 项目结束时间 -->
+	<view class="item" style="width: 90%; margin-left: 5%; color: #999;" wx:if="{{itemSelect === 'luckSudoku'}}">
+		<text style="font-size: 35rpx; color: #000; ">结束时间 : </text>
+		<picker mode="date" bindchange="change" mark:item="luckSudokuEndDate">
+			<text>{{luckSudoku.endDate}}</text>
+		</picker>
+	</view>
+	<!-- 每人每天次数 -->
+	<view class="item" style="width: 90%; margin-left: 5%; color: #999;" wx:if="{{itemSelect === 'luckSudoku'}}">
+		<text style="font-size: 35rpx; color: #000; ">每人每天参与次数限制 : </text>
+		<input style="width:200rpx; height: 100%; text-align: center;" type="number" value="{{luckSudoku.everyDaySum}}" placeholder="输入限制次数" bind:input="input" mark:item="luckSudokuEveryDaySum" />
+	</view>
+	<view  wx:if="{{itemSelect === 'luckSudoku'}}" class="input" style=" color: #999; font-size: 28rpx; margin-left:30rpx">
+		<text style="color: red;">说明 : \n1 . 奖项名称规则  八个奖项名称可以自定义,\n   ---名称为(谢谢!)会员抽到该奖项后弹出未中奖提示.\n  ---名称为(再来一次)会员抽到该奖项会当日可以免费再抽一次.\n   ---名称为(代金券**元)会员抽到该奖项后会自动拥有该代金券,下次本店消费自动抵扣,请严格按照括号里面的格式填写.否则可能会出现错误!!! \n  ---名称为其他实物的,会员凭客户端显示的中奖记录前往店铺兑奖. \n2 . 每个奖项的数量发放完后就不会再产生了,每个奖项出现的概率=该奖项剩余数量/全部奖项剩余总数量.\n3 . 每个奖项的剩余数量可以在活动中途更改,更改后概率个会刷新.\n</text>
+	</view>
+</view>
+<!-- 保存按钮 -->
+<button type="primary" style="margin: 80rpx;" bind:tap="save" >保存</button>
+<view style="width: 100%; height: 300rpx;"></view>

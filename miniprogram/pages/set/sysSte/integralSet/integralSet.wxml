@@ -1,6 +1,11 @@
 <!--pages/set/sysSte/integralSet/integralSet.wxml-->
-<import src="../../../../template/SetMenu/SetMenu" />
-<template is="titel" data="{{titel}}" />
+<view style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin:50rpx; height: 80rpx;">
+  <text style="color: #888;">积分规则设置</text>
+  <view style="display: flex; flex-direction: column; justify-content: center;">
+    <van-icon name="video-o" size="60rpx" bind:tap="video" />
+    <view style="color: #999;">演示视频</view>
+  </view>
+</view>
 <view class='outBorder' style="background-color: white;">
 <!-- 台费积分 -->
   <view class="border">
@@ -9,9 +14,9 @@
   </view>
   <view class="border" hidden="{{!integral.tableCost.values}}">
     <text style="font-size: 32rpx; margin-left: 50rpx;">消费</text>
-    <input class="input" type="text" value='{{integral.tableCost.everyCost}}' mark:every="tableCost"	bindinput='every' />
+    <input style="height: 100%;width: 100rpx;" class="input" type="text" value='{{integral.tableCost.everyCost}}' mark:every="tableCost"	bindinput='every' />
     <text style="font-size: 32rpx; ">元获得</text>
-    <input class="input"  type="text" value='{{integral.tableCost.giveValues}}' mark:give="tableCost" bindinput='give' />
+    <input style="height: 100%;width: 100rpx;" class="input"  type="text" value='{{integral.tableCost.giveValues}}' mark:give="tableCost" bindinput='give' />
     <text style="font-size: 32rpx;margin-right: 200rpx; ">积分</text>
   </view>
   <!-- 商品积分 -->
@@ -21,9 +26,9 @@
   </view>
   <view class="border" hidden="{{!integral.commotidy.values}}">
     <text style="font-size: 32rpx; margin-left: 50rpx;">消费</text>
-    <input class="input" type="text" value='{{integral.commotidy.everyCost}}' mark:every='commotidy'	bindinput='every' />
+    <input style="height: 100%;width: 100rpx;" class="input" type="text" value='{{integral.commotidy.everyCost}}' mark:every='commotidy'	bindinput='every' />
     <text style="font-size: 32rpx; ">元获得</text>
-    <input class="input"  type="text" value='{{integral.commotidy.giveValues}}' mark:give='commotidy' bindinput='give' />
+    <input style="height: 100%;width: 100rpx;" class="input"  type="text" value='{{integral.commotidy.giveValues}}' mark:give='commotidy' bindinput='give' />
     <text style="font-size: 32rpx;margin-right: 200rpx; ">积分</text>
   </view>
   <!-- 充值积分 -->
@@ -33,11 +38,22 @@
   </view>
   <view class="border" hidden="{{!integral.stored.values}}">
     <text style="font-size: 32rpx; margin-left: 50rpx;">充值</text>
-    <input class="input" type="text" value='{{integral.stored.everyCost}}' mark:every='stored' 	bindinput='every' />
+    <input style="height: 100%;width: 100rpx;" class="input" type="text" value='{{integral.stored.everyCost}}' mark:every='stored' 	bindinput='every' />
     <text style="font-size: 32rpx; ">元获得</text>
-    <input class="input"  type="text" value='{{integral.stored.giveValues}}' mark:give='stored' bindinput='give' />
+    <input style="height: 100%;width: 100rpx;" class="input"  type="text" value='{{integral.stored.giveValues}}' mark:give='stored' bindinput='give' />
     <text style="font-size: 32rpx;margin-right: 200rpx; ">积分</text>
   </view>
 </view>
 
 <button type="primary" style="margin: 50rpx;" bind:tap="save">提交</button>
+<!-- 演示视频 -->
+<van-dialog
+  use-slot
+  title="演示视频"
+  show="{{ videoShow }}"
+  bind:close="onClose"
+  bind:confirm="onConfirm"
+>
+  <video style="height: calc(70vh); width: calc(75vw);display: block; margin: auto;" 	picture-in-picture-show-progress = "true" src="{{videoUrl}}"/>
+  <view style="height: 50rpx; width: calc(80vw);display: block; margin: auto; display: flex; flex-direction: row;justify-content: center;">←左滑后退       右滑前进→</view>
+</van-dialog>

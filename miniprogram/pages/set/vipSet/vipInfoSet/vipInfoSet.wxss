@@ -17,9 +17,12 @@ page{
 .input{
   display: flex;
   flex-direction: row;
-  justify-self: start;
+  justify-content: center;
+  align-items: center;
   margin-right: 50rpx;
+  height: 100%;
 }
+
 .saveMoney{
   display: flex;
   flex-direction: row;

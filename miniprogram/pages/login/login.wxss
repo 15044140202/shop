@@ -21,8 +21,9 @@
   margin-top: 10rpx;
 }
 .inputBorder{
+  width: 90%;
   margin-top: 20rpx;
-  margin-left: 20rpx;
+  margin-left: 5%;
 }
 .telephoneCode{
   display: flex;

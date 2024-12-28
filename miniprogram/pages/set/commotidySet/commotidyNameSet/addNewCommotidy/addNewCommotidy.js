@@ -15,10 +15,10 @@ Page({
       picId:'',
       name: '',
       units: '',
-      primeCost: '',
-      sellCost: '',
-      sum: '',
-      lowSum: ''
+      primeCost: 0,
+      sellCost: 0,
+      sum: 0,
+      lowSum: 0
     },
     units: ['个', '只', '瓶', '盒', '套', '包', '根'],
     unitsSelect: 0,
@@ -140,7 +140,7 @@ Page({
   },
   input(e) {
     this.setData({
-      [`newCommotidy.${e.mark.name}`]: e.detail.value
+      [`newCommotidy.${e.mark.name}`]: e.mark.name==='sum' || e.mark.name==='lowSum' ||e.mark.name==='sellCost'||e.mark.name==='primeCost' ? parseFloat(e.detail.value) : e.detail.value
     })
     console.log(this.data.newCommotidy[e.mark.name])
   },
@@ -231,6 +231,6 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage() {
-
+    return appData.globalShareInfo;
   }
 })

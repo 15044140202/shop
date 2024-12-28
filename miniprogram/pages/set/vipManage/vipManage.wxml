@@ -2,7 +2,7 @@
 <van-search placeholder="请输入会员账号或者手机号" show-action bind:search="onSearch" bind:cancel="onCancel" />
 <view class="border1" wx:for="{{vipList}}" wx:key="index" bind:tap="goto" mark:index='{{index}}'>
   <view class='titel'>
-    <image style="height: 150rpx; width: 150rpx; border-radius: 10%; border: solid 1rpx #ccc ; margin: 10rpx;" src="{{item.image === '' ? 'cloud://cloud-4g9re7jfd5333736.636c-cloud-4g9re7jfd5333736-1325756030/image/没有图片.png' : item.image}}" />
+    <image style="height: 150rpx; width: 150rpx; border-radius: 10%; border: solid 1rpx #ccc ; margin: 10rpx;" src="{{vipHeadImage[index]}}" />
     <view class="titel_1">
       <text>{{item.name}}</text>
       <text>积分:{{item.integral}}</text>

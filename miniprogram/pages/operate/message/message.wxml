@@ -1,1 +1,31 @@
 <!--pages/operate/message/message.wxml-->
+<view class="select" style="margin-top: 30rpx;">
+	<view class="selectButton" style="background-color:{{showSelect === 0 ? '#fff' : '#eee'}}; color: {{showSelect === 0 ? '#000' : '#999'}};" bind:tap="tap" mark:item="showSelect" mark:index="0">未打扫</view>
+	<view class="selectButton" style="background-color:{{showSelect === 1 ? '#fff' : '#eee'}}; color: {{showSelect === 1 ? '#000' : '#999'}};" bind:tap="tap" mark:item="showSelect" mark:index="1">已打扫</view>
+</view>
+<view wx:for="{{order}}" wx:key="index" wx:if="{{((item.orderName === '自助开台订单' || item.orderName === '店员开台订单' || item.orderName === '自助套餐订单') && item.endTime !== '未结账') || (item.orderName === '商品单' && !item.delivery)}}">
+	<view class="message" wx:if="{{showSelect === 0 && (item.sweep === '' || !item.sweep)}}">
+		<view class="tableNum">{{item.tableNum}}号台</view>
+		<view class="orderInfo">
+			<view>{{item.orderName}}</view>
+			<view wx:if="{{item.orderName === '店员开台订单' || item.orderName === '自助开台订单' || item.orderName === '自助套餐订单'}}">结账 : {{item.endTime}}</view>
+			<view wx:if="{{item.orderName === '商品单'}}">下单 : {{item.time}}</view>
+		</view>
+		<view wx:if="{{item.orderName === '店员开台订单' || item.orderName === '自助开台订单' || item.orderName === '自助套餐订单'}}" class="sweep" style="{{item.sweep === '' || !item.sweep ? '' : 'background-color:#1aad19'}}" bind:tap="tap" mark:index="{{index}}" mark:item="sweep">{{item.sweep === "" || !item.sweep ? '打扫' : item.sweep}}</view>
+		<view wx:if="{{item.orderName === '商品单'}}" class="sweep" style="{{item.sweep === '' || !item.sweep ? '' : 'background-color:#1aad19'}}" bind:tap="tap" mark:index="{{index}}" mark:item="sweep">{{item.sweep === "" || !item.sweep ? '配送' : item.sweep}}</view>
+	</view>
+	<view class="message" wx:if="{{showSelect === 1 && (item.sweep !== '' && item.sweep !== undefined )}}">
+		<view class="tableNum">{{item.tableNum}}号台</view>
+		<view class="orderInfo">
+			<view>{{item.orderName}}</view>
+			<view wx:if="{{item.orderName === '店员开台订单' || item.orderName === '自助开台订单' || item.orderName === '自助套餐订单'}}">结账 : {{item.endTime}}</view>
+			<view wx:if="{{item.orderName === '店员开台订单' || item.orderName === '自助开台订单' || item.orderName === '自助套餐订单'}}">打扫 : {{item.sweepTime}}</view>
+			<view wx:if="{{item.orderName === '商品单'}}">下单 : {{item.time}}</view>
+			<view wx:if="{{item.orderName === '商品单'}}">配送 : {{item.sweepTime}}</view>
+		</view>
+		<view wx:if="{{item.orderName === '店员开台订单' || item.orderName === '自助开台订单' || item.orderName === '自助套餐订单'}}" class="sweep" style="{{item.sweep === '' || !item.sweep ? '' : 'background-color:#1aad19'}}" bind:tap="tap" mark:index="{{index}}" mark:item="sweep">{{item.sweep === "" || !item.sweep ? '打扫' : item.sweep}}</view>
+
+		<view wx:if="{{item.orderName === '商品单'}}" class="sweep" style="{{item.sweep === '' || !item.sweep ? '' : 'background-color:#1aad19'}}" bind:tap="tap" mark:index="{{index}}" mark:item="sweep">{{item.sweep === "" || !item.sweep ? '配送' : item.sweep}}</view>
+	</view>
+
+</view>

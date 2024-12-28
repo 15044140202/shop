@@ -10,7 +10,7 @@
     <switch style="margin-right: 30rpx;" checked="{{operateSet.startSet.detectDistance}}" bindchange="set" mark:name='startSet' mark:name2="detectDistance" />
   </view>
   <view class="titel_1">
-    <text>新顾客需要电话授权</text>
+    <text>顾客需要电话授权认证</text>
     <switch style="margin-right: 30rpx;" checked="{{operateSet.startSet.phoneImpower}}" bindchange="set" mark:name="startSet" mark:name2="phoneImpower" />
   </view>
   <view class="titel_1" hidden="{{!operateSet.startSet.phoneImpower}}">
@@ -92,8 +92,8 @@
   </view>
   <view class="titel_1">
     <text>打扫时长</text>
-    <input style="margin-left: 320rpx; width: 120rpx; text-align: right;" type="text" value='{{operateSet.sweepSet.sweepTime}}' bindinput="set" mark:name='sweepSet.sweepTime' />
-    <text style="margin-right: 50rpx;">分钟</text>
+    <input style="margin-left: 320rpx; width: 120rpx; height: 100%; text-align: center;" type="text" value='{{operateSet.sweepSet.sweepTime}}' bindinput="set" mark:name='sweepSet.sweepTime' />
+    <view style="margin-right: 50rpx; ">分钟</view>
   </view>
 </view>
 <button style="margin:50rpx;" type="primary" bind:tap="save">提交</button>

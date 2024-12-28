@@ -1,12 +1,20 @@
 <!--pages/set/chargingSet/newCharging/newCharging.wxml-->
-<view style="margin:50rpx;">
+<view style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin:50rpx; height: 80rpx;">
   <text style="color: #888;">设置计费规则</text>
+  <view style="display: flex; flex-direction: column; justify-content: center;">
+    <van-icon name="video-o" size="60rpx" bind:tap="video" />
+    <view style="color: #999;">演示视频</view>
+  </view>
 </view>
 <!-- 名称设置 -->
 <view class='name'>
   <text style="margin-left: 30rpx;">名称</text>
   <input class="input" type="text" placeholder="如:中式八球" bindblur='nameData' value="{{name}}" />
 </view>
+<view class='titel'>
+    <text>是否开启按时间计费</text>
+    <switch checked="{{onOff}}" bindchange="change" mark:item="onOff" style="margin-right: 30rpx;" />
+  </view>
 <!-- 时间段设置 -->
 <view class="timeSet">
   <view class='titel'>
@@ -42,9 +50,9 @@
     </view>
   </view>
   <view class="period" hidden="{{periodHidden}}">
-    <input style="width: 120rpx; text-align: center;" type="text" bindblur='periodTime' value="{{periodCost.periodTime}}" />
+    <input style="height: 100%; width: 120rpx; text-align: center;" type="text" bindblur='periodTime' value="{{periodCost.periodTime}}" />
     <text>分钟计费一次,不足</text>
-    <input style="width: 80rpx; text-align: center;" type="text" bindblur='freeTime' value="{{periodCost.freeTime}}" />
+    <input style="height: 100%; width: 100rpx; text-align: center;" type="text" bindblur='freeTime' value="{{periodCost.freeTime}}" />
     <text>分钟不计</text>
   </view>
   <view class='titel' bind:tap="costTap">
@@ -55,9 +63,9 @@
   </view>
   <view class='period' hidden="{{costHidden}}">
     <text style="margin-left: 40rpx;">每次增加</text>
-    <input style="width: 120rpx; text-align: center;" type="text" bindblur='everyCost' value="{{costCost.everyCost}}" />
+    <input style="height: 100%; width: 120rpx; text-align: center;" type="text" bindblur='everyCost' value="{{costCost.everyCost}}" />
     <text>元,不足</text>
-    <input style="width: 80rpx; text-align: center;" type="text" bindblur='freeCost' value="{{costCost.freeCost}}" />
+    <input style="height: 100%; width: 100rpx; text-align: center;" type="text" bindblur='freeCost' value="{{costCost.freeCost}}" />
     <text>元不收</text>
   </view>
 </view>
@@ -72,17 +80,18 @@
   </view>
   <view class='period' hidden="{{!startCost.value}}">
     <text>开台</text>
-    <input style="width: 100rpx; text-align: center;" type="text" value='{{startCost.startTime}}' bindinput='startCostSet' mark:name='startTime' />
+    <input style="height: 100%; width: 100rpx; text-align: center;" type="text" value='{{startCost.startTime}}' bindinput='startCostSet' mark:name='startTime' />
     <text>分钟后,最低消费</text>
-    <input style="width: 100rpx; text-align: center;" type="text" value='{{startCost.startCost}}' bindinput='startCostSet' mark:name='startCost' />
+    <input style="height: 100%; width: 100rpx; text-align: center;" type="text" value='{{startCost.startCost}}' bindinput='startCostSet' mark:name='startCost' />
     <text>元</text>
   </view>
-  <view style="height: 60rpx; display: flex; flex-direction: column; justify-content: center; align-content: center; border-bottom:  solid #ccc 1rpx;">
+  <!-- <view style="height: 60rpx; display: flex; flex-direction: column; justify-content: center; align-content: center; border-bottom:  solid #ccc 1rpx;">
     <van-tag catch:tap="advancedSet" type='primary' style="margin-left:30rpx;">{{advancedSetHidden===false ? '隐藏高级设置':'显示高级设置'}}</van-tag>
-  </view>
+  </view> -->
 </view>
-<!-- 高级设置 -->
-<view class="advancedSet" hidden="{{advancedSetHidden}}" bind:tap="advancedSet">
+
+<!-- 高级设置 暂做停用高级功能 -->
+<!-- <view class="advancedSet" hidden="{{advancedSetHidden}}" bind:tap="advancedSet">
   <view class='advancedSetTitel'>
     <view>
       <text>启用开台押金</text>
@@ -90,22 +99,23 @@
     </view>
     <switch checked="{{cashPledge}}" catch:tap="cashPledge" style="margin-right: 30rpx;" />
   </view>
-  <view class='period' hidden="{{!cashPledge}}" wx:for="{{pledge}}" wx:key="index"  catchtap="input">
+  <view class='period' hidden="{{!cashPledge}}" wx:for="{{pledge}}" wx:key="index" catchtap="input" wx:if="{{index<5}}">
     <text style="color: #999;">自定义名称 : </text>
-    <input style="width: 300rpx; text-align: left; padding-left: 30rpx;" type="text" catchtap="input" bindinput='input' mark:index="{{index}}" mark:item = "name" value="{{item.name}}" />
+    <input style="height: 100%; width: 300rpx; text-align: left; padding-left: 30rpx;" type="text" catchtap="input" bindinput='input' mark:index="{{index}}" mark:item="name" value="{{item.name}}" />
     <text style="color: #999;">押金 : </text>
-    <input style="width: 80rpx; text-align: center;" type="number" catchtap="input" bindinput='input' value="{{item.pledge}}"  mark:index="{{index}}" mark:item = "pledge"/>
+    <input style="height: 100%; width: 80rpx; text-align: center;" type="number" catchtap="input" bindinput='input' value="{{item.pledge}}" mark:index="{{index}}" mark:item="pledge" />
     <text style="color: #999;">元</text>
   </view>
-  <view class='period' hidden="{{!cashPledge}}"   catchtap="input">
+  <view class='period' hidden="{{!cashPledge}}" catchtap="input">
     <text style="color:red;">押金金额为0时,客户端不会显示此选项!</text>
   </view>
 
-  <view class='advancedSetTitel'   catchtap="input">
+  <view class='advancedSetTitel' catchtap="input">
     <text>启动余额提醒</text>
     <switch checked="{{balanceWarn}}" catch:tap="balanceWarn" style="margin-right: 30rpx;" />
   </view>
-</view>
+</view> -->
+
 <view class="tableShowBorder">
   <view style="border-bottom:#999 solid 1rpx; margin-left: 30rpx; height: 80rpx; display: flex; flex-direction: column; justify-content: center;">
     <text style="color: #999;">使用本计费规则的桌台</text>
@@ -122,4 +132,13 @@
   <button type="default" style="margin:50rpx;">模拟计费</button>
 </view>
 
-<van-dialog id="van-dialog" />
+<van-dialog
+  use-slot
+  title="演示视频"
+  show="{{ videoShow }}"
+  bind:close="onClose"
+  bind:confirm="onConfirm"
+>
+  <video style="height: calc(70vh); width: calc(75vw);display: block; margin: auto;" 	picture-in-picture-show-progress = "true" src="{{videoUrl}}"/>
+  <view style="height: 50rpx; width: calc(80vw);display: block; margin: auto; display: flex; flex-direction: row;justify-content: center;">←左滑后退       右滑前进→</view>
+</van-dialog>

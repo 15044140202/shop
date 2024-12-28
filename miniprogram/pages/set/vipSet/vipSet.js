@@ -10,7 +10,14 @@ Page({
    */
   data: {
     vipInfo: [],
-    charging: []
+    charging: [],
+    videoShow:false,
+    videoUrl:'https://6269-billiards-0g53628z5ae826bc-1326882458.tcb.qcloud.la/video/%E5%A6%82%E4%BD%95%E8%AE%BE%E7%BD%AE%E4%BC%9A%E5%91%98%E7%BA%A7%E5%88%AB.mp4?sign=0cbc5413359b96f4597e5ef71e666da5&t=1721455226'
+  },
+  video(){
+    this.setData({
+      videoShow:true
+    })
   },
   goto(e) {
     console.log(e)
@@ -63,11 +70,15 @@ Page({
       const element = this.data.vipInfo[index];
       index === i ? console.log('删除:' + index) : newData.push(element)
     }
-    const res = await utils.amendDatabase_op({
-      collection: 'vipInfo',
-      openid: appData.shopInfo._openid,
-      objName: 'vipInfo',
-      data: newData
+    const res = await app.callFunction({
+      name: 'amendDatabase_fg',
+      data: {
+        collection:'vipInfo',
+        flagName:'shopFlag',
+        flag:appData.shopInfo.shopFlag,
+        objName:'vipInfo',
+        data:newData
+      }
     })
     if (res === 'ok') {
       app.showToast('删除成功!', 'success')
@@ -84,12 +95,12 @@ Page({
     newVip.name = '未定义'
     newVip.vipSum = 0;
     const res = await app.callFunction({
-      name:'addArrayDatabase_fg',
-      data:{
-        collection:'vipInfo',
-        shopFlag:appData.shopInfo.shopFlag,
-        objName:'vipInfo',
-        data:newVip
+      name: 'addArrayDatabase_fg',
+      data: {
+        collection: 'vipInfo',
+        shopFlag: appData.shopInfo.shopFlag,
+        objName: 'vipInfo',
+        data: newVip
       }
     })
     if (res === 'ok') {
@@ -213,13 +224,13 @@ Page({
     //再次检测 会员信息里面是否存在 全部的 charging 如果确定 后期添加了 新的计费规则 返回true
     if (this.settleCharing() === true) { //修改过数据 向服务器发送修改后的数据
       const r = await app.callFunction({
-        name:'amendDatabase_fg',
-        data:{
-          collection:'vipInfo',
-          flagName:'shopFlag',
-          flag:appData.shopInfo.shopFlag,
-          objName:'vipInfo',
-          data:this.data.vipInfo
+        name: 'amendDatabase_fg',
+        data: {
+          collection: 'vipInfo',
+          flagName: 'shopFlag',
+          flag: appData.shopInfo.shopFlag,
+          objName: 'vipInfo',
+          data: this.data.vipInfo
         }
       })
       console.log(r)
@@ -269,13 +280,6 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
 
   }
 })

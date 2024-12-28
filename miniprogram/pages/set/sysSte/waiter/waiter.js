@@ -1,10 +1,8 @@
 // pages/set/sysSte/waiter/waiter.js
 const app = getApp();
 const appData = getApp().globalData;
-const utils = require('../../../../utils/light');
 import Dialog from '../../../../miniprogram_npm/@vant/weapp/dialog/dialog';
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -29,7 +27,7 @@ Page({
       return;
     });
   },
-  async delete_1(i){
+  async delete_1(i) {
     console.log('执行删除MerchantInfo')
     const res = await this.deleteMerchantInfo(i)
     console.log(res)
@@ -46,7 +44,7 @@ Page({
           }
         }
         this.setData({
-          member:newData
+          member: newData
         })
         appData.shopInfo.shop.member = newData;
         return;
@@ -64,11 +62,11 @@ Page({
     console.log(this.data.member[i].memberOpenid)
     var shopFlag = [];
     const res = await app.callFunction({
-      name:'getDatabaseRecord_op',
-      data:{
-        collection:'merchantInfo',
+      name: 'getDatabaseRecord_op',
+      data: {
+        collection: 'merchantInfo',
         openid: this.data.member[i].memberOpenid,
-        record:'shopFlag'
+        record: 'shopFlag'
       }
     });
     console.log(res)
@@ -92,11 +90,15 @@ Page({
     }
     console.log(newShopFlag)
     //向服务器发送新的  店员的 merchantInfo  的 shopFlag数组
-    const r = await utils.amendDatabase_op({
-      collection: "merchantInfo",
-      openid: this.data.member[i].memberOpenid,
-      objName: "shopFlag",
-      data: newShopFlag
+    const r = await app.callFunction({
+      name: 'amendDatabase_fg',
+      data: {
+        collection: "merchantInfo",
+        flagName: '_openid',
+        flag: this.data.member[i].memberOpenid,
+        objName: "shopFlag",
+        data: newShopFlag
+      }
     });
     console.log(r)
     if (r === 'ok') {
@@ -118,11 +120,15 @@ Page({
         newMember.push(element)
       }
     }
-    const res = await utils.amendDatabase_op({
-      collection: 'shopAccount',
-      openid: appData.shopInfo._openid,
-      objName: 'shop.member',
-      data: newMember
+    const res = await app.callFunction({
+      name:'amendDatabase_fg',
+      data: {
+        collection: 'shopAccount',
+        flagName: 'shopFlag',
+        flag: appData.shopInfo.shopFlag,
+        objName: 'shop.member',
+        data: newMember
+      }
     });
     if (res === 'ok') {
       app.showToast('删除shopMember成功!', 'success');
@@ -194,13 +200,6 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
 
   }
 })

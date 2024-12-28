@@ -1,6 +1,6 @@
 <!--pages/operate/inShopCustomer/inShopCustomer.wxml-->
 <view class="border" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName === '自助开台订单' || item.orderName === '店员开台订单'}}">
-  <view wx:if="{{item.endTime === '未结账'}}" class="titel" bind:tap="gotoVipInfo" mark:index="{{index}}">
+  <view wx:if="{{item.endTime === '未结账'}}" class="titel" bind:tap="goto" mark:index="{{index}}">
     <view style="display: flex; flex-direction: row; align-items: center;">
       <view class="openPerson">
       <text style="font-size: 42rpx;">{{item.tableNum}}号台\n</text>

@@ -1,5 +1,4 @@
 /* pages/set/sysSte/integralSet/integralSet.wxss */
-@import '../../../../template/SetMenu//SetMenu.wxss';
 page{
   background-color: #eee;
 }

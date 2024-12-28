@@ -2,16 +2,23 @@
   "setting": {
     "compileHotReLoad": true,
     "urlCheck": true,
-    "skylineRenderEnable": true
+    "skylineRenderEnable": false
   },
   "condition": {
     "miniprogram": {
       "list": [
         {
-          "name": "首页-快速开始",
+          "name": "pages/operate/operate",
           "pathName": "pages/login/login",
           "query": "",
           "launchMode": "default",
+          "scene": 1007
+        },
+        {
+          "name": "首页-快速开始",
+          "pathName": "pages/login/login",
+          "query": "",
+          "launchMode": "singlePage",
           "scene": 1047
         },
         {

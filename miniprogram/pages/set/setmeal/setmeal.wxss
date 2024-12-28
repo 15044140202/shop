@@ -1,0 +1,32 @@
+/* pages/set/setmeal/setmeal.wxss */
+@import '../../../template/SetMenu/SetMenu.wxss';
+.setmeal{
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	height: auto;
+	border: 1rpx solid #eee;
+	width: 95%;
+	margin-left: 2.5%;
+	margin-top: 30rpx;
+	border-radius: 20rpx;
+	background-color: #eaeef0;
+}
+.setmealName{
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	margin-top: 15rpx;
+	font-weight:bolder;
+}
+.priceSet{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	height: 80rpx;
+	width: 80%;
+	border-bottom: solid 5rpx #fff;
+
+}

@@ -204,6 +204,9 @@ exports.main = async (event) => {
       {
         '门禁设置': false
       },
+      {
+        '退款/部分退款': false
+      }
     ]
   }
   var power = [];

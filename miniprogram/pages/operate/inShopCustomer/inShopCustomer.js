@@ -7,70 +7,86 @@ Page({
    * 页面的初始数据
    */
   data: {
-    orderForm:appData.orderForm,
-    vipList:[],
+    orderForm: [],
+    shopTableInfo: appData.shopInfo.shop.tableSum,
 
-    res:[]
-  },
- async gotoVipInfo(e){
-    //先获取会员信息  传给下一界面
-    app.showLoading("数据加载中...",true)
-    const res = await app.callFunction({
-      name:'getOneVipInfo',
-      data:{
-        shopOpenid:appData.shopInfo._openid,
-        vipInfo:this.data.orderForm[e.mark.index].openPerson.openPersonOpenid
-      }
-    })
-    console.log(res);
-    wx.hideLoading();
-    if (res === [] || res === 'error') {//没有查询到此用户的会员信息
-      app.showToast('数据加载错误!','error')
-      return;
-    }
-    this.data.res.push(res)
-    const that = this;
-    wx.navigateTo({
-      url: `../../set/vipManage/vipDetail/vipDetail?index=0&returnData=${false}`,
-      events:{
+    vipList: [],
 
-      },
-      success:function(res){
-        res.eventChannel.emit('giveData',that.data.res)
-      }
-    })
+    res: []
   },
-  call(e){
+  call(e) {
     wx.makePhoneCall({
-      phoneNumber: this.data.orderForm[e.mark.index].openPerson.openPersonTelephone//仅为示例，并非真实的电话号码
+      phoneNumber: this.data.orderForm[e.mark.index].openPerson.openPersonTelephone //仅为示例，并非真实的电话号码
     })
   },
-  goto(e){
+  goto(e) {
+    console.log(e)
+    const  that = this;
     wx.navigateTo({
-      url: `./orderFormInfo/orderFormInfo?index=${e.mark.index}`,
-    })
-  },
-  async loadData(shopFlag,date){
-   const res = await app.callFunction({
-      name:'getOrderForm',
-      data:{
-        collection:"orderForm",
-        record:"orderFrom",
-        shopFlag:shopFlag,
-        date:date,
+      url: `../../statement/orderForm/orderFormInfo/orderFormInfo?item="inShopCustomer"&index=${e.mark.index}`,
+      success: function(res) {
+        // 通过eventChannel向被打开页面传送数据
+        res.eventChannel.emit('giveData', that.data.orderForm)
       }
     })
-    console.log(res)
+  },
+  async loadData() {
+    const shopTableInfo = this.data.shopTableInfo;
+    const orderDateArray = [];
+    //先统计桌台 账单 日期列表, 为了获取那个日期的账单
+    for (let index = 0; index < shopTableInfo.length; index++) {
+      const element = shopTableInfo[index];
+      if (element.orderForm !== '') { //
+        const orderDate = app.getOrderFormDate(element.orderForm)
+        //订单日期数组 是否已有 此时日期
+        if (orderDateArray.length > 0) {
+          for (let i = 0; i < orderDateArray.length; i++) {
+            const date = orderDateArray[i];
+            if (orderDate === date) { //以获取的日期
+              break;
+            } else if (i === orderDateArray.length - 1) { //没有获取过这个日期
+              orderDateArray.push(orderDate)
+            }
+          }
+        } else {
+          orderDateArray.push(orderDate)
+        }
+      }
+    }
+    console.log({
+      '日期数组': orderDateArray
+    })
+    //循环获取 每个日期的订单
+    for (let index = 0; index < orderDateArray.length; index++) {
+      const element = orderDateArray[index];
+      const res = await app.callFunction({
+        name: 'getOrderForm',
+        data: {
+          collection: "orderForm",
+          shopFlag: appData.shopInfo.shopFlag,
+          date: element,
+          propertyName: 'null',
+          property: 'null'
+        }
+      })
+      for (let i = 0; i < res[`${element}`].length; i++) {
+        const order = res[`${element}`][i];
+        this.data.orderForm.push(order)
+      }
+    }
     this.setData({
-      orderForm:res.orderForm
+      orderForm: this.data.orderForm
     })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    // const NowDate = app.getNowDate();
-    // this.loadData(appData.shopInfo.shopFlag,NowDate);
+    this.setData({
+      shopTableInfo:appData.shopInfo.shop.tableSum,
+    })
+    this.loadData();
+
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -118,6 +134,6 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage() {
-
+    return appData.globalShareInfo;
   }
 })

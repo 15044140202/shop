@@ -2,5 +2,6 @@
   "usingComponents": {
     "van-image": "@vant/weapp/image/index",
     "van-dialog": "@vant/weapp/dialog/index"
-  }
+  },
+  "enablePullDownRefresh": true
 }

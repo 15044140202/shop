@@ -1,6 +1,24 @@
 <!--pages/set/vipSet/vipSet.wxml-->
+<view style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin:50rpx; height: 80rpx;">
+  <text style="color: #888;">会员级别设置</text>
+  <view style="display: flex; flex-direction: column; justify-content: center;">
+    <van-icon name="video-o" size="60rpx" bind:tap="video" />
+    <view style="color: #999;">演示视频</view>
+  </view>
+</view>
 <view style="background-color: white;">
   <van-cell wx:for="{{vipInfo}}" wx:key="index" size='large' title="{{item.name}}" is-link value="{{item.vipSum}}人" arrow-direction='' bind:longpress="delete" bind:tap="goto" mark:index='{{index}}' />
 </view>
 <button type="primary" style="margin:  50rpx;" bind:tap="newVipLevel">新增会员级别</button>
 <van-dialog id="van-dialog" />
+<!-- 演示视频 -->
+<van-dialog
+  use-slot
+  title="演示视频"
+  show="{{ videoShow }}"
+  bind:close="onClose"
+  bind:confirm="onConfirm"
+>
+  <video style="height: calc(70vh); width: calc(75vw);display: block; margin: auto;" 	picture-in-picture-show-progress = "true" src="{{videoUrl}}"/>
+  <view style="height: 50rpx; width: calc(80vw);display: block; margin: auto; display: flex; flex-direction: row;justify-content: center;">←左滑后退       右滑前进→</view>
+</van-dialog>

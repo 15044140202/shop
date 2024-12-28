@@ -21,12 +21,11 @@ Page({
    */
   onLoad(options) {
     this.setData({
-      orderForm: appData.orderForm,
+      orderForm: appData.disPlayOrderForm,
       get_item:options.item
     })
     console.log(this.data.orderForm)
     console.log(this.data.get_item)
-
   },
 
   /**
@@ -75,6 +74,6 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage() {
-
+    return appData.globalShareInfo;
   }
 })

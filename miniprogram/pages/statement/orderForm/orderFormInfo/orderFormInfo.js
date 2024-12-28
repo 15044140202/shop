@@ -8,21 +8,101 @@ Page({
    * 页面的初始数据
    */
   data: {
-    orderForm:appData.orderForm,
-    index:0
-
+    orderForm: [],
+    index: 0,
+    vipList: [],
+    refundTotalAmount: 0,
   },
-
+  async goto(e) {
+    console.log(e)
+    if (e.mark.item === "vipDetail") {
+      //获取这个会员的会员信息
+      const res = await app.callFunction({
+        name: 'searchVip',
+        data: {
+          shopFlag: appData.shopInfo.shopFlag,
+          userTelephone: null,
+          userName: null,
+          userOpenid: this.data.orderForm[this.data.index].openPerson.openPersonOpenid
+        }
+      })
+      if (res === 'noVipInfo' || res === 'error') {
+        app.showModal('提示', '获取会员信息失败!')
+        return;
+      }
+      this.data.vipList.push(res)
+      const that = this;
+      wx.navigateTo({
+        url: `../../../set/vipManage/vipDetail/vipDetail?index=0&returnData=false`,
+        events: {},
+        success: function (res) {
+          // 通过eventChannel向被打开页面传送数据
+          res.eventChannel.emit('giveData', that.data.vipList)
+        }
+      })
+    }
+  },
+  computeRefundTotalamount(log) {
+    var amount = 0;
+    for (let index = 0; index < log.length; index++) {
+      const element = log[index];
+      if (element.split("---")[1].substring(0, 2) === '退款') {
+        amount += parseInt(element.split("---")[1].match(/\d+/))
+      }
+    }
+    return amount;
+  },
+  async rePay(e) {
+    //检测权限
+    if (await app.power('systemSet', '7', '退款/部分退款')) {
+      console.log('有权限');
+    } else {
+      app.showToast('没有权限', 'error');
+      return;
+    }
+    console.log(e)
+    wx.navigateTo({
+      url: `../../../set/sysSte/wxAccount/rePay/rePay?order=${this.data.orderForm[e.mark.index].orderNum}&amount=${this.data.orderForm[e.mark.index].cashPledge > 0 ? this.data.orderForm[e.mark.index].cashPledge : this.data.orderForm[e.mark.index].tableCost}&tableCost=${this.data.orderForm[e.mark.index].tableCost}&rePayMode=${this.data.orderForm[e.mark.index].payMode}`,
+    })
+  },
+  call() {
+    wx.makePhoneCall({
+      phoneNumber: this.data.orderForm[this.data.index].openPerson.openPersonPhone,
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
-    this.setData({
-      index:options.index
+    const that = this;
+    const eventChannel = this.getOpenerEventChannel()
+    eventChannel.on('giveData', function (data) {
+      console.log(data)
+      that.setData({
+        orderForm: data,
+        index: options.index
+      })
     })
+    if ('item' in options) { //判断项目
+      if (options.item === 'inShopCustomer') { //在店账单
+
+      }
+    } else {
+      this.setData({
+        orderForm: appData.disPlayOrderForm,
+        index: options.index,
+      })
+      //统计总退款金额
+      if (appData.disPlayOrderForm[options.index].orderName === '店员开台订单' || appData.disPlayOrderForm[options.index].orderName === '自助开台订单' || appData.disPlayOrderForm[options.index].orderName === '自助套餐订单') {
+        this.setData({
+          refundTotalAmount: this.computeRefundTotalamount(appData.disPlayOrderForm[options.index].log)
+        })
+      }
+
+    }
 
   },
-  
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -69,6 +149,6 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage() {
-
+    return appData.globalShareInfo;
   }
 })

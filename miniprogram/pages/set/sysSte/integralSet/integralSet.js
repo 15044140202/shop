@@ -26,8 +26,14 @@ Page({
         everyCost: 1,
         giveValues: 1
       }
-    }
-
+    },
+    videoShow:false,
+    videoUrl:'https://6269-billiards-0g53628z5ae826bc-1326882458.tcb.qcloud.la/video/%E5%A6%82%E4%BD%95%E8%AE%BE%E7%BD%AE%E7%A7%AF%E5%88%86.mp4?sign=93f97d93349efd18f9736c14352fd1c2&t=1721454885'
+  },
+  video(){
+    this.setData({
+      videoShow:true
+    })
   },
   async save() {
     const res = await app.callFunction({
@@ -151,13 +157,6 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
 
   }
 })

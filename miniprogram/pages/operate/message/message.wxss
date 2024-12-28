@@ -1,1 +1,73 @@
 /* pages/operate/message/message.wxss */
+.message {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	height: 150rpx;
+	width: 95%;
+	margin-left: 2.5%;
+	margin-top: 10rpx;
+	border: #eee solid 1rpx;
+	border-radius: 20rpx;
+}
+
+.tableNum {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	width: 120rpx;
+	background-color: #0097ff;
+	color: #fff;
+	border-top-left-radius: 20rpx;
+	border-bottom-left-radius: 20rpx;
+}
+
+.orderInfo {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: flex-start;
+	height: 75%;
+	width: 60%;
+	margin-left: 20rpx;
+}
+
+.sweep {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: rgb(153, 16, 51);
+	color: #fff;
+	height: 70%;
+	width: 110rpx;
+	border-radius: 20rpx;
+	text-align: center;
+}
+
+.select {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	width: 96%;
+	height: 80rpx;
+	background-color: #eee;
+	border-radius: 20rpx;
+	margin-left: 2%;
+}
+
+.selectButton {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	width: 48%;
+	height: 80%;
+	border-radius: 10px;
+	margin-left: 1%;
+	margin-right: 1%;
+}

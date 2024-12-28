@@ -1,8 +1,17 @@
 /* pages/operate/manager/manager.wxss */
+.border{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 95%;
+  margin-left: 2.5%;
+}
 .row {
   display: flex;
   flex-direction: row;
   justify-self: start;
+  width: 100%;
 }
 
 .tableNum {

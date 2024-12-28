@@ -41,7 +41,7 @@ function getStatus(openid) {
 
 //获取 店铺头像函数
 async function getLogo(p) {
-  var url = 'https://636c-cloud1-4ga7jm4aad5de5c5-1324387207.tcb.qcloud.la/image/logo.png?sign=aa2e5b4912a6cf22308985950708ff86&t=1712498421'
+  var url = 'https://6269-billiards-0g53628z5ae826bc-1326882458.tcb.qcloud.la/image/merchantLogo.png?sign=596d84deeb2878e24ae5dfddb646badb&t=1716972043'
   if (p === '1') {
     console.log('返回默认图片地址')
     return url;
@@ -78,6 +78,7 @@ async function lightCtrl(p) {
     method: "POST"
   });
   console.log(res)
+  return res;
 }
 //更新店铺信息数据**********************************************************
 async function updataShopInfo() {

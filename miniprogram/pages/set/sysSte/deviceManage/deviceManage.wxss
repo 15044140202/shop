@@ -1,0 +1,25 @@
+@import '../../../../template/SetMenu/SetMenu.wxss';
+
+page{
+  background-color: #eee;
+}
+.deviceBorder{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  width: 100%;
+  height: auto;
+  flex-wrap: wrap;
+}
+.device{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 28%;
+  height: 200rpx;
+  border: solid 5rpx #8a8a8a;
+  border-radius: 30rpx;
+  margin-top: 60rpx;
+}

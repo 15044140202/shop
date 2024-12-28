@@ -97,7 +97,6 @@ Page({
     if (await app.haveLight() === false) { //没有绑定灯控器
       return;
     }
-
     if (this.data.checked === false) {
       this.setData({
         checked: true
@@ -107,10 +106,14 @@ Page({
         checked: false
       })
     }
-    await utils.lightCtrl({
-      lightName: appData.shopInfo.shop.lightId,
-      lightData: `{{"A${this.data.optNum.toString().padStart(2, '0') }":1${this.data.checked === true ? 1 : 0}0000,"res":"123"}}`
+    const res = await app.callFunction({
+      name:'lightCtrl',
+      data:{
+        lightName: appData.device.lightCtrl,
+        lightData: `{"A${this.data.optNum.toString().padStart(2, '0') }":1${this.data.checked === true ? 1 : 0}0000,"res":"123"}`
+      }
     })
+    console.log(res)
   },
   async saveData() {
     wx.showToast({
@@ -228,6 +231,6 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage() {
-
+    return appData.globalShareInfo;
   }
 })

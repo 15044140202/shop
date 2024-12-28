@@ -1,7 +1,7 @@
 <!--pages/statement/attendance/attendance.wxml-->
 <view class="border" wx:for="{{memberData}}" wx:key="index">
   <view style="margin-top: 10rpx;">
-  <text style="font-size: 32rpx;">名字:{{item.name}}\n</text>
+  <text style="font-size: 32rpx;">员工名字:{{item.name}}\n</text>
   <text style="margin-top: 10rpx;">电话:{{item.telephone}}</text>
   </view>
   <view class="time">

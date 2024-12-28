@@ -1,0 +1,14 @@
+/* pages/set/sysSte/wxAccount/rePay/rePay.wxss */
+page{
+  background-color: #eee;
+}
+.order{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  margin-left: 80rpx;
+  margin-right: 80rpx;
+  margin-top: 50rpx;
+}

@@ -1,19 +1,19 @@
 <!--pages/set/commoditySet/commotidySet.wxml-->
 <van-grid column-num="1" class="border">
   <van-grid-item use-slot bind:tap="goto" mark:name='commotidyClassSet'>
-    <image mode="scaleToFill" style="height: 180rpx; width: 180rpx;" src="https://636c-cloud-4g9re7jfd5333736-1325756030.tcb.qcloud.la/icon/%E5%88%86%E7%B1%BB%E8%AE%BE%E7%BD%AE_h.png?sign=825e38908a0e6c41f5b46142086ec860&t=1713803932" />
+    <image mode="scaleToFill" style="height: 180rpx; width: 180rpx;" src="https://6269-billiards-0g53628z5ae826bc-1326882458.tcb.qcloud.la/icon/%E5%88%86%E7%B1%BB%E8%AE%BE%E7%BD%AE_h.png?sign=11330e86b8548496fb2dc84db6595d0f&t=1716971861" />
     <text>商品分类设置</text>
   </van-grid-item>
   <van-grid-item use-slot bind:tap="goto" mark:name='commotidyNameSet'>
-    <image mode="scaleToFill" style="height: 180rpx; width: 180rpx;" src="https://636c-cloud-4g9re7jfd5333736-1325756030.tcb.qcloud.la/icon/%E6%A1%A3%E6%A1%88.png?sign=1914c5a576a6123db34de55e97de72ae&t=1713803603" />
+    <image mode="scaleToFill" style="height: 180rpx; width: 180rpx;" src="https://6269-billiards-0g53628z5ae826bc-1326882458.tcb.qcloud.la/icon/%E6%A1%A3%E6%A1%88.png?sign=579257484707ee399ff8c3452b1e0883&t=1716971880" />
     <text>商品档案设置</text>
   </van-grid-item>
   <van-grid-item use-slot bind:tap="goto" mark:name='commotidyPurchaseSet'>
-    <image mode="scaleToFill" style="height: 180rpx; width: 180rpx;" src="https://636c-cloud-4g9re7jfd5333736-1325756030.tcb.qcloud.la/icon/%E9%87%87%E8%B4%AD%E5%85%A5%E5%BA%93.png?sign=72c5609c0a6b2a0110cfda8729467cf2&t=1713803977" />
+    <image mode="scaleToFill" style="height: 180rpx; width: 180rpx;" src="https://6269-billiards-0g53628z5ae826bc-1326882458.tcb.qcloud.la/icon/%E9%87%87%E8%B4%AD%E5%85%A5%E5%BA%93.png?sign=46f44350b3a45f924f5268c52a54a601&t=1716971894" />
     <text>商品入库</text>
   </van-grid-item>
   <van-grid-item use-slot bind:tap="goto" mark:name='listSearch'>
-    <image mode="scaleToFill" style="height: 180rpx; width: 180rpx;" src="cloud://cloud-4g9re7jfd5333736.636c-cloud-4g9re7jfd5333736-1325756030/icon/查库存.png" />
+    <image mode="scaleToFill" style="height: 180rpx; width: 180rpx;" src="https://6269-billiards-0g53628z5ae826bc-1326882458.tcb.qcloud.la/icon/%E6%9F%A5%E5%BA%93%E5%AD%98.png?sign=eccbc468e93d1998ce6b7750fbf56f42&t=1716971907" />
     <text>查库存记录</text>
   </van-grid-item>
 </van-grid>

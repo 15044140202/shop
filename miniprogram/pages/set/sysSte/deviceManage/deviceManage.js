@@ -1,18 +1,65 @@
 // pages/set/sysSte/deviceManage/deviceManage.js
+const imou = require('../../../../utils/imou');
+const app = getApp();
+const appData = app.globalData;
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    device: {}
+  },
+  goto(e) {
+    console.log(e)
+    wx.navigateTo({
+      url: `./${e.mark.item}/${e.mark.item}`
+    })
 
   },
-
+  /**
+   * @description //新加设备种类时 用这个函数检测 数据库中是否有 新加的这个设备种类  没有会自动添加并刷新本地数据
+   * @param {Object} nowDevice 
+   * @returns {object} 返回添加后的新 设备数据
+   */
+  async testDeviceKind(nowDevice) {
+    const newKind = [{
+      name: 'cupboard',data:[]
+    }]
+    for (let index = 0; index < newKind.length; index++) {
+      const element = newKind[index];
+      if (!(element.name in nowDevice)) {//数据库中没有这个设备种类
+        const newData = {
+          ...nowDevice,
+          [element.name]:element.data
+        }
+        //刷新数据库数据
+        await app.callFunction({
+          name:'amendDatabase_fg',
+          data:{
+            collection:'shopAccount',
+            flagName:'shopFlag',
+            flag:appData.shopInfo.shopFlag,
+            objName:'shop.device',
+            data:newData
+          }
+        })
+        appData.device = newData;
+        this.setData({
+          device:newData
+        })
+      }
+    }
+  },
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
-
+  async onLoad(options) {
+    this.setData({
+      device: appData.device
+    })
+    await this.testDeviceKind(this.data.device)
+    
   },
 
   /**
@@ -54,13 +101,6 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
 
   }
 })

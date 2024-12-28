@@ -1,1 +1,1 @@
-"F:\Ô­×ÀÃæÎÄ¼þ\Î¢ÐÅweb¿ª·¢Õß¹¤¾ß\cli.bat" cloud functions deploy --e cloud1-4ga7jm4aad5de5c5 --n quickstartFunctions --r --project "C:\Users\Administrator\WeChatProjects\miniprogram-6" --report_first --report
+"F:\Ô­ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½\Î¢ï¿½ï¿½webï¿½ï¿½ï¿½ï¿½ï¿½ß¹ï¿½ï¿½ï¿½\cli.bat" cloud functions deploy --e billiards-0g53628z5ae826bc --n quickstartFunctions --r --project "C:\Users\Administrator\WeChatProjects\miniprogram-6" --report_first --report

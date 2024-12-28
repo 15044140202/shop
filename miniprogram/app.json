@@ -7,18 +7,14 @@
     "pages/index/index",
     "template/SetMenu",
     "pages/statement/cash/cash",
-    "utils/utils",
     "pages/statement/turnover/turnover",
     "pages/operate/tableInfo/tableInfo",
     "pages/set/sysSte/sysSte",
-    "pages/set/sysSte/lightSet/lightSet",
     "pages/set/sysSte/wxAccount/wxAccount",
     "pages/set/sysSte/waiter/waiter",
     "pages/set/sysSte/suggest/suggest",
-    "pages/set/sysSte/printerSet/printerSet",
     "pages/set/sysSte/operateSet/operateSet",
     "pages/set/sysSte/integralSet/integralSet",
-    "pages/set/sysSte/doorSet/doorSet",
     "pages/set/sysSte/deviceManage/deviceManage",
     "pages/set/shopSet/shopSet",
     "pages/set/noticeSet/noticeSet",
@@ -29,7 +25,6 @@
     "pages/oder/oder",
     "pages/set/sysSte/waiter/set/set",
     "pages/set/sysSte/waiter/newWaiter/newWaiter",
-    "pages/set/sysSte/operateSet/topUp/topUp",
     "pages/set/vipSet/vipSet",
     "pages/set/vipSet/vipInfoSet/vipInfoSet",
     "pages/set/commotidySet/commotidySet",
@@ -50,7 +45,17 @@
     "pages/statement/orderForm/orderFormInfo/orderFormInfo",
     "pages/statement/orderForm/orderForm",
     "pages/statement/attendance/attendance",
-    "pages/operate/tableInfo/tableQr/tableQr"
+    "pages/operate/tableInfo/tableQr/tableQr",
+    "pages/set/sysSte/wxAccount/rePay/rePay",
+    "pages/set/sysSte/deviceManage/lightCtrl/lightCtrl",
+    "pages/set/sysSte/deviceManage/announcer/announcer",
+    "pages/set/sysSte/deviceManage/camera/camera",
+    "pages/set/sysSte/deviceManage/doorLock/doorLock",
+    "pages/set/sysSte/deviceManage/printer/printer",
+    "pages/login/agree/agree",
+    "pages/set/setmeal/setmeal",
+    "pages/set/sysSte/deviceManage/cupboard/cupboard",
+    "pages/set/marketing/marketing"
   ],
   "usingComponents": {
     "van-icon": "@vant/weapp/icon/index",
@@ -99,5 +104,11 @@
     ]
   },
   "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "plugins": {
+    "myPlugin": {
+      "version": "1.0.8",
+      "provider": "wx19793dc4c276eeba"
+    }
+  }
 }

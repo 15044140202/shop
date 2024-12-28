@@ -7,7 +7,6 @@ page{
   display: flex;
   flex-direction: column;
   justify-self: start;
-
 }
 .titel{
   display: flex;

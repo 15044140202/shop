@@ -1,7 +1,7 @@
 // pages/set/commotidySet/commotidyPurchaseSet/commotidyPurchaseSet.js
-const utils = require('../../../utils/light')
 const appData = getApp().globalData;
 const app = getApp();
+import Dialog from '@vant/weapp/dialog/dialog';
 Page({
   /**
    * 页面的初始数据
@@ -14,11 +14,57 @@ Page({
     sum: 0,
 
     hidden: true
-
   },
-  async pay() {
+  async payCommotidyCost() {
+    const now = new Date();
+    const orderNum = app.createOrderNum(now, 'W')
     //此处加入支付 代码  支付成功  修改库存 与出库记录   否则 返回
+    //显示选择支付方式选择界面
+    var payMode = 'cash';
+    try {
+      await Dialog.confirm({
+        title: '选择支付方式',
+        message: `${this.data.sum/100}元\n现金收取请直接收取\n微信支付需扫客人首付款码.`,
+        confirmButtonText: '微信支付',
+        cancelButtonText: '现金支付'
+      });
+      //点击确认键   微信支付
+      payMode = 'wx'
+      const cardId = await wx.scanCode({
+        onlyFromCamera: true, // 是否只能从相机扫码，不允许从相册选择图片
+      });
+      console.log('调用微信支付!:' + cardId.result)
+      const payCode = await app.cardPay((this.data.sum).toString(), `商品费`, appData.shopInfo.proceedsAccount, orderNum, cardId.result, 'wxad610929898d4371')
+      console.log({
+        '调用结果:': payCode
+      })
+      if (payCode === undefined) { //支付返回错误
+        app.showToast('支付失败!', 'error')
+        return;
+      }
+      const payRes = await this.awaitOrderResult(orderNum);
+      if (!payRes) { //支付失败
+        app.showToast('支付失败!', 'error')
+        return;
+      }
+      payMode = '微信';
+    } catch { //点击取消按钮  现金支付
+      if (payMode === 'wx') { //判断是否为 微信支付模式 在扫描界面退出导致的 误进此选项
+        return; //误进入
+      }
+      console.log('选择现金支付!');
+      payMode = 'cash';
 
+    }
+    if (payMode === 'cash') {
+      //现金支付 直接开台 收取方式为现金
+      Dialog.alert({
+        message: `请收取顾客现金${this.data.sum/100}元`,
+      }).then(() => {
+        // on close
+      });
+    }
+    console.log('支付完成!')
     //***************支付 代码  待补充 */
 
     this.deletZero();
@@ -31,10 +77,10 @@ Page({
       console.log(this.data.commotidy)
       //修改商品库存数量
       const res = await app.callFunction({
-        name:'subtractCommotidySum',
-        data:{
-          shopFlag:appData.shopInfo.shopFlag,
-          commotidyInfo:this.data.addCommotidy
+        name: 'subtractCommotidySum',
+        data: {
+          shopFlag: appData.shopInfo.shopFlag,
+          commotidyInfo: this.data.addCommotidy
         }
       })
       if (res === 'ok') {
@@ -59,8 +105,8 @@ Page({
           sellPerson: appData.status,
           orderName: '商品单',
           time: app.getNowTime(now),
-          payMode: '现金/微信',
-          orderNum: app.createOrderNum(now,'S'),
+          payMode: payMode,
+          orderNum: orderNum,
           integral: "0",
           commotidyList: commotidyList,
           commotidyCost: this.data.sum / 100
@@ -76,9 +122,9 @@ Page({
         })
         if (r === 'ok') {
           console.log('修改记录保存成功!');
-          app.showToast('提交成功!','success');
+          app.showToast('提交成功!', 'success');
         } else {
-          app.showToast('提交失败!','error');
+          app.showToast('提交失败!', 'error');
         }
         this.setData({
           commotidy: this.data.commotidy,
@@ -87,11 +133,11 @@ Page({
         })
         return;
       } else {
-        app.showToast('提交失败!','error')
+        app.showToast('提交失败!', 'error')
       }
 
     } else {
-      app.showToast('没有商品!','error')
+      app.showToast('没有商品!', 'error')
       return;
     }
   },
@@ -127,10 +173,11 @@ Page({
     //首先检测这个商品是否已添加到添加列表了
     for (let index = 0; index < this.data.addCommotidy.length; index++) {
       const element = this.data.addCommotidy[index];
-      if (e.mark.class === element.class && e.mark.index === element.index) {//已被添加的商品
+      if (e.mark.class === element.class && e.mark.index === element.index) { //已被添加的商品
         this.setData({
-          [`addCommotidy[${index}].sum`]:this.data.addCommotidy[index].sum + 1
+          [`addCommotidy[${index}].sum`]: this.data.addCommotidy[index].sum + 1
         })
+        this.getSum()
         return;
       }
     }
@@ -143,14 +190,15 @@ Page({
     this.setData({
       addCommotidy: this.data.addCommotidy
     })
+    this.getSum()
     console.log(this.data.addCommotidy)
   },
   input(e) {
     if (e.detail.value === '') {
-      this.data.addCommotidy[e.mark.index].sum = '0'
+      this.data.addCommotidy[e.mark.index].sum = 0
     } else {
       this.setData({
-        [`addCommotidy[${e.mark.index}].sum`]: e.detail.value
+        [`addCommotidy[${e.mark.index}].sum`]: parseInt(e.detail.value)
       })
     }
     this.getSum()
@@ -254,6 +302,6 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage() {
-
+    return appData.globalShareInfo;
   }
 })

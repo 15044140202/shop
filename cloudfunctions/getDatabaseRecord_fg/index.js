@@ -21,7 +21,7 @@ exports.main = async (event) => {
       await db.collection(collection).add({
         data: {
           shopFlag: shopFlag,
-          [record]: record === 'integral' || record === 'operateSet' ? {} :  []
+          [record]: record === 'integral' || record === 'operateSet' || record === 'luckSudoku' ? {} :  []
         }
       })
     } else {
@@ -35,7 +35,7 @@ exports.main = async (event) => {
             shopFlag: shopFlag
           }).update({
             data: {
-              [record]: record === 'integral' ? {} : []
+              [record]: record === 'integral' || record === 'operateSet' || record === 'luckSudoku' ? {} : []
             }
           })
         }

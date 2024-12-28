@@ -9,43 +9,54 @@
     <text style=" padding-right:30rpx ">{{orderForm[index].orderNum}}</text>
   </view>
   <view class="info">
-    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">开始时间: </text>
-    <text style=" padding-right:30rpx ">{{orderForm[index].startTime}}</text>
+    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">{{orderForm[index].orderName === '储值单' ||orderForm[index].orderName === '精彩秀单' ||orderForm[index].orderName === '商品单' || orderForm[index].orderName === '杆柜租赁' ? '时间: ' : '开始时间: '}}</text>
+    <text style=" padding-right:30rpx ">{{orderForm[index].orderName === '储值单' ||orderForm[index].orderName === '精彩秀单' ||orderForm[index].orderName === '商品单' || orderForm[index].orderName === '杆柜租赁' ? orderForm[index].time : orderForm[index].startTime}}</text>
   </view>
-  <view class="info">
+  <view class="info" hidden="{{orderForm[index].orderName === '储值单' ||orderForm[index].orderName === '精彩秀单' ||orderForm[index].orderName === '商品单' || orderForm[index].orderName === '杆柜租赁'}}">
     <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">结束时间: </text>
     <text style=" padding-right:30rpx ">{{orderForm[index].endTime}}</text>
   </view>
   <view class="info">
-    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">结账方式: </text>
-    <text style=" padding-right:30rpx ">{{orderForm[index].payMode}}</text>
+    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">{{orderForm[index].orderName === '储值单'  ||orderForm[index].orderName === '精彩秀单' ||orderForm[index].orderName === '商品单'  || orderForm[index].orderName === '杆柜租赁' ? '支付方式: ' : '结账方式: '}}</text>
+    <text style=" padding-right:30rpx ">{{orderForm[index].payMode === 'wx' ? '微信' :orderForm[index].payMode}}</text>
   </view>
-  <view class="info">
-    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">开台人: </text>
-    <text style=" padding-right:30rpx ">{{orderForm[index].openPerson.openPersonName}}</text>
+  <view class="info" bind:tap="goto" mark:item="vipDetail">
+    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">{{orderForm[index].orderName === '储值单'  ||orderForm[index].orderName === '精彩秀单'  ||orderForm[index].orderName === '商品单'  || orderForm[index].orderName === '杆柜租赁' ? '支付人: ' : '开台人: '}}</text>
+    <text style=" padding-right:30rpx ">{{orderForm[index].orderName === '储值单' ? orderForm[index].person.name: orderForm[index].orderName === '精彩秀单' ? orderForm[index].personName: orderForm[index].orderName === '商品单' || orderForm[index].orderName === '杆柜租赁'? orderForm[index].buyPerson.name : orderForm[index].openPerson.openPersonName}}</text>
   </view>
-  <view class="info">
+  <view class="info" bind:tap="call">
+    <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">电话: </text>
+    <view>
+      <van-icon name="phone-o" size="45rpx"></van-icon>
+      <text style=" padding-right:30rpx ">{{orderForm[index].orderName === '储值单' ? orderForm[index].person.telephone:orderForm[index].orderName === '精彩秀单' ? orderForm[index].personTelephone : orderForm[index].orderName === '商品单'  || orderForm[index].orderName === '杆柜租赁' ? orderForm[index].buyPerson.telephone : orderForm[index].openPerson.openPersonPhone}}</text>
+    </view>
+  </view>
+  <view class="info" hidden="{{orderForm[index].orderName === '精彩秀单'  || orderForm[index].orderName === '杆柜租赁'}}">
     <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">本次积分: </text>
     <text style=" padding-right:30rpx ">{{orderForm[index].integral}} 分</text>
   </view>
   <view style=" height: 30rpx; border-bottom: 1rpx #999 solid;"></view>
-  <view class="info">
+  <view class="info" hidden="{{orderForm[index].orderName === '储值单' || orderForm[index].orderName === '精彩秀单'|| orderForm[index].orderName === '商品单'  || orderForm[index].orderName === '杆柜租赁'}}">
     <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">桌台费: </text>
     <text style=" padding-right:30rpx ">{{orderForm[index].tableCost}} 元</text>
   </view>
-  <view class="info">
+  <view class="info" hidden="{{orderForm[index].orderName === '储值单' || orderForm[index].orderName === '精彩秀单'  || orderForm[index].orderName === '杆柜租赁'}}">
     <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">商品费: </text>
     <text style=" padding-right:30rpx ">{{orderForm[index].commotidyCost}} 元</text>
   </view>
   <view style=" height: 30rpx; border-bottom: 1rpx #999 solid;"></view>
-  <view class="info" style="margin-bottom: 50rpx; margin-top: 30rpx;">
+  <view class="info" style="margin-bottom: 30rpx; margin-top: 30rpx;">
     <text style="font-size: 38rpx; padding-left: 30rpx; color: #999;">消费总额: </text>
-    <text style=" padding-right:30rpx; font-size: 38rpx;">{{orderForm[index].commotidyCost + orderForm[index].tableCost}} 元</text>
+    <text style=" padding-right:30rpx; font-size: 38rpx;">{{orderForm[index].orderName === '储值单' ? orderForm[index].amount: orderForm[index].orderName === '精彩秀单' ? orderForm[index].cost : orderForm[index].orderName === '商品单' ? orderForm[index].commotidyCost:orderForm[index].orderName === '杆柜租赁' ? orderForm[index].amount : orderForm[index].commotidyCost + orderForm[index].tableCost}} 元</text>
+  </view>
+  <view class="info" style="margin-bottom: 10rpx; margin-top: 10rpx;" hidden="{{!(orderForm[index].payMode === '微信' || orderForm[index].payMode === 'wx' || orderForm[index].payMode ==='现金')}}">
+    <text style="font-size: 28rpx; padding-left: 30rpx; color: #999;">仅现金与微信结账方式的桌台订单支持退款</text>
+    <button type="warn" size="mini" bind:tap="rePay" mark:index='{{index}}' disabled="{{refundTotalAmount >= orderForm[index].tableCost || orderForm[index].tableCost === 0 ||orderForm[index].orderName === '杆柜租赁' ||orderForm[index].orderName === '储值单'  ||orderForm[index].orderName === '精彩秀单'}}">退款</button>
   </view>
 </view>
 <view style="margin-left: 30rpx; margin-top: 20rpx;">日志:</view>
 <view class="border" style="margin-top: 20rpx;">
   <view wx:for="{{orderForm[index].log}}" wx:key="index" class="log">
-  <text style="margin-left: 30rpx; ">{{item}}</text>
+    <text style="margin-left: 30rpx; ">{{item}}</text>
   </view>
 </view>

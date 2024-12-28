@@ -1,4 +1,6 @@
 // pages/set/shortMassageSend/shortMassageSend.js
+const app = getApp();
+const appData = app.globalData;
 Page({
 
   /**
@@ -72,6 +74,6 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage() {
-
+    return appData.globalShareInfo;
   }
 })

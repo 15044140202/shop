@@ -1,0 +1,36 @@
+<!--pages/set/sysSte/lightSet/lightSet.wxml-->
+<view style=" height:50rpx "></view>
+<text style="margin-top:50rpx; margin-left: 50rpx; color: #999;">灯控器设置</text>
+<view style=" height:50rpx "></view>
+
+
+<view class="titel" style="background-color: white; height: 100rpx;">
+  <text style="margin-left: 30rpx;">绑定通讯模块</text>
+  <view class="titel_1">
+    <input style="width: 280rpx; margin-right: 20rpx;" type="text" value="{{device.lightCtrl}}" placeholder="未绑定灯控器" focus="false" bindblur="bindKeyInput" mark:item='lightCtrl' />
+    <van-icon name='scan' size="50rpx" color="#999" bind:tap="scan"></van-icon>
+  </view>
+</view>
+<view class="lightBorder" wx:for="{{5}}" wx:key="index">
+  <view style="background-color:#0097ff;color: #fff; width: 90%; height: 60rpx; margin-top:{{index === 0 ? '30rpx' : '0rpx'}}; font-size: 38rpx;display: flex; justify-content: center; align-items: center;">{{index === 0 ? '店内牌匾设置' : '店铺内电器'}}{{index === 0 ? '' : index}}</view>
+  <view class="light">
+    <view class="switch">
+      <picker mode="time" value="{{device.shopLightSet[index].openTime}}" bindchange="timeChange" mark:item="open" mark:index="{{index}}">
+        <text>每天--{{device.shopLightSet[index].openTime === undefined ? '00:00' :device.shopLightSet[index].openTime}} 开</text>
+      </picker>
+      <view style="display: flex; flex-direction: row; width: 200rpx;">
+        <text>通道 : </text>
+        <input style="width: 80rpx; height: 100%; text-align: center;" type="number" value="{{device.shopLightSet[index].lightId}}" placeholder="0" bindinput="bindKeyInput" mark:item="lightId" mark:index="{{index}}" />
+      </view>
+    </view>
+    <view style="width: 50%;">
+      <picker style="width: 100%; text-align: right;" mode="time" value="{{device.shopLightSet[index].closeTime}}" bindchange="timeChange" mark:item="close" mark:index="{{index}}">
+        <text>每天--{{device.shopLightSet[index].closeTime === undefined ? '00:00' :device.shopLightSet[index].closeTime}} 关</text>
+      </picker>
+      <switch style="width: 100%; text-align: right;" checked="{{switchStatus[index]}}" bindchange="switchChange" mark:item="lightChange"  mark:index="{{index}}" />
+    </view>
+  </view>
+</view>
+
+<button type="primary" style="margin: 40rpx 40rpx 0rpx 40rpx ;" bind:tap="save">保存</button>
+<button style="margin: 40rpx 40rpx 0rpx 40rpx ;" bind:tap="lightTest">模块联网测试</button>

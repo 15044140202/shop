@@ -1,0 +1,59 @@
+<!--pages/set/sysSte/deviceManage/camera/camera.wxml-->
+<import src="../../../../../template/SetMenu/SetMenu" />
+<template is="titel" data="{{titel:'添加摄像机'}}" />
+<view style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 95%; margin-left: 2.5%; height: 80rpx; background-color: #eee; margin-top: 20rpx; border-radius: 20rpx; border:1rpx solid #ccc">
+  <text style="margin-left: 30rpx;" >调用余额:</text>
+  <text> {{shopInfo.sportShowAmount > 0 ? shopInfo.sportShowAmount : '0'}} 元</text>
+  <button type="primary" style="width: 150rpx;" size="mini" bind:tap="tap" mark:item="topup">充值</button>
+  <text style="color: #999; font-size: 29rpx;">顾客调用一次扣除1元</text>
+</view>
+<view style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 95%; margin-left: 2.5%; height: 80rpx; background-color: #eee; margin-top: 20rpx; border-radius: 20rpx; border:1rpx solid #ccc">
+  <text style="margin-left: 30rpx;">售价:</text>
+  <input style="width: 120rpx; border-bottom: 1rpx #999 solid; text-align: center;" type="number" value="{{sportShowPrice}}" bindinput="input" mark:item ="sportShowPrice"/>
+  <text>元/次</text>
+  <button type="primary" size="mini" bind:tap="priceSave">保存</button>
+</view>
+<view style="width:95%; margin-left:2.5%; margin-top: 20rpx; background-color: #eee; border-radius: 30rpx; border: #ccc solid 1rpx; display: flex; flex-direction: column; justify-content: center; align-items: center; ">
+  <text>已添加列表</text>
+  <view style="{{device.camera.length - 1 > index ?'width: 100%; border-bottom: #fff solid 5rpx;' : 'width:100%;'}}" wx:for="{{device.camera}}" wx:key="index">
+    <view class="cameraList">
+      <text>摄像机编号:</text>
+      <text>{{item.cameraNum}}</text>
+      <van-icon color="red" style="margin-left:20rpx;" name="delete-o" size="48rpx" bind:tap="delete" mark:index="{{index}}"></van-icon>
+    </view>
+    <view class="cameraList" style="justify-content: start;">
+      <text>设备状态:</text>
+      <text style="margin-left: 50rpx;">{{deviceState[index] === '1' ? '在线' : '离线'}}</text>
+      <van-icon style="margin-left:40rpx;" color="{{deviceState[index] === '1' ? 'green' : 'red' }}" name="{{deviceState[index] === '1' ? 'passed' : 'close' }}" size="48rpx"></van-icon>
+    </view>
+    <view class="cameraList" style="justify-content: start;" wx:for="{{item.channel}}" wx:for-item="channelItem" wx:for-index="channelIndex" wx:key="channelIndex">
+      <text>通道{{channelIndex +1}}:</text>
+      <picker range="{{tableSum}}" range-key="tableNum" value="{{item.bindTable - 1}}" bindchange="chengeBindTable" mark:index="{{index}}" mark:channelIndex="{{channelIndex}}">
+        <text style="margin-left: 30rpx;">{{channelItem.bindTable === 0 ? '未绑定桌台' : '绑定' + channelItem.bindTable + '号桌台'}}</text>
+      </picker>
+    </view>
+
+  </view>
+</view>
+<view style="width: 100%; border-bottom: solid 1rpx #eee; height: 20rpx; "></view>
+<view style="margin-top: 30rpx;" class="cameraList">
+  <text style="width: 35%;">摄像机S/N:</text>
+  <view style="width: 65%;" class="scan">
+    <input style="font-size: 28rpx; text-align: center; color: #ccc;" type="text" value="{{cameraNum}}" placeholder="仅支持大华摄像机" bindinput="input" mark:item="cameraNum" />
+    <van-icon style="margin-left:20rpx;" name="scan" size="50rpx" bind:tap="scan" />
+  </view>
+</view>
+<view class="cameraList">
+  <text style="width: 35%;">安全码:</text>
+  <view style="width: 65%; height: 100%;" class="scan">
+    <input style="height: 100%; text-align: center; font-size: 28rpx; color: #ccc;" type="text" value="{{cameraSecurityCode}}" placeholder="仅支持大华摄像机" bindinput="input" mark:item="cameraSecurityCode" />
+  </view>
+</view>
+<view class="cameraList">
+  <text style="width: 35%;">通道数量:</text>
+  <view style="width: 65%; height: 100%;" class="scan">
+    <input style="height: 100%; text-align: center; font-size: 28rpx; color: #ccc;" type="text" value="{{channel}}" placeholder="录像机请输入通道总数" bindinput="input" mark:item="channel" />
+  </view>
+</view>
+<button style="margin:80rpx" type="primary" bind:tap="save">添加摄像机</button>
+<van-dialog id="van-dialog" />

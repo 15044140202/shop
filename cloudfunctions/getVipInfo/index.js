@@ -49,7 +49,7 @@ exports.main = async (event) => {
         vipInfo = res.data[0];
         break;
       } else {
-        return res.data[0];
+        return res.data[0].vipInfo;
       }
     }
   }

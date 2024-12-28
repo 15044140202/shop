@@ -1,7 +1,7 @@
 <!--pages/operate/tableInfo/tableQr/tableQr.wxml-->
+<view style="display: flex; flex-direction: row; justify-content: center; align-items: center; width: 100%;">
+	<canvas type="2d" id="myCanvas" style=" border: 1rpx #eee solid; width:{{item === 'tableNum' ? '90vw' : '80vw'}}; height:{{item === 'tableNum' ? '30vw' : '108.5vw'}};"></canvas>
+</view>
 
-<canvas type="2d" id="myCanvas" style=" border: 1rpx #eee solid; width: 90%; margin: 5%;">
-
-</canvas>
-<button type="default" style="margin: 50rpx;" bind:tap="downTableQr">下载桌台码</button>
-<button type="{{saveButton}}" disabled="{{saveButtonDisabled}}" style="margin: 50rpx;" bind:tap="saveQr" >保存桌台码</button>
+<button type="default" style="margin: 50rpx;" bind:tap="downTableQr">{{item === 'tableNum' ? '下载桌台码' : '下载杆柜指图'}}</button>
+<button type="{{saveButton}}" disabled="{{saveButtonDisabled}}" style="margin: 50rpx;" bind:tap="saveQr">{{item === 'tableNum' ? '保存桌台码' : '保存杆柜指图'}}</button>

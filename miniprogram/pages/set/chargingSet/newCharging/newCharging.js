@@ -4,12 +4,12 @@ const app = getApp();
 const utils = require('../../../../utils/light');
 import Dialog from '../../../../miniprogram_npm/@vant/weapp/dialog/dialog';
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
     charging: [],
+    onOff:true,//是否启用 按时间计费
     name: '',
     periodCost: {
       periodTime: 15,
@@ -37,13 +37,27 @@ Page({
     advancedSetHidden: true,
     //是否启用开台押金  及 启动余额提醒
     cashPledge: true,
-    pledge:[{name:'1小时',pledge:0},{name:'2小时',pledge:0},{name:'3小时',pledge:0},{name:'4小时',pledge:0},{name:'5小时',pledge:0},{name:'6小时',pledge:0}],
+    pledge:[{name:'1小时',pledge:0},{name:'2小时',pledge:0},{name:'3小时',pledge:0},{name:'4小时',pledge:0},{name:'5小时',pledge:0}],
     balanceWarn: true,
 
     //修改规则  上一页传过来的  index
-    index: 0
-
-
+    index: 0,
+    videoShow:false,
+    videoUrl:'https://6269-billiards-0g53628z5ae826bc-1326882458.tcb.qcloud.la/video/%E5%A6%82%E4%BD%95%E8%AE%BE%E7%BD%AE%E8%AE%A1%E8%B4%B9%E8%A7%84%E5%88%99.mp4?sign=1921fc8dac9f26718f12d162f4343b75&t=1721302743'
+  },
+  change(e){
+    if (e.mark.item === 'onOff') {
+      this.setData({
+        onOff:this.data.onOff === true ? false : true
+      })
+      return;
+    }
+  },
+  video(e){
+    this.setData({
+      videoShow:true
+    })
+    
   },
   startCostSet(e){
     console.log(e.detail.value)
@@ -78,6 +92,7 @@ Page({
     //构造计费规则 
     const charging = {
       shopFlag: appData.shopInfo.shopFlag,
+      onOff:this.data.onOff,
       flag: this.data.flag,
       name: this.data.name,
       timeSegment: this.data.timeSegment,
@@ -131,6 +146,8 @@ Page({
         name:'amendArrayDatabase_fg',
         data:{
           collection:'charging',
+          flag:'shopFlag',
+          flagInfo: p.shopFlag,
           record:'charging',
           arrayFlag:'flag',
           data:p
@@ -328,6 +345,7 @@ Page({
       console.log('上一页面传来的数据', params);
       this.setData({
         charging: params.charging,
+        onOff:'onOff' in params.charging[index] ? params.charging[index].onOff : true,
         name: params.charging[index].name,
         flag: params.charging[index].flag,
         periodCost: params.charging[index].periodCost,
@@ -394,6 +412,6 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage() {
-
+    return appData.globalShareInfo;
   }
 })

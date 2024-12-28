@@ -3,7 +3,6 @@ const app = getApp();
 const appData = app.globalData;
 const db = wx.cloud.database();
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -36,14 +35,42 @@ Page({
       }
     },
     sacnMode: ['客人扫收款码', '店员扫付款码'],
-    paker: ['20.0元500条', '40.0元100条', '120.0元3000条', '200.0元5000条', '400.0元10000条'],
+    paker: ['20.0元500条', '40.0元1000条', '120.0元3000条', '200.0元5000条', '400.0元10000条'],
     pakerIndex: 0
   },
-  pakerOnChange(e) {
+  async pakerOnChange(e) {
+    console.log(e)
     const amount = this.data.paker[e.detail.value].slice(0, e.detail.value > 1 ? 3 : 2)
-    wx.showToast({
-      title: `充值${amount}元`,
+    const degree = e.detail.value === "0" ? 500 : e.detail.value === "1" ? 1000 : e.detail.value === "2" ? 3000 : e.detail.value === "3" ? 5000 : 10000
+    console.log(degree)
+    const now = new Date();
+    const orderNum = app.createOrderNum(now, 'shortMsg')
+    const payRes = await app.pay(amount, '短信验证费', appData.my_sub_mchid, orderNum);
+    if (payRes === 'error') { //支付成功
+      return;
+    }
+    //支付成功  修改营业设置中的  验证手机号码次数
+    const res = await app.callFunction({
+      name:'payMerchantShortMsgDegree',
+      data:{
+        shopFlag:appData.shopInfo.shopFlag,
+        degree:degree,
+        orderNum:orderNum,
+        amount:amount,
+        payTime:app.getNowTime(new Date(now))
+      }
     })
+    if (res === 'ok') {
+      app.showModal('提示','充值成功!')
+      this.setData({
+        ['operateSet.startSet.degree']:this.data.operateSet.startSet.degree + degree
+      })
+      return;
+    }else{
+      app.showModal('提示','充值失败!如成功支付稍后未到账请联系客服!')
+      return;
+    }
+
   },
   change(e) {
     console.log(e)
@@ -65,22 +92,22 @@ Page({
     }
   },
   async save() {
-    app.showLoading('保存中...',true);
+    app.showLoading('保存中...', true);
     const res = await app.callFunction({
-      name:'amendDatabase_fg',
-      data:{
-        collection:'operateSet',
-        flagName:'shopFlag',
-        flag:appData.shopInfo.shopFlag,
-        objName:'operateSet',
-        data:this.data.operateSet
+      name: 'amendDatabase_fg',
+      data: {
+        collection: 'operateSet',
+        flagName: 'shopFlag',
+        flag: appData.shopInfo.shopFlag,
+        objName: 'operateSet',
+        data: this.data.operateSet
       }
     })
     wx.hideLoading();
     if (res === 'ok') {
-      app.showToast('保存成功!','success');
-    }else{
-      app.showToast('保存失败!','error');
+      app.showToast('保存成功!', 'success');
+    } else {
+      app.showToast('保存失败!', 'error');
     }
   },
   //获取 积分规则 函数
@@ -113,7 +140,6 @@ Page({
     }
     wx.hideLoading();
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -153,13 +179,6 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
 
   }
 })

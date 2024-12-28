@@ -126,8 +126,8 @@ const _buildParams = () => {
     SignatureVersion: '1.0',
     Timestamp: timestamp(),
     AccessKeyId: app.globalData.ai,
-    Version: app.globalData.apiVersion,
-    RegionId: "cn-shanghai"
+    Version: '2020-04-20',
+    RegionId: "cn-shenzhen"
   };
   return defaultParams;
 }
@@ -154,7 +154,7 @@ function request(params, opts) {
 
   normalized.push(['Signature', encode(signature)])
 
-  const url = method === 'POST' ? `https://iot.cn-shanghai.aliyuncs.com/` : `https://iot.cn-shanghai.aliyuncs.com/?${canonicalize(normalized)}`
+  const url = method === 'POST' ? `https://onsmqtt.cn-shenzhen.aliyuncs.com/` : `https://onsmqtt.cn-shenzhen.aliyuncs.com/?${canonicalize(normalized)}`
   if (method === 'POST') {
     opts.headers = opts.headers || {};
     opts.headers['content-type'] = 'application/x-www-form-urlencoded'
@@ -168,10 +168,10 @@ function request(params, opts) {
       method: method,
       dataType: 'json',
       responseType: 'text',
-      success: function(res) {
+      success(res) {
         resolve(res.data);
       },
-      fail: function(error) {
+      fail(error) {
         reject(error);
       }
     });

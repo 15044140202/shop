@@ -6,7 +6,7 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV }) // 使用当前云环境
 // 云函数入口函数
 exports.main = async (event) => {
   const wxContext = cloud.getWXContext()
-  const {shopFlag,userTelephone,userName} = event;
+  const {shopFlag,userTelephone,userName,userOpenid} = event;
   var vipList = [];
   //现获取店铺会员列表
   const res = await cloud.callFunction({
@@ -24,7 +24,11 @@ exports.main = async (event) => {
   }
   for (let index = 0; index < vipList.length; index++) {
     const element = vipList[index];
-    if (userTelephone !== 'null') { //优先匹配电话号  如果电话号为null  则匹配名字
+    if (userOpenid !== 'null' && userOpenid !== undefined) { //优先匹配电话号  如果电话号为null  则匹配名字
+      if (userOpenid === element.userOpenid) {
+        return element;
+      }
+    }else if (userTelephone !== 'null') { //优先匹配电话号  如果电话号为null  则匹配名字
       if (userTelephone === element.telephone) {
         return element;
       }
