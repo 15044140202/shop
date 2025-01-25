@@ -5,7 +5,6 @@ import {
   Base64
 } from 'js-base64';
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -27,19 +26,35 @@ Page({
         member: data
       })
     })
-
-    //获取二维码
+    const _id = app.getRandomString(28)
     const now = new Date().getTime();
-    const res = await wx.cloud.callFunction({
+    //上传QR信息
+    const upQrDataRes = await app.updateQrData({
+      _id:_id,
+      itemName:'addWaiter',
+      position:options.position,
+      time:now,
+      shopId:appData.shop_account._id,
+      shopName:appData.shop_account.shopInfo.shopName
+    })
+    if (!upQrDataRes.success) {//
+      console.log('上传QR信息失败!')
+      return
+    }
+    //获取二维码
+    const path = `pages/oder/oder`
+    console.log(path)
+    const res = await app.callFunction({
       name: 'getQRCode',
       data: {
-        pages: `pages/oder/oder?position=${options.position}&time=${now}&shopFlag=${appData.shopInfo.shopFlag}&shopName=${appData.shopInfo.shop.shopName}`
+        pages: path,
+        scene:_id
       }
     })
     console.log(res)
-    if (res.result.errMsg === 'openapi.wxacode.get:ok') {
+    if (res.errMsg === 'openapi.wxacode.getUnlimited:ok') {
       app.showToast('获取小程序码成功!', 'success')
-      let arrayBuffer = res.result.buffer; // 你的 ArrayBuffer 数据
+      let arrayBuffer = res.buffer; // 你的 ArrayBuffer 数据
       let byteArray = new Uint8Array(arrayBuffer);
       let base64String = Base64.fromUint8Array(byteArray);
       this.setData({
@@ -48,7 +63,6 @@ Page({
     } else {
       app.showToast('获取小程序码失败!', 'error')
     }
-
   },
 
   /**

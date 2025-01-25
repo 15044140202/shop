@@ -1,0 +1,18 @@
+<view style="width: 100%; height: 100rpx; display: flex; flex-direction: column;justify-content: center;align-items: center; color: red; font-size: 50rpx;">转让详情</view>
+<view class="shopInfo_border">
+  <view class="viewLine">店铺名称 : {{shop_account.shopInfo.shopName}}</view>
+  <view class="viewLine">店铺地址 : {{shop_account.shopInfo.shopAdd}}</view>
+  <view class="viewLine">接收人手机号码 :
+    <input style="height: 100%; width: 60%;text-align: center;" type="number" value="{{tel}}" placeholder="输入接收人手机号码" bindinput="input" mark:item="tel" />
+  </view>
+  <button type="primary" style="margin-top:20rpx; width:90%;" bind:tap="tap" mark:item="confirm">确认转让</button>
+</view>
+<block wx:if="{{qrHidden}}">
+  <view style=" background-color: #fff; width: 100%; height: 500rpx; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <image src="{{imgBuff}}" mode="aspectFit" />
+  </view>
+  <view style=" display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <text>用新店主的人打开微信扫一扫即可</text>
+    <text>有效时间10分钟</text>
+  </view>
+</block>

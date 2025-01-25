@@ -6,7 +6,7 @@
   <navigator class="logo" url='./shopSet/shopSet'>
     <image src="{{shopLogo}}" mode="scaleToFill" />
     <view class="logo_name">
-      <text style="font-size: 40rpx;">{{shopInfo.shop.shopName}}</text>
+      <text style="font-size: 40rpx;">{{shop_account.shopInfo.shopName}}</text>
       <text style="font-size: 25rpx; color: #6d6969; margin-top: 10rpx;">店铺设置</text>
     </view>
   </navigator>

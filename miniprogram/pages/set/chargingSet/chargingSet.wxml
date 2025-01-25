@@ -1,6 +1,6 @@
 <!--pages/set/chargingSet/chargingSet.wxml-->
 <view class='border'>
-  <view class="titel" wx:for="{{charging}}" wx:key="index" bind:tap="goto" mark:mymark='{{index}}' bind:longpress="longPress" mark:index='{{index}}'>
+  <view class="titel" wx:for="{{shop_charging}}" wx:key="index" bind:tap="goto" mark:mymark='{{index}}' bind:longpress="longPress" mark:index='{{index}}'>
     <text style="font-size: 38rpx;">{{item.name}}</text>
     <view style=" margin-right:35rpx">
       <text style="color: #999;">{{bindTableCount[index]}}台</text>

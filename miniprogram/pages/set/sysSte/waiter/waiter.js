@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    member: appData.shopInfo.shop.member
+    member: appData.shop_member_set
   },
   set(e) {
     console.log(e.mark.mymark)

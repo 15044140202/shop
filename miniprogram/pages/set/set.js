@@ -1,5 +1,4 @@
 // pages/set/set.js
-const utils = require('../../utils/light')
 const app = getApp()
 const appData = app.globalData;
 Page({
@@ -7,7 +6,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    shopInfo: appData.shopInfo,
+    shop_account: appData.shop_account,
     shopLogo: '',
     MenuData: {
       set: {
@@ -49,7 +48,7 @@ Page({
       coupon: {
         logo1: 'coupon-o',
         name: "优惠券/团购券/营销管理",
-        to:'./marketing/marketing'
+        to: './marketing/marketing'
       },
       setmeal: {
         logo1: 'discount-o',
@@ -109,10 +108,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
+    const that = this
     //获取店铺Logo
-    this.setData({
-      shopLogo: await app.getHeadImage(this.data.shopInfo.logoId)
+    app.getHeadImage(this.data.shop_account.shopInfo.logoId).then(res =>{
+      that.setData({
+        shopLogo:res
+      })
     })
+
   },
 
   /**
@@ -126,15 +129,18 @@ Page({
    * 生命周期函数--监听页面显示
    */
   async onShow() {
-    if (appData.shopInfo.shopFlag === this.data.shopInfo.shopFlag) { //判断有没有切换店铺
+    if (appData.shop_account.id === this.data.shop_account._id) { //判断有没有切换店铺
       return;
     }
     this.setData({
-      shopInfo:appData.shopInfo
+      shop_account: appData.shop_account
     })
     //获取店铺Logo
-    this.setData({
-      shopLogo: await app.getHeadImage(this.data.shopInfo.logoId)
+    const that = this
+    app.getHeadImage(this.data.shop_account.shopInfo.logoId).then(res =>{
+      that.setData({
+        shopLogo:res
+      })
     })
 
   },

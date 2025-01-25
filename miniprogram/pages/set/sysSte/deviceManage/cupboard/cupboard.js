@@ -10,13 +10,13 @@ function flagToSysId(flag) {
   console.log(intNum)
   return parseInt(intNum.toString().slice(0, 4))
 }
-openDoor.cfg.sysID = flagToSysId(appData.shopInfo.shopFlag); //设置开锁模块的 系统id
+openDoor.cfg.sysID = flagToSysId(appData.shop_account._id); //设置开锁模块的 系统id
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-    device: appData.device,
+    shop_device: appData.shop_device,
     lockSetShow: false,
     useRuleSetShow: false,
     lockSelect: 0,
@@ -42,7 +42,7 @@ Page({
       })
     }
     if (e.mark.item === "openDoor") { //开门
-      if (!this.data.device.cupboard[e.mark.index].lockCode && !this.data.device.cupboard[e.mark.index].androidLockCode) { //未绑定柜门锁
+      if (!this.data.shop_device.cupboard[e.mark.index].lockCode && !this.data.shop_device.cupboard[e.mark.index].androidLockCode) { //未绑定柜门锁
         this.setData({
           lockSetShow: true
         })
@@ -51,11 +51,11 @@ Page({
       console.log('执行开锁');
       app.showLoading('开锁中...', true)
       openDoor.cfg.lockID = e.mark.index + 1; //选择密码锁序号
-      const deviceId = this.data.system === 'iOS' ? '' : this.data.device.cupboard[e.mark.index].androidLockCode
+      const deviceId = this.data.system === 'iOS' ? '' : this.data.shop_device.cupboard[e.mark.index].androidLockCode
       const openRes = await openDoor.openLock(deviceId);
       wx.hideLoading();
       if (openRes !== 'error') {
-        if (this.data.system === 'iOS' && !this.data.device.cupboard[e.mark.index].lockCode) {
+        if (this.data.system === 'iOS' && !this.data.shop_device.cupboard[e.mark.index].lockCode) {
           //保存 ios 设备ID
           await this.saveDeviceId('iOS', e.mark.index, openRes)
         } else {
@@ -198,90 +198,87 @@ Page({
     }
   },
   async saveDeviceId(system, myCupboardIndex, deviceId) {
+
+    const record = system === 'iOS' ? `device.cupboard.${myCupboardIndex}.lockCode` : `device.cupboard.${myCupboardIndex}.androidLockCode`
     const res = await app.callFunction({
-      name: 'amendDatabase_fg',
+      name: 'upDate',
       data: {
-        collection: 'shopAccount',
-        flagName: 'shopFlag',
-        flag: appData.shopInfo.shopFlag,
-        objName: system === 'iOS' ? `shop.device.cupboard.${myCupboardIndex}.lockCode` : `shop.device.cupboard.${myCupboardIndex}.androidLockCode`,
-        data: deviceId
+        collection: 'shop_device',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        upData:{
+          [record]:deviceId
+        }
       }
     })
     console.log(res)
+
     if (system === 'iOS') {
-      appData.device.cupboard[cupboardIndex].lockCode = deviceId;
+      appData.shop_device.cupboard[cupboardIndex].lockCode = deviceId;
       this.setData({
-        [`device.cupboard[${cupboardIndex}].lockCode`]: deviceId
+        [`shop_device.cupboard[${cupboardIndex}].lockCode`]: deviceId
       })
     } else {
-      if (appData.device.cupboard[cupboardIndex].androidLockCode) {
-        appData.device.cupboard[cupboardIndex].androidLockCode = deviceId;
+      if (appData.shop_device.cupboard[cupboardIndex].androidLockCode) {
+        appData.shop_device.cupboard[cupboardIndex].androidLockCode = deviceId;
       } else {
-        appData.device.cupboard[cupboardIndex] = {
+        appData.shop_device.cupboard[cupboardIndex] = {
           ...appData.device.cupboard[cupboardIndex],
           androidLockCode: deviceId
         }
       }
       this.setData({
-        [`device.cupboard[${cupboardIndex}].androidLockCode`]: deviceId
+        [`shop_device.cupboard[${cupboardIndex}].androidLockCode`]: deviceId
       })
     }
     return
   },
   async clearUser(cupboardIndex) {
     const res = await app.callFunction({
-      name: 'databaseRecord_set',
+      name: 'record_set',
       data: {
-        collection: 'shopAccount',
-        flagName: 'shopFlag',
-        flag: appData.shopInfo.shopFlag,
-        record: `shop.device.cupboard.${cupboardIndex}.userInfo`,
-        value: {}
+        collection: 'shop_device',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        record:`cupboard.${cupboardIndex}.userInfo`,
+        data: {}
       }
     })
-    if (res === 'ok') {
-      app.showToast('清除成功!', 'success');
-      appData.device.cupboard[cupboardIndex].userInfo = {};
+    if (res.success) {
+      appData.shop_device.cupboard[cupboardIndex].userInfo = {};
       this.setData({
-        [`device.cupboard[${cupboardIndex}].userInfo`]: {}
+        [`shop_device.cupboard[${cupboardIndex}].userInfo`]: {}
       })
+      app.showToast('清除成功!', 'success');
     } else {
       app.showToast('清除失败!', 'error');
     }
   },
+
   async unbindLock(cupboardIndex) {
+    const record = [`cupboard.${cupboardIndex}.lockCode`,`cupboard.${cupboardIndex}.androidLockCode`]
+    const data = ['' , '']
     const res = await app.callFunction({
-      name: 'databaseRecord_set',
+      name: 'record_set',
       data: {
-        collection: 'shopAccount',
-        flagName: 'shopFlag',
-        flag: appData.shopInfo.shopFlag,
-        record: `shop.device.cupboard.${cupboardIndex}.lockCode`,
-        value: ''
+        collection: 'shop_device',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        record:record,
+        data: data
       }
     })
-    const r = await app.callFunction({
-      name: 'databaseRecord_set',
-      data: {
-        collection: 'shopAccount',
-        flagName: 'shopFlag',
-        flag: appData.shopInfo.shopFlag,
-        record: `shop.device.cupboard.${cupboardIndex}.androidLockCode`,
-        value: ''
-      }
-    })
-    if (res === 'ok') {
-      app.showToast('解绑成功!', 'success');
-      appData.device.cupboard[cupboardIndex].lockCode = '';
-      appData.device.cupboard[cupboardIndex] = {
-        ...appData.device.cupboard[cupboardIndex],
-        androidLockCode: ''
-      }
+
+    if (res.success) {
       this.setData({
-        [`device.cupboard[${cupboardIndex}].lockCode`]: '',
-        [`device.cupboard[${cupboardIndex}].androidLockCode`]: ''
+        [`shop_device.cupboard[${cupboardIndex}].lockCode`]: '',
+        [`shop_device.cupboard[${cupboardIndex}].androidLockCode`]: ''
       })
+      Object.assign(appData.shop_device.cupboard[cupboardIndex],this.data.shop_device.cupboard[`${cupboardIndex}`])
+      app.showToast('解绑成功!', 'success');
     } else {
       app.showToast('解绑失败!', 'error');
     }
@@ -289,35 +286,29 @@ Page({
   async bindLock(system, deviceId, cupboardIndex) {
     const obj = system === 'iOS' ? `shop.device.cupboard.${cupboardIndex}.lockCode` : `shop.device.cupboard.${cupboardIndex}.androidLockCode`
     const res = await app.callFunction({
-      name: 'amendDatabase_fg',
+      name: 'upDate',
       data: {
-        collection: 'shopAccount',
-        flagName: 'shopFlag',
-        flag: appData.shopInfo.shopFlag,
-        objName: obj,
-        data: deviceId
+        collection: 'shop_device',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        upData:{
+          [`${obj}`]:deviceId
+        }
       }
     })
-    if (res === 'ok') {
+    if (res.success) {
       app.showToast('绑定成功!', 'success');
       if (system === 'iOS') {
-        appData.device.cupboard[cupboardIndex].lockCode = deviceId;
         this.setData({
-          [`device.cupboard[${cupboardIndex}].lockCode`]: deviceId
+          [`shop_device.cupboard[${cupboardIndex}].lockCode`]: deviceId
         })
       } else {
-        if (appData.device.cupboard[cupboardIndex].androidLockCode) {
-          appData.device.cupboard[cupboardIndex].androidLockCode = deviceId;
-        } else {
-          appData.device.cupboard[cupboardIndex] = {
-            ...appData.device.cupboard[cupboardIndex],
-            androidLockCode: deviceId
-          }
-        }
         this.setData({
-          [`device.cupboard[${cupboardIndex}].androidLockCode`]: deviceId
+          [`shop_device.cupboard[${cupboardIndex}].androidLockCode`]: deviceId
         })
       }
+      Object.assign(appData.shop_device.cupboard[`${cupboardIndex}`],this.data.shop_device.cupboard[`${cupboardIndex}`])
     } else {
       app.showToast('绑定失败!', 'error');
     }
@@ -334,20 +325,22 @@ Page({
       locakPassWord: ''
     }
     const res = await app.callFunction({
-      name: 'databaseRecord_push',
+      name: 'record_push',
       data: {
-        collection: 'shopAccount',
-        flagName: 'shopFlag',
-        flag: appData.shopInfo.shopFlag,
-        record: 'shop.device.cupboard',
-        value: cupboardData
+        collection: 'shop_device',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        record:'cupboard',
+        data:cupboardData
       }
     })
-    if (res === 'ok') {
-      this.data.device.cupboard.push(cupboardData)
+    if (res.success) {
+      this.data.shop_device.cupboard.push(cupboardData)
       this.setData({
-        device: this.data.device
+        shop_device: this.data.shop_device
       })
+      Object.assign(appData.shop_device.cupboard,this.data.shop_device.cupboard)
       app.showToast('添加成功!', 'success')
       return;
     } else {
@@ -358,16 +351,18 @@ Page({
   async save() {
     if (this.data.dataChangeEd === true) {
       const res = await app.callFunction({
-        name: 'amendDatabase_fg',
+        name: 'upDate',
         data: {
-          collection: 'shopAccount',
-          flagName: 'shopFlag',
-          flag: appData.shopInfo.shopFlag,
-          objName: 'shop.device.cupboardUseRule',
-          data: this.data.device.cupboardUseRule
+          collection: 'shop_device',
+          query:{
+            shopId:appData.shop_account._id
+          },
+          upData:{
+            [`shop.device.cupboardUseRule`]:this.data.shop_device.cupboardUseRule
+          }
         }
       })
-      if (res === 'ok') {
+      if (res.success) {
         app.showToast('保存成功!', 'success')
         this.setData({
           dataChangeEd: false
@@ -377,7 +372,7 @@ Page({
   },
   input(e) {
     this.setData({
-      [`device.cupboardUseRule[${e.mark.index}].${e.mark.item}`]: parseInt(e.detail.value),
+      [`shop_device.cupboardUseRule[${e.mark.index}].${e.mark.item}`]: parseInt(e.detail.value),
       dataChangeEd: true
     })
 
@@ -400,45 +395,6 @@ Page({
     this.setData({
       system: this.getOsType()
     })
-    if ('cupboardUseRule' in appData.device) { //有使用规则
-
-    } else { //未设置使用规则 进行设置
-      const cupboardUseRule = [{
-        integral: 0,
-        price: 0
-      }, {
-        integral: 0,
-        price: 0
-      }, {
-        integral: 0,
-        price: 0
-      }]
-      const res = await app.callFunction({
-        name: 'amendDatabase_fg',
-        data: {
-          collection: 'shopAccount',
-          flagName: 'shopFlag',
-          flag: appData.shopInfo.shopFlag,
-          objName: 'shop.device.cupboardUseRule',
-          data: cupboardUseRule
-        }
-      })
-      if (res === 'ok') {
-        this.setData({
-          device: {
-            ...this.data.device,
-            cupboardUseRule
-          }
-        })
-        appData.device = {
-          ...this.data.device,
-          cupboardUseRule
-        }
-      } else {
-
-      }
-    }
-
   },
 
   /**
@@ -453,10 +409,9 @@ Page({
    */
   onShow() {
     this.setData({
-      device: appData.device
+      shop_device: appData.shop_device
     })
   },
-
   /**
    * 生命周期函数--监听页面隐藏
    */

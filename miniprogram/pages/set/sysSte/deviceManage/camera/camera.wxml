@@ -3,19 +3,19 @@
 <template is="titel" data="{{titel:'添加摄像机'}}" />
 <view style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 95%; margin-left: 2.5%; height: 80rpx; background-color: #eee; margin-top: 20rpx; border-radius: 20rpx; border:1rpx solid #ccc">
   <text style="margin-left: 30rpx;" >调用余额:</text>
-  <text> {{shopInfo.sportShowAmount > 0 ? shopInfo.sportShowAmount : '0'}} 元</text>
+  <text> {{shop_account.sportShowAmount > 0 ? shop_account.sportShowAmount : '0'}} 元</text>
   <button type="primary" style="width: 150rpx;" size="mini" bind:tap="tap" mark:item="topup">充值</button>
-  <text style="color: #999; font-size: 29rpx;">顾客调用一次扣除1元</text>
+  <text style="color: #999; font-size: 29rpx;">顾客调用一次扣除{{sportShowCost}}元</text>
 </view>
 <view style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 95%; margin-left: 2.5%; height: 80rpx; background-color: #eee; margin-top: 20rpx; border-radius: 20rpx; border:1rpx solid #ccc">
   <text style="margin-left: 30rpx;">售价:</text>
-  <input style="width: 120rpx; border-bottom: 1rpx #999 solid; text-align: center;" type="number" value="{{sportShowPrice}}" bindinput="input" mark:item ="sportShowPrice"/>
+  <input style="width: 120rpx; border-bottom: 1rpx #999 solid; text-align: center;" type="number" value="{{shop_device.sportShowPrice}}" bindinput="input" mark:item ="sportShowPrice"/>
   <text>元/次</text>
   <button type="primary" size="mini" bind:tap="priceSave">保存</button>
 </view>
 <view style="width:95%; margin-left:2.5%; margin-top: 20rpx; background-color: #eee; border-radius: 30rpx; border: #ccc solid 1rpx; display: flex; flex-direction: column; justify-content: center; align-items: center; ">
   <text>已添加列表</text>
-  <view style="{{device.camera.length - 1 > index ?'width: 100%; border-bottom: #fff solid 5rpx;' : 'width:100%;'}}" wx:for="{{device.camera}}" wx:key="index">
+  <view style="{{shop_device.camera.length - 1 > index ?'width: 100%; border-bottom: #fff solid 5rpx;' : 'width:100%;'}}" wx:for="{{shop_device.camera}}" wx:key="index">
     <view class="cameraList">
       <text>摄像机编号:</text>
       <text>{{item.cameraNum}}</text>

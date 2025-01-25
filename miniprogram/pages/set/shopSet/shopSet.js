@@ -1,5 +1,4 @@
 // pages/set/shopSet/shopSet.js
-const utils = require('../../../utils/light')
 const app = getApp();
 const appData = app.globalData;
 
@@ -9,15 +8,15 @@ Page({
    */
   data: {
     shopLogo: '',
-    shopInfo: appData.shopInfo,
+    shop_account: appData.shop_account,
     amendData: {
-      shopName: '',
-      openTime: '',
-      closeTime: '',
-      telephone: '',
-      shopAdd: '',
-      foundTime: '',
-      intro: '',
+      shopName: appData.shop_account.shopInfo.shopName,
+      openTime: appData.shop_account.shopInfo.openTime,
+      closeTime: appData.shop_account.shopInfo.closeTime,
+      telephone: appData.shop_account.shopInfo.telephone,
+      shopAdd: appData.shop_account.shopInfo.shopAdd,
+      foundTime: appData.shop_account.shopInfo.foundTime,
+      intro: appData.shop_account.shopInfo.intro,
     },
   },
   tap(e) {
@@ -65,36 +64,37 @@ Page({
     console.log(r)
     const path = r.tempFiles[0].tempFilePath
     const res = await wx.cloud.uploadFile({
-      cloudPath: `image/${appData.shopInfo._id}.img`, // 上传至云端的路径
+      cloudPath: `image/${appData.shop_account._id}.img`, // 上传至云端的路径
       filePath: path, // 小程序临时文件路径
     })
     console.log(res)
-    if (res !== 'undefine') {
+    if (res.errMsg === 'cloud.uploadFile:ok') {
       console.log(res.fileID)
       //如果以前修改或头像  新旧头像的fileID  不会发生变化  所以判断 以前是否有上传过头像
-      if (appData.shopInfo.logoId === '1') { //这种情况是以前没有上传过头像
-        var s = await app.amendDatabase_fg({
-          collection: 'shopAccount',
-          flagName: 'shopFlag',
-          flag: this.data.shopInfo.shopFlag,
-          objName: 'logoId',
-          data: res.fileID
+      if (appData.shop_account.shopInfo.logoId === '1' || appData.shop_account.shopInfo.logoId === '') { //这种情况是以前没有上传过头像
+        const s = await app.callFunction({
+          name: 'upDate',
+          data: {
+            collection: 'shop_account',
+            query: {
+              _id: appData.shop_account._id
+            },
+            upData: {
+              [`shopInfo.logoId`]: res.fileID
+            }
+          }
         })
         console.log(s)
-        if (s == 'ok') {
-          appData.shopLogo = path
-          this.setData({
-            shopLogo: path
-          })
+        if (s.success) {
+          appData.shop_account.shopInfo.logoId = res.fileID
+          this.data.shop_account.shopInfo.logoId = res.fileID
+          this.getHeadImage()
           app.showModal('提示', '保存成功,头像设置不会立即生效,请稍后查看效果!')
         } else {
           app.showToast('保存失败!', 'error')
         }
       } else { //以前上传过头像  直接提供  新文件路径
-        appData.shopLogo = path
-        this.setData({
-          shopLogo: path
-        })
+        this.getHeadImage()
       }
     } else {
       app.showToast('上传失败!', 'error')
@@ -104,55 +104,39 @@ Page({
     var result = 'ok';
     const amendDataArray = Object.keys(this.data.amendData)
     console.log(amendDataArray)
+    const changeData = {}
     for (let index = 0; index < amendDataArray.length; index++) {
       const element = amendDataArray[index];
-      if (element === 'telephone') {
-        if (this.data.amendData[element] !== '' && this.data.amendData[element] !== this.data.shopInfo[element]) {
-          const res = await app.callFunction({
-            name: 'amendDatabase_fg',
-            data: {
-              collection: 'shopAccount',
-              flagName: 'shopFlag',
-              flag: this.data.shopInfo.shopFlag,
-              objName: 'telephone',
-              data: this.data.amendData[element]
-            }
-          })
-          appData.shopInfo.telephone = this.data.amendData[element];
-          if (res !== 'ok') {
-            result = 'error'
-          }
-        }
-      } else {
-        if (this.data.amendData[element] !== '' && this.data.amendData[element] !== this.data.shopInfo.shop[element]) {
-          const res = await app.callFunction({
-            name: 'amendDatabase_fg',
-            data: {
-              collection: 'shopAccount',
-              flagName: 'shopFlag',
-              flag: this.data.shopInfo.shopFlag,
-              objName: `shop.${element}`,
-              data: this.data.amendData[element]
-            }
-          })
-          appData.shopInfo.shop[element] = this.data.amendData[element];
-          if (res !== 'ok') {
-            result = 'error'
-          }
-        }
+      if (this.data.amendData[element] !== '' && this.data.amendData[element] !== this.data.shop_account.shopInfo[element]) {
+        changeData[element] = this.data.amendData[element]
       }
     }
-    //清空需要保存的临时数据
-    for (let index = 0; index < amendDataArray.length; index++) {
-      const element = amendDataArray[index];
-      this.data.amendData[element] = ''
-    }
-    if (result === 'ok') {
-      app.showModal('提示','修改成功!请重新进入小程序以刷新数据')
+    //把所有改变了的数据 放到shop_account里面
+    Object.assign(this.data.shop_account.shopInfo, changeData)
+    console.log({ '改变后的数据:': this.data.shop_account.shopInfo })
+    const res = await app.callFunction({
+      name: 'upDate',
+      data: {
+        collection: 'shop_account',
+        query: {
+          _id: appData.shop_account._id
+        },
+        upData: {
+          shopInfo: this.data.shop_account.shopInfo
+        }
+      }
+    })
+
+    if (res.success) {
+      //清空需要保存的临时数据
+      for (let index = 0; index < amendDataArray.length; index++) {
+        const element = amendDataArray[index];
+        this.data.amendData[element] = ''
+      }
+      app.showModal('提示', '修改成功!请重新进入小程序以刷新数据')
       return;
-    }else{
-      app.showModal('提示','修改失败!请重新进入小程序以刷新数据后重试!')
-      return;
+    } else {
+      app.showModal('错误', '保存失败!')
     }
   },
   /**
@@ -160,8 +144,16 @@ Page({
    */
   async onLoad(options) {
     //获取店铺Logo
-    this.setData({
-      shopLogo: await app.getHeadImage(this.data.shopInfo.logoId)
+    this.getHeadImage()
+
+  },
+  getHeadImage() {
+    const that = this
+    //获取店铺Logo
+    app.getHeadImage(this.data.shop_account.shopInfo.logoId).then(res => {
+      that.setData({
+        shopLogo: res
+      })
     })
   },
   /**

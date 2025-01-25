@@ -1,4 +1,7 @@
 // pages/set/vipManage/vipDetail/amountChange/amountChange.js
+const app = getApp()
+const appData = app.globalData
+
 Page({
 
   /**
@@ -14,15 +17,31 @@ Page({
   onLoad(options) {
     const eventChannel = this.getOpenerEventChannel();
     const that = this ;
-    eventChannel.on('giveData', function(data) {
+    eventChannel.on('giveData',async function(data) {
       console.log(data)
       that.setData({
-        amountChange:data.reverse()
+        userOpenid:data.userOpenid,
+        shopId:data.shopId
       })
+      await that.getChange()
     })
-
   },
-
+  async getChange(){
+    const res = await app.callFunction({
+      name:'getData_where',
+      data:{
+        collection:'vip_amount_change',
+        query:{
+          shopId:this.data.shopId,
+          userOpenid:this.data.userOpenid
+        }
+      }
+    })
+    console.log(res)
+    this.setData({
+      amountChange:res.data
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

@@ -7,6 +7,6 @@
   </view>
   <view class="titel">
     <text>事由:{{item.reason}}</text>
-    <text>金额:{{item.amount}}</text>
+    <text>金额:{{item.changeAmount}}</text>
   </view>
 </view>

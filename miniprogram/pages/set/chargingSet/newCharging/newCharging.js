@@ -20,8 +20,7 @@ Page({
       freeCost: 3
     },
     timeSegment: [],
-    //该规则的唯一标志
-    flag: '',
+
     //控制计费周期选择框的  hidden
     minuteHidden: false,
     periodHidden: true,
@@ -77,23 +76,17 @@ Page({
   async save() {
     //判断  名称 不能为空  时间段不能没有 
     if (this.data.name === '') {
-      wx.showToast({
-        title: '请填写名称!',
-        icon:'error'
-      })
+      app.showToast('请填写名称!','error')
       return ;
     }else if (this.data.timeSegment.length < 1) {
-      wx.showToast({
-        title: '请设置时段价格!',
-        icon:'error'
-      })
+      app.showToast('请设置时段价格!','error')
       return ;
     }
     //构造计费规则 
     const charging = {
-      shopFlag: appData.shopInfo.shopFlag,
+      shopId: appData.shop_account._id,
       onOff:this.data.onOff,
-      flag: this.data.flag,
+      _id: this.data._id,
       name: this.data.name,
       timeSegment: this.data.timeSegment,
       periodSet: this.data.minuteHidden === false ? 'minute' : this.data.periodHidden === false ? 'period' : 'costCost',
@@ -110,27 +103,25 @@ Page({
   },
   async addCharging(p) {
     //此处有两个分支  当flag有值的时候  为修改原有数据   当flag为空的时候 为新增数据
-    if (p.flag === '') { //新增数据**********************
+    if (!p._id) { //新增数据**********************
       console.log('新添加计费规则!')
       var newP = p;
-      newP.flag = await utils.getRandomString(20)
+      delete newP._id
       const res = await app.callFunction({
-        name:'addArrayDatabase_fg',
+        name:'addRecord',
         data:{
-          collection:'charging',
-          shopFlag:newP.shopFlag,
-          objName:'charging',
+          collection:'shop_charging',
           data:newP
         }
       })
-      console.log({
-        "添加:": '结果',
-        res
-      })
+      console.log(res)
       //添加成功
-      if (res === 'ok') {
+      if (res.success) {
         this.getOpenerEventChannel().emit('upData', {
-          charging: newP
+          shop_charging: {
+            _id:res.data._id,
+            ...newP
+          }
         });
         console.log('添加成功!')
         //添加成功!
@@ -142,35 +133,32 @@ Page({
       }
     } else { //修改数据**********************
       console.log('修改计费规则!')
+      const _id = p._id
+      delete p._id
       const res = await app.callFunction({
-        name:'amendArrayDatabase_fg',
+        name:'upDate',
         data:{
-          collection:'charging',
-          flag:'shopFlag',
-          flagInfo: p.shopFlag,
-          record:'charging',
-          arrayFlag:'flag',
-          data:p
+          collection:'shop_charging',
+          query:{
+            _id:_id
+          },
+          upData:p
         }
       })
-      console.log({
-        "添加:": '结果',
-        res
-      })
-      if (res === 'ok') {
+      console.log(res)
+      if (res.success) {
         //聚合数据
-        this.data.charging[this.data.index].name = this.data.name
-        this.data.charging[this.data.index].periodCost = this.data.periodCost
-        this.data.charging[this.data.index].costCost = this.data.costCost
-        this.data.charging[this.data.index].timeSegment = this.data.timeSegment
-        this.data.charging[this.data.index].flag = this.data.flag
-        this.data.charging[this.data.index].periodSet = this.data.minuteHidden === false ? 'minute' : this.data.periodHidden === false ? 'period' : 'costCost'
-        this.data.charging[this.data.index].startCost = this.data.startCost
-        this.data.charging[this.data.index].cashPledge = this.data.cashPledge
-        this.data.charging[this.data.index].balanceWarn = this.data.balanceWarn
+        this.data.shop_charging[this.data.index].name = this.data.name
+        this.data.shop_charging[this.data.index].periodCost = this.data.periodCost
+        this.data.shop_charging[this.data.index].costCost = this.data.costCost
+        this.data.shop_charging[this.data.index].timeSegment = this.data.timeSegment
+        this.data.shop_charging[this.data.index].periodSet = this.data.minuteHidden === false ? 'minute' : this.data.periodHidden === false ? 'period' : 'costCost'
+        this.data.shop_charging[this.data.index].startCost = this.data.startCost
+        this.data.shop_charging[this.data.index].cashPledge = this.data.cashPledge
+        this.data.shop_charging[this.data.index].balanceWarn = this.data.balanceWarn
         //返回给上一界面新数据
         this.getOpenerEventChannel().emit('updateInvoice', {
-          charging: this.data.charging
+          shop_charging: this.data.shop_charging
         });
         console.log('添加成功!')
         //添加成功!
@@ -344,23 +332,23 @@ Page({
     eventChannel.once('sendQueryParams', (params) => {
       console.log('上一页面传来的数据', params);
       this.setData({
-        charging: params.charging,
-        onOff:'onOff' in params.charging[index] ? params.charging[index].onOff : true,
-        name: params.charging[index].name,
-        flag: params.charging[index].flag,
-        periodCost: params.charging[index].periodCost,
-        costCost: params.charging[index].costCost,
-        timeSegment: params.charging[index].timeSegment,
+        shop_charging: params.shop_charging,
+        onOff:'onOff' in params.shop_charging[index] ? params.shop_charging[index].onOff : true,
+        name: params.shop_charging[index].name,
+        _id: params.shop_charging[index]._id,
+        periodCost: params.shop_charging[index].periodCost,
+        costCost: params.shop_charging[index].costCost,
+        timeSegment: params.shop_charging[index].timeSegment,
         //控制计费周期选择框的  hidden
-        minuteHidden: params.charging[index].periodSet === 'minute' ? false : true,
-        periodHidden: params.charging[index].periodSet === 'period' ? false : true,
-        costHidden: params.charging[index].periodSet === 'costCost' ? false : true,
+        minuteHidden: params.shop_charging[index].periodSet === 'minute' ? false : true,
+        periodHidden: params.shop_charging[index].periodSet === 'period' ? false : true,
+        costHidden: params.shop_charging[index].periodSet === 'costCost' ? false : true,
         //是否使用起步价 
-        startCost: params.charging[index].startCost,
+        startCost: params.shop_charging[index].startCost,
         //是否启用开台押金  及 启动余额提醒
-        cashPledge: params.charging[index].cashPledge,
-        pledge:params.charging[index].pledge,
-        balanceWarn: params.charging[index].balanceWarn
+        cashPledge: params.shop_charging[index].cashPledge,
+        pledge:params.shop_charging[index].pledge,
+        balanceWarn: params.shop_charging[index].balanceWarn
       })
     })
 

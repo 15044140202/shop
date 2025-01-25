@@ -8,33 +8,32 @@ Page({
    * 页面的初始数据
    */
   data: {
-    commotidy: [],
-    index: 0,//上页传过来的 index
-    class:0,//上页传过来的 classIndex
+    shop_commotidy: [],
     newCommotidy: {
-      picId:'',
+      picId: '',
       name: '',
+      class: '',
       units: '',
       primeCost: 0,
       sellCost: 0,
       sum: 0,
       lowSum: 0
     },
-    units: ['个', '只', '瓶', '盒', '套', '包', '根'],
+    units: ['个', '只', '瓶','桶', '盒', '套', '包', '根'],
     unitsSelect: 0,
-    Newclass: '',
+    class: ['饮品', '食品', '烟酒', '台球用品', '球杆', '其他'],
     classSelect: 0
   },
-  async Image(e){
+  async Image(e) {
     if (e.mark.name === '') {
       wx.showToast({
         title: '请先填写名称',
-        icon:'error'
+        icon: 'error'
       })
-    }else{
-      const res = await utils.updataImage(appData.shopInfo._openid,e.mark.name)
+    } else {
+      const res = await utils.updataImage(appData.shop_account._id, e.mark.name)
       this.setData({
-        ['newCommotidy.picId']:res
+        ['newCommotidy.picId']: res
       })
       console.log(this.data.newCommotidy.picId)
     }
@@ -53,7 +52,7 @@ Page({
           icon: 'error'
         })
         return;
-      case this.Newclass:
+      case this.data.newCommotidy.class:
         wx.showToast({
           title: '请选择分类!',
           icon: 'error'
@@ -86,61 +85,75 @@ Page({
     }
 
     if (this.data.index === '-1') {//新增
-      for (let index = 0; index < this.data.commotidy.length; index++) {
-        const element = this.data.commotidy[index];
-        if (element.name === this.data.Newclass) {//向指定的类别里面添加商品数据
-          for (let i = 0; i < this.data.commotidy[index].commotidy.length; i++) {//判断名称是否重复!
-            const element = this.data.commotidy[index].commotidy[i];
-            if (element.name === this.data.newCommotidy.name) {
-              wx.showToast({
-                title: '名称重复!',
-                icon:'error'
-              })
-              return;
-            }
-          }
-          this.data.commotidy[index].commotidy.push(this.data.newCommotidy);
-          break;
-        }else if(index === this.data.commotidy.length - 1){
+      for (let index = 0; index < this.data.shop_commotidy.length; index++) {
+        const element = this.data.shop_commotidy[index];
+        if (element.name === this.data.newCommotidy.name) {//名称重复
           wx.showToast({
-            title: '错误!没有此类别!',
-            icon:'error'
+            title: '名称重复!',
+            icon: 'error'
           })
           return;
         }
       }
-    }else{//修改
-      console.log(this.data.commotidy)
-    }
-    //向服务器  提交修改数据
-    const res = await app.callFunction({
-      name:'amendDatabase_fg',
-      data:{
-        collection:'commotidy',
-        flagName:'shopFlag',
-        flag:appData.shopInfo.shopFlag,
-        objName:'commotidy',
-        data:this.data.commotidy
+      //向服务器  提交新增数据
+      const res = await app.callFunction({
+        name: 'addRecord',
+        data: {
+          collection: 'shop_commotidy',
+          data: {
+            ...this.data.newCommotidy,
+            shopId: appData.shop_account._id,
+          }
+        }
+      })
+      if (res.success) {
+        app.showToast('修改成功!', 'success')
+        this.data.shop_commotidy.push({
+          ...this.data.newCommotidy,
+          shopId: appData.shop_account._id,
+          _id:res.data._id
+        })
+        appData.shop_commotidy = this.data.shop_commotidy
+        const eventChannel = this.getOpenerEventChannel();
+        eventChannel.emit('updata', this.data.shop_commotidy);
+        wx.navigateBack();
+      } else {
+        app.showToast('数据提交失败!', 'error')
+        return
       }
-    })
-    if (res === 'ok') {
-      wx.showToast({
-        title: '保存成功!',
-        icon:'success'
+    } else {//修改
+      //向服务器  提交修改数据
+      delete this.data.newCommotidy._id
+      const res = await app.callFunction({
+        name: 'upDate',
+        data: {
+          collection: 'shop_commotidy',
+          query: {
+            _id: this.data.shop_commotidy[this.data.index]._id
+          },
+          upData: this.data.newCommotidy
+        }
       })
-      const eventChannel = this.getOpenerEventChannel();
-      eventChannel.emit('updata',this.data.commotidy);
-      wx.navigateBack();
-    }else{
-      wx.showToast({
-        title: '数据提交失败!',
-        icon:'error'
-      })
+      if (res.success) {
+        app.showToast('修改成功!', 'success')
+        Object.assign(this.data.shop_commotidy[this.data.index],this.data.newCommotidy)
+
+        appData.shop_commotidy = this.data.shop_commotidy
+        const eventChannel = this.getOpenerEventChannel();
+        eventChannel.emit('updata', this.data.shop_commotidy);
+        wx.navigateBack();
+      } else {
+        app.showToast('数据提交失败!', 'error')
+        return
+      }
     }
   },
   input(e) {
+    if (!e.detail.value) {
+      return
+    }
     this.setData({
-      [`newCommotidy.${e.mark.name}`]: e.mark.name==='sum' || e.mark.name==='lowSum' ||e.mark.name==='sellCost'||e.mark.name==='primeCost' ? parseFloat(e.detail.value) : e.detail.value
+      [`newCommotidy.${e.mark.name}`]: e.mark.name === 'sum' || e.mark.name === 'lowSum' || e.mark.name === 'sellCost' || e.mark.name === 'primeCost' ? parseFloat(e.detail.value) : e.detail.value
     })
     console.log(this.data.newCommotidy[e.mark.name])
   },
@@ -148,9 +161,9 @@ Page({
     console.log(e)
     if (e.mark.name === 'class') {
       this.setData({
-        Newclass: this.data.commotidy[e.detail.value].name
+        [`newCommotidy.${e.mark.name}`]: this.data.class[e.detail.value]
       })
-      console.log(this.data.Newclass)
+      console.log(this.data.newCommotidy[e.mark.name])
     } else {
       this.setData({
         [`newCommotidy.${e.mark.name}`]: this.data.units[e.detail.value]
@@ -162,23 +175,19 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    console.log(options)
+    this.setData({
+      index:options.index
+    })
     const eventChannel = this.getOpenerEventChannel();
     const that = this;
     eventChannel.on('giveData', function (data) {
       that.setData({
-        commotidy: data.data
+        shop_commotidy: data.data
       })
-      console.log(that.data.commotidy)
-      if(options.index === '-1'){
+      if (parseInt(options.index) !== -1) {
+        const newCommotidy = JSON.parse(JSON.stringify(that.data.shop_commotidy[parseInt(options.index)]))
         that.setData({
-          index:'-1'
-        })
-      }else{
-        that.setData({
-          newCommotidy:that.data.commotidy[options.class].commotidy[options.index],
-          class:options.class,
-          index:options.index
+          newCommotidy:newCommotidy
         })
       }
     })

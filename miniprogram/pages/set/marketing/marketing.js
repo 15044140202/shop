@@ -11,49 +11,49 @@ Page({
     luckSudoku: {
       switch: false,
       prize: [{
-          name: '谢谢!',
-          totalSum: 100,
-          probability:0.125
-        },
-        {
-          name: '红牛1瓶',
-          totalSum: 100,
-          probability:0.125
-        },
-        {
-          name: '谢谢!',
-          totalSum: 100,
-          probability:0.125
-        },
-        {
-          name: '代金券',
-          totalSum: 100,
-          probability:0.125
-        },
-        {
-          name: '谢谢!',
-          totalSum: 100,
-          probability:0.125
-        },
-        {
-          name: '代金券',
-          totalSum: 100,
-          probability:0.125
-        },
-        {
-          name: '谢谢!',
-          totalSum: 100,
-          probability:0.125
-        },
-        {
-          name: '谢谢!',
-          totalSum: 100,
-          probability:0.125
-        },
+        name: '谢谢!',
+        totalSum: 100,
+        probability: 0.125
+      },
+      {
+        name: '红牛1瓶',
+        totalSum: 100,
+        probability: 0.125
+      },
+      {
+        name: '谢谢!',
+        totalSum: 100,
+        probability: 0.125
+      },
+      {
+        name: '代金券',
+        totalSum: 100,
+        probability: 0.125
+      },
+      {
+        name: '谢谢!',
+        totalSum: 100,
+        probability: 0.125
+      },
+      {
+        name: '代金券',
+        totalSum: 100,
+        probability: 0.125
+      },
+      {
+        name: '谢谢!',
+        totalSum: 100,
+        probability: 0.125
+      },
+      {
+        name: '谢谢!',
+        totalSum: 100,
+        probability: 0.125
+      },
       ],
       startDate: '2024/07/28 00:00:00',
       endDate: '2024/09/28/ 00:00:00',
-      everyDaySum:0
+      everyDaySum: 0
     }
   },
   tap(e) {
@@ -69,19 +69,13 @@ Page({
       })
       return;
     } else if (e.mark.item === 'luckSudokuSwitch') {
-      if (this.data.luckSudoku.switch === false) {
-        this.setData({
-          ['luckSudoku.switch']: true
-        })
-      } else {
-        this.setData({
-          ['luckSudoku.switch']: false
-        })
-      }
+      this.setData({
+        ['luckSudoku.switch']: e.detail.value
+      })
       return;
     }
   },
-  computerProbability(name){ 
+  computerProbability(name) {
     const prize = this.data[`${name}`].prize;
     var totalSum = 0;
     for (let index = 0; index < prize.length; index++) {//计算总数量
@@ -91,45 +85,45 @@ Page({
     for (let index = 0; index < prize.length; index++) {//计算每个概率
       const element = prize[index];
       this.setData({
-        [`${name}.prize[${index}].probability`]:element.totalSum/totalSum*100
+        [`${name}.prize[${index}].probability`]: element.totalSum / totalSum * 100
       })
     }
   },
-  input(e){
+  input(e) {
     console.log(e);
     if (e.mark.item === 'luckSudokuPrizeName') {
       if (e.detail.value.length > 12) {
-        app.showToast('名称过长!','error')
+        app.showToast('名称过长!', 'error')
         return;
-      }else{
+      } else {
         this.setData({
-          [`luckSudoku.prize[${e.mark.index}].name`]:e.detail.value
+          [`luckSudoku.prize[${e.mark.index}].name`]: e.detail.value
         })
         return;
       }
-    }else if (e.mark.item === 'luckSudokuPrizeTotalSum'){
+    } else if (e.mark.item === 'luckSudokuPrizeTotalSum') {
       this.setData({
-        [`luckSudoku.prize[${e.mark.index}].totalSum`]:parseInt(e.detail.value) 
+        [`luckSudoku.prize[${e.mark.index}].totalSum`]: parseInt(e.detail.value)
       })
       this.computerProbability('luckSudoku');
       return;
-    }else if (e.mark.item === 'luckSudokuEveryDaySum'){
+    } else if (e.mark.item === 'luckSudokuEveryDaySum') {
       this.setData({
-        [`luckSudoku.everyDaySum`]:parseInt(e.detail.value) 
+        [`luckSudoku.everyDaySum`]: parseInt(e.detail.value)
       })
       return;
     }
   },
-  change(e){
+  change(e) {
     console.log(e);
     if (e.mark.item === 'luckSudokuStartDate') {
       this.setData({
-        [`luckSudoku.startDate`]:e.detail.value.replace(/-/g, '/') + " 00:00:00"
+        [`luckSudoku.startTime`]: e.detail.value.replace(/-/g, '/') + " 00:00:00"
       })
       return;
-    }else if (e.mark.item === 'luckSudokuEndDate'){
+    } else if (e.mark.item === 'luckSudokuEndDate') {
       this.setData({
-        [`luckSudoku.endDate`]:e.detail.value.replace(/-/g, '/') + " 00:00:00"
+        [`luckSudoku.endTime`]: e.detail.value.replace(/-/g, '/') + " 00:00:00"
       })
       return;
     }
@@ -137,48 +131,54 @@ Page({
   video_tap() {
     console.log('显示演示视频')
   },
-  async getLuckSudoku(shopFlag){
+  async getLuckSudoku(shopFlag) {
     const res = await app.callFunction({
-      name:'getDatabaseRecord_fg',
-      data:{
-        collection:'luckSudoku',
-        record:'luckSudoku',
-        shopFlag:shopFlag
+      name: 'getData_where',
+      data: {
+        collection: 'shop_lucksudoku_set',
+        query: {
+          shopId: appData.shop_account._id
+        }
       }
     })
     console.log(res)
-    if (Object.keys(res).length === 0) {//空数据
-      const r = await this.save();
-      if (r === 'ok') {
-        app.showToast('初始化成功!')
-      }else{
-        app.showToast('初始化失败!')
+    if (!res.success) {//空数据
+      app.showModal('提示', '数据初始化失败!')
+    } else {
+      const luckSudoku = res.data[0]
+      //判断奖项数量是否是8个
+      while(luckSudoku.prize.length < 8){
+        luckSudoku.prize.push({
+          name:'谢谢',
+          probability:0,
+          totalSum:0
+        })
       }
-    }else{
       this.setData({
-        luckSudoku:res
+        luckSudoku: res.data[0]
       })
       return;
     }
   },
-  async save(){
+  async save() {
+    delete this.data.luckSudoku._id
     const res = await app.callFunction({
-      name:'amendDatabase_fg',
-      data:{
-        collection:'luckSudoku',
-        flagName:'shopFlag',
-        flag:appData.shopInfo.shopFlag,
-        objName:'luckSudoku',
-        data:this.data.luckSudoku
+      name: 'upDate',
+      data: {
+        collection: 'shop_lucksudoku_set',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        upData:this.data.luckSudoku
       }
     })
-    if (res === 'ok') {
+    if (res.success) {
       //保存成功
-      app.showToast('保存成功!','success')
+      app.showToast('保存成功!', 'success')
       console.log(res)
-    }else{
+    } else {
       //保存失败!
-      app.showToast('保存失败!','error')
+      app.showToast('保存失败!', 'error')
       console.log(res)
     }
     return res;
@@ -188,7 +188,7 @@ Page({
    */
   async onLoad(options) {
     //获取数据-幸运九宫格
-    const  res = await this.getLuckSudoku(appData.shopInfo.shopFlag)
+    const res = await this.getLuckSudoku(appData.shop_account._id)
 
   },
 

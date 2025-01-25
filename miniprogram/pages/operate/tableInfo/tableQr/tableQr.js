@@ -18,8 +18,9 @@ Page({
 
     optNum: 0,
     saveButton: 'default',
-    saveButtonDisabled: true
+    saveButtonDisabled: true,
 
+    qrId: ''
   },
 
   /**
@@ -27,23 +28,33 @@ Page({
    */
   async downTableQr() {
     const item = this.data.item
-    const pages = this.data.item === 'cupboardNum' ? 'pages/index/index' : `pages/index/index?tableNum=${this.data.optNum -1}&shopFlag=${appData.shopInfo.shopFlag}`
+    const pages = this.data.item === 'cupboardNum' ? 'pages/index/index' : `pages/index/index?tableNum=${this.data.optNum - 1}&shopId=${appData.shop_account._id}`
     const bgcSrc = this.data.item === 'cupboardNum' ? 'https://6269-billiards-0g53628z5ae826bc-1326882458.tcb.qcloud.la/icon/%E6%9D%86%E6%9F%9C%E6%8C%87%E5%BC%95%E8%B4%B4.png?sign=3ab9ed3c1b92ed35b2715575439783ec&t=1724167746' : 'https://6269-billiards-0g53628z5ae826bc-1326882458.tcb.qcloud.la/icon/%E7%A9%BA%E4%BA%8C%E7%BB%B4%E7%A0%81%E8%B4%B4.png?sign=de67e5b8fb55d85c761d50282302aec5&t=1723042982'
 
     app.showLoading('获取中...', true)
-    const res = await wx.cloud.callFunction({
-      name: 'getOpenTableQRCode',
+    const res = await app.callFunction({
+      name: 'fetchData',
       data: {
-        pages: pages
+        skip: 0,
+        limit: 1,
+        collection: 'shop_table_qr',
+        query: {
+          using: 0
+        }
       }
     })
     console.log(res)
     var picData = ''
-    if (res.result.errMsg === 'openapi.wxacode.get:ok') {
+    if (res.success) {
+      if (res.data.data.length === 0) {
+        app.showModal('提示', '数据库二维码数量不足,请联系客户补充!')
+        return
+      }
       app.showToast('获取小程序码成功!', 'success')
-      let arrayBuffer = res.result.buffer; // 你的 ArrayBuffer 数据
-      let byteArray = new Uint8Array(arrayBuffer);
-      let base64String = Base64.fromUint8Array(byteArray);
+      // let arrayBuffer = res.data.data[0].qrData; // 你的 ArrayBuffer 数据
+      // let byteArray = new Uint8Array(arrayBuffer);
+      let base64String = res.data.data[0].qrData;
+      this.data.qrId = res.data.data[0]._id
       picData = 'data:image/png;base64,' + base64String
     } else {
       app.showToast('获小程序码失败!', 'error');
@@ -56,7 +67,7 @@ Page({
     qr.src = picData;
     qr.onload = () => {
       if (item === 'cupboardNum') {
-        ctx.drawImage(qr,920 * dpr, 110 * dpr, 340* dpr, 340 * dpr)
+        ctx.drawImage(qr, 920 * dpr, 110 * dpr, 340 * dpr, 340 * dpr)
       } else {
         ctx.drawImage(qr, 78 * dpr, 42 * dpr, 180 * dpr, 180 * dpr)
       }
@@ -69,7 +80,7 @@ Page({
       if (item === 'cupboardNum') {
         ctx.fillStyle = "white";
         ctx.font = "bold 700px sans-serif";
-        ctx.fillText(`${this.data.optNum.padStart(2,'0')}`, 80 * dpr, 400 * dpr);
+        ctx.fillText(`${this.data.optNum.padStart(2, '0')}`, 80 * dpr, 400 * dpr);
       } else {
         ctx.fillStyle = "black";
         ctx.font = "80px sans-serif";
@@ -120,7 +131,31 @@ Page({
         ctx.fillRect(0, 0, canvas.width, canvas.height)
       })
   },
+  async saveDatabaseQrData(qrId) {
+    const res = await app.callFunction({
+      name: 'upDate',
+      data: {
+        collection: 'shop_table_qr',
+        query: {
+          _id: qrId
+        },
+        upData: {
+          qrData:'0',
+          using: 1,
+          item: 'table',
+          shopId: appData.shop_account._id,
+          tableNum: this.data.optNum
+        }
+      }
+    })
+    return res
+  },
   async saveQr() {
+    const RES = await this.saveDatabaseQrData(this.data.qrId)
+    if (!RES.success) {
+      app.showModal('提示','保存桌台信息失败!请重试!')
+      return
+    }
     const width = this.data.item === 'cupboardNum' ? 1400 : 1050
     const height = this.data.item === 'cupboardNum' ? 1900 : 350
     const res = await wx.canvasToTempFilePath({
@@ -149,7 +184,7 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady() {},
+  onReady() { },
   /**
    * 生命周期函数--监听页面显示
    */

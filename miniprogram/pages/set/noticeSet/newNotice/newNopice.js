@@ -9,7 +9,6 @@ Page({
    */
   data: {
     //上传需要的数据    9项目
-    flag: '',
     titel: '',
     content: '',
     startTime: '',
@@ -23,20 +22,18 @@ Page({
   },
   async addNotice(p) {
     //此处有两个分支  当flag有值的时候  为修改原有数据   当flag为空的时候 为新增数据
-    if (p.flag === '') { //新增数据**********************
+    if (!p.shopId) { //新增数据**********************
       console.log('新添加公告!')
       var newP = p;
-      newP.flag = await utils.getRandomString(20)
+      newP.shopId = appData.shop_account._id
       const res = await app.callFunction({
-        name: 'addArrayDatabase_fg',
+        name: 'addRecord',
         data: {
-          collection: 'notice',
-          shopFlag: appData.shopInfo.shopFlag,
-          objName: 'notice',
+          collection: 'shop_notice',
           data: newP
         }
       })
-      if (res === 'ok') {
+      if (res.success) {
         console.log('添加成功!')
         return true
       } else {
@@ -47,25 +44,20 @@ Page({
     } else { //修改数据**********************
       console.log('修改公告!')
       console.log(p)
+      const newNotice = p
+      const _id = newNotice._id
+      delete newNotice._id
       const res = await app.callFunction({
-        name: 'amendArrayDatabase_fg',
+        name: 'upDate',
         data: {
-          collection: 'notice',
-          flag:'shopFlag',
-          flagInfo:appData.shopInfo.shopFlag,
-          record: 'notice',
-          arrayFlag: 'flag',
-          data: p
+          collection: 'shop_notice',
+          query:{
+            _id:_id
+          },
+          upData:newNotice
         }
-
       })
-
-      console.log({
-        "添加:": '结果',
-        res
-      })
-
-      if (res === 'ok') {
+      if (res.success) {
         console.log('添加成功!')
         //添加成功!
         return true
@@ -140,8 +132,9 @@ Page({
       mask: true
     })
     const res = await this.addNotice({
-      flag: this.data.flag,
-      openid: appData.shopInfo._openid,
+      _id:this.data._id,
+      shopId:this.data.shopId,
+      openid: appData.merchant_info._openid,
       titel: this.data.titel,
       content: this.data.content,
       startTime: this.data.startTime,
@@ -182,7 +175,8 @@ Page({
       eventChannel.on('giveData', function (res) {
         console.log(res)
         that.setData({
-          flag: res.flag,
+          _id:res._id,
+          shopId:res.shopId,
           author: res.author,
           titel: res.titel,
           content: res.content,

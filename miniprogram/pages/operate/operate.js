@@ -1,7 +1,6 @@
 // pages/operate/operate.js
-const utils = require('../../utils/light');
-const appData = getApp().globalData;
 const app = getApp();
+const appData = app.globalData;
 const db = wx.cloud.database();
 import Dialog from '@vant/weapp/dialog/dialog';
 Page({
@@ -9,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    APPDATA: appData,
+    appData: appData,
     shopInfo: appData.shopInfo,
     tableCtrlShow: false,
     longPressShow: false,
@@ -35,38 +34,39 @@ Page({
     operateSet: {},
 
     menu_data: [{
-        iconName: 'shopping-cart-o',
-        titel_name: "外卖",
-        path: "./outSell/outSell",
-        showRedDot: false
-      },
-      {
-        iconName: 'comment-o',
-        titel_name: "消息",
-        path: "./message/message",
-        showRedDot: false
-      },
-      {
-        iconName: 'friends-o',
-        titel_name: "在店顾客",
-        path: "./inShopCustomer/inShopCustomer",
-        showRedDot: false
-      },
-      {
-        iconName: 'manager-o',
-        titel_name: "我的",
-        path: "./my/my",
-        showRedDot: false
-      }
+      iconName: 'shopping-cart-o',
+      titel_name: "外卖",
+      path: "./outSell/outSell",
+      showRedDot: false
+    },
+    {
+      iconName: 'comment-o',
+      titel_name: "消息",
+      path: "./message/message",
+      showRedDot: false
+    },
+    {
+      iconName: 'friends-o',
+      titel_name: "在店顾客",
+      path: "./inShopCustomer/inShopCustomer",
+      showRedDot: false
+    },
+    {
+      iconName: 'manager-o',
+      titel_name: "我的",
+      path: "./my/my",
+      showRedDot: false
+    }
     ],
-    table_data: appData.shopInfo.shop.tableSum,
+    shop_table: appData.shop_table,
     tableState: [],
-    charging: [],
-    integral: {},
-
+    shop_charging: [],
+    shop_integral_set: {},
+    shop_account: appData.shop_account,
     tableOrder: [],
 
-    watcher: undefined // 店铺信息监听器
+    totalOrder: [],
+    todayOrders: []
   },
   async tap(e) {
     console.log(e.mark.item)
@@ -159,18 +159,6 @@ Page({
       show: false
     })
   },
-  async getSweepSet() {
-    const res = await app.callFunction({
-      name: 'getDatabaseRecord_fg',
-      data: {
-        collection: 'operateSet',
-        record: 'operateSet',
-        shopFlag: appData.shopInfo.shopFlag
-      }
-    })
-    console.log(res)
-    return res;
-  },
   async goto(e) {
     if (e.mark.path === './my/my') {
       this.setData({
@@ -216,7 +204,7 @@ Page({
   },
   async tableManager() {
     //判断电话号码认证是否完成
-    if (appData.shopInfo.telephone === "1" || appData.shopInfo.telephone === "") { //认证手机号码
+    if (appData.shop_account.shopInfo.telephone === "1" || appData.shop_account.shopInfo.telephone === undefined) { //认证手机号码
       this.setData({
         bindTelShow: true
       })
@@ -234,15 +222,15 @@ Page({
       events: {
         updata: function (data) {
           that.setData({
-            table_data: data
+            shop_table: data
           })
           //调用刷新桌台状态函数
-          that.refreshTableState();
-          console.log(that.data.table_data)
+          that.refreshTableState(that.data.shop_table);
+          console.log(that.data.shop_table)
         }
       },
       success: function (res) {
-        res.eventChannel.emit('giveData', that.data.table_data)
+        res.eventChannel.emit('giveData', that.data.shop_table)
       }
     })
   },
@@ -263,13 +251,13 @@ Page({
 
   },
   getAttendanceState() {
-    const member = appData.shopInfo.shop.member;
+    const member = appData.shop_member;
     if (appData.status === 'boss') {
       return false; //老板不需要打卡
     }
     for (let index = 0; index < member.length; index++) {
       const element = member[index];
-      if (element.memberOpenid === appData.merchantInfo._openid) { // 实验完成  需要把这个openid  换成 appData
+      if (element.memberOpenid === appData.merchant_info._openid) { // 实验完成  需要把这个openid  换成 appData
         return element.attendanceState;
       }
     }
@@ -278,53 +266,26 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
+    const now = app.getNowTime(new Date())
     this.setData({
       ['options[0]']: this.getAttendanceState() === false ? '上班' : '下班' //获取打卡信息
     })
     //获取本店计费规则  积分规则
     this.setData({
-      charging: await app.callFunction({
-        name: 'getDatabaseRecord_fg',
-        data: {
-          collection: 'charging',
-          record: 'charging',
-          shopFlag: appData.shopInfo.shopFlag
-        }
-      }),
-      integral: await app.callFunction({
-        name: 'getDatabaseRecord_fg',
-        data: {
-          collection: 'integral',
-          record: 'integral',
-          shopFlag: appData.shopInfo.shopFlag
-        }
-      }),
-      operateSet: await this.getSweepSet()
+      shop_charging: appData.shop_charging,
+      shop_integral_set: appData.shop_integral_set,
+      shop_operate_set: appData.shop_operate_set,
     })
     console.log(this.data.options)
-    //处理消息
+    //获取今日订单
+    this.setData({
+      todayOrders: await app.getOrderData(now, now)
+    })
+    //处理消息  //用于处理今日结账未打扫的桌台 显示在消息按钮上面  后面修正
     this.setData({
       [`menu_data[1].showRedDot`]: this.disposeMessage(appData.orderForm)
     })
-
-    //开启监听本店桌台订单
-    const that = this;
-    appData.watcher = db.collection('shopAccount').where({
-      shopFlag: appData.shopInfo.shopFlag
-    }).watch({
-      onChange: function (snapshot) {
-        console.log('snapshot:', snapshot);
-        if (appData.shopInfo.shopFlag === snapshot.docChanges[0].doc.shopFlag) { //确保店铺没有被切换  数据对应没有错误
-          appData.shopInfo = snapshot.docChanges[0].doc;
-          that.refreshTableState();
-        }
-      },
-      onError: function (err) {
-        console.error('the watch closed because of error', err)
-      }
-    })
-    console.log(this.data.watcher);
-    await app.checkMerchantBalance(appData.shopInfo, this.data.operateSet)
+    await app.checkMerchantBalance(appData.shop_table, appData.shop_account)
   },
   disposeMessage(orderArray) {
     for (let index = 0; index < orderArray.length; index++) {
@@ -344,27 +305,33 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  async onReady() {},
-  async refreshTableState(param) {
-    var autoClear = false;
-    //刷新本地桌台数据 信号颜色变化 
+  async onReady() {
+
+  },
+  signalLamp(color) {
     this.setData({
-      sortColor: 'red',
-      table_data: appData.shopInfo.shop.tableSum
+      sortColor: color,
     })
-    // appData.orderForm = await app.getOrderForm(appData.shopInfo.shopFlag, app.getNowDate(), 'null', 'null');
-    this.data.tableState = [];
+  },
+  async refreshTableState(shop_table = this.data.shop_table) {
+    console.log(shop_table)
+    const that = this
+    //刷新本地桌台数据 信号颜色变化 
+    this.signalLamp('red')
+    //同步数据
+    that.shop_table = shop_table,
+      that.data.tableState = [];
     //判断桌台订单 长度 与桌台数据 是否一致
-    if (this.data.tableOrder.length !== this.data.table_data.length) { //不一致则 初始化
-      this.data.tableOrder = []
-      for (let index = 0; index < this.data.table_data.length; index++) {
-        this.data.tableOrder.push(null)
-      }
+    if (this.data.tableOrder.length !== this.data.shop_table.length) { //不一致则 初始化
+      this.data.tableOrder.length = 0
+      this.data.shop_table.forEach(element => {
+        that.data.tableOrder.push(null)
+      });
       console.log(this.data.tableOrder)
     }
     //循环获取桌台 订单信息
-    for (let index = 0; index < this.data.table_data.length; index++) {
-      const element = this.data.table_data[index];
+    for (let index = 0; index < this.data.shop_table.length; index++) {
+      const element = this.data.shop_table[index];
       if (element.orderForm === '') { //判断桌台是否为空台
         this.data.tableState.push({
           endTime: '',
@@ -377,7 +344,7 @@ Page({
         //先判断 现有桌台订单 是否为null
         if (this.data.tableOrder[index] === null) { //为空
           //获取这个订单
-          const res = await this.getTableStateOfOrderForm(element.orderForm, this.data.charging, element.chargingFlag)
+          const res = await this.getTableStateOfOrderForm(element.orderForm, this.data.shop_charging, element.chargingId)
           console.log(res)
           this.data.tableOrder[index] = res.order
           this.data.tableState.push(res.tableState)
@@ -387,22 +354,18 @@ Page({
             //给桌台状态赋值
             var now = undefined;
             if ('orderTotalTimeLong' in thisOrder) {
-              now = new Date(thisOrder.startTime).getTime() + 60 * 1000 * (thisOrder.orderTotalTimeLong); //结束时间
+              now = new Date(thisOrder.time).getTime() + 60 * 1000 * (thisOrder.orderTotalTimeLong); //结束时间
             } else {
-              now = new Date(thisOrder.startTime).getTime() + 60 * 60 * 1000 * (thisOrder.cashPledge / thisOrder.price); //结束时间
+              now = new Date(thisOrder.time).getTime() + 60 * 60 * 1000 * (thisOrder.cashPledge / thisOrder.price); //结束时间
             }
             this.data.tableState.push({
               endTime: thisOrder.cashPledge > 0 || thisOrder.cashCoupon > 0 ? app.getNowTime(new Date(now), 'hms') : '非定时开台', //结束时间
               state: thisOrder.orderNum.slice(0, 1) === 'S' ? '自助开台' : '店员开台', //根据订单数据  修改 桌台开台类型
-              tableCost: thisOrder.orderName === '自助套餐订单' ? thisOrder.cashPledge : app.computeTableCost(this.data.charging, element.chargingFlag, thisOrder.price, thisOrder.startTime, new Date()) //已消费金额
+              tableCost: thisOrder.orderName === '自助套餐订单' ? thisOrder.cashPledge : app.computeTableCost(this.data.shop_charging, element.chargingId, thisOrder.price, thisOrder.time, new Date()) //已消费金额
             })
-            //判断结束时间 是否已结束  已结束 函数最后调用 自动结算函数
-            // if (new Date().getTime() >= new Date(now).getTime() && thisOrder.cashPledge > 0) { //订单已到时间 并且是押金模式
-            //   autoClear = true;
-            // } 
           } else { //不一致 需要更新
             //获取这个订单
-            const res = await this.getTableStateOfOrderForm(element.orderForm, this.data.charging, element.chargingFlag)
+            const res = await this.getTableStateOfOrderForm(element.orderForm, this.data.charging, element.chargingId)
             console.log(res)
             this.data.tableOrder[index] = res.order
             this.data.tableState.push(res.tableState)
@@ -411,31 +374,29 @@ Page({
       }
     }
     //设置本地变量 信号颜色变化  及刷新桌台信息
+    this.signalLamp('green')
     this.setData({
-      sortColor: 'green',
       tableState: this.data.tableState
     })
     //更新本地账单数据 以便消息 提示
-    if (param !== false) {
-      appData.orderForm = await app.getOrderForm(appData.shopInfo.shopFlag, app.getNowDate(), 'null', 'null')
-      this.setData({
-        [`menu_data[1].showRedDot`]: this.disposeMessage(appData.orderForm)
-      })
-    }
-
+    const NOW = new Date()
+    appData.orderForm = await app.getOrderData(app.getDateTimeLowOrHi(NOW, undefined), app.getDateTimeLowOrHi(undefined, NOW), false)
+    this.setData({
+      [`menu_data[1].showRedDot`]: this.disposeMessage(appData.orderForm)
+    })
   },
-  async getTableStateOfOrderForm(orderFormNum, chargingArray, chargingFlag) {
+  async getTableStateOfOrderForm(orderFormNum, chargingArray, chargingId) {
     var tempData = {
       state: '空闲',
       endTime: '',
       tableCost: ''
     }
     var thisOrder = undefined;
-    const todayOrderForm = appData.orderForm;
+    const todayOrderForm = this.data.todayOrders;
     //匹配今日订单数据
     for (let index = 0; index < todayOrderForm.length; index++) {
-      const element = todayOrderForm[index];
-      if (element.orderNum === orderFormNum && element.endTime === '未结账') { //这个订单
+      const element = JSON.parse(todayOrderForm[index]);
+      if (element.orderNum === orderFormNum) { //这个订单
         thisOrder = element //寻找到订单
         break;
       }
@@ -443,11 +404,13 @@ Page({
     //判断今日订单数据  是否匹配到
     if (thisOrder === undefined) { //没有匹配到
       //服务器里搜索该订单数据
-      const res = await app.getOrderForm(appData.shopInfo.shopFlag, app.getOrderFormDate(orderFormNum), 'orderNum', orderFormNum)
-      console.log({
-        '搜索到订单数据': res
-      })
-      thisOrder = res; //寻找到订单
+      const res = await app.getOrderInfo('table_order', orderFormNum)
+      if (!res.success) {
+        app.showModal('提示', '获取指定订单错误!')
+        console.log(res)
+        return
+      }
+      thisOrder = res.data; //寻找到订单
     }
     console.log({
       '匹配订单': thisOrder
@@ -457,18 +420,18 @@ Page({
     thisOrder.orderNum.slice(0, 1) === 'S' ? tempData.state = '自助开台' : tempData.state = '店员开台';
 
     //根据订单数据  修改 桌台结束时间
-    console.log(thisOrder.startTime)
+    console.log(thisOrder.time)
     var now = undefined;
     if ('orderTotalTimeLong' in thisOrder) {
       now = new Date(thisOrder.startTime).getTime() + 60 * 1000 * (thisOrder.orderTotalTimeLong)
     } else {
-      now = new Date(thisOrder.startTime).getTime() + 60 * 60 * 1000 * (thisOrder.cashPledge / thisOrder.price);
+      now = new Date(thisOrder.time).getTime() + 60 * 60 * 1000 * (thisOrder.cashPledge / thisOrder.price);
     }
     tempData.endTime = thisOrder.cashPledge > 0 || thisOrder.cashCoupon > 0 ? app.getNowTime(new Date(now), 'hms') : '非定时开台'
     if (thisOrder.orderName === '自助套餐订单') {
       tempData.tableCost = thisOrder.cashPledge;
     } else {
-      tempData.tableCost = app.computeTableCost(chargingArray, chargingFlag, thisOrder.price, thisOrder.startTime, new Date());
+      tempData.tableCost = app.computeTableCost(chargingArray, chargingId, thisOrder.price, thisOrder.time, new Date());
     }
     console.log(tempData.tableCost)
 
@@ -492,8 +455,8 @@ Page({
       optNum: p.mark.tableMark + 1,
       optPrice: this.getNowPrice(p.mark.tableMark),
       tableCtrlShow: true,
-      switchName: this.data.table_data[p.mark.tableMark].orderForm === '' ? '重发关灯指令' : '重发开灯指令',
-      closeOrOpen: this.data.table_data[p.mark.tableMark].orderForm === '' ? '开台' : '结账'
+      switchName: this.data.shop_table[p.mark.tableMark].orderForm === '' ? '重发关灯指令' : '重发开灯指令',
+      closeOrOpen: this.data.shop_table[p.mark.tableMark].orderForm === '' ? '开台' : '结账'
     })
 
   },
@@ -520,7 +483,7 @@ Page({
       name: 'lightCtrl',
       data: {
         lightName: appData.device.lightCtrl,
-        lightData: `{"A${this.data.optNum.toString().padStart(2, '0') }":21${(this.data.operateSet.sweepSet.sweepTime).toString().padStart(4,'0')},"res":"123"}`
+        lightData: `{"A${this.data.optNum.toString().padStart(2, '0')}":21${(this.data.operateSet.sweepSet.sweepTime).toString().padStart(4, '0')},"res":"123"}`
       }
     })
     wx.hideLoading()
@@ -531,24 +494,27 @@ Page({
     return new Promise(resolve => setTimeout(resolve, ms));
   },
   //获取桌台选择的计费规则选项下标
-  getChargingSelect(tableChargingFlag, chaging) {
+  getChargingSelect(tableChargingId, chaging) {
     for (let index = 0; index < chaging.length; index++) {
       const element = chaging[index];
-      if (element.flag === tableChargingFlag) {
+      if (element._id === tableChargingId) {
         return index;
       } else if (index === chaging.length - 1) { //此桌台没有绑定任何计费规则
         return -1;
       }
     }
   },
-  //获取此时段 此桌台价格 函数
+  /**
+   * @description 获取现在 的价格
+   * @param {*} tableNum 
+   */
   getNowPrice(tableNum) {
     //判断tableChargingFlag  是否为未选择,  如果为未选择  不允许开台
-    if (this.data.table_data[tableNum].chargingFlag === '') {
+    if (this.data.shop_table[tableNum].chargingId === '') {
       return -1;
     }
-    const chargingSeletc = this.getChargingSelect(this.data.table_data[tableNum].chargingFlag, this.data.charging)
-    const charging = this.data.charging[chargingSeletc]
+    const chargingSeletc = this.getChargingSelect(this.data.shop_table[tableNum].chargingId, this.data.shop_charging)
+    const charging = this.data.shop_charging[chargingSeletc]
     //判断时间是否只有一个    只有一个的话 为全天一个价格!
     if (charging.timeSegment.length === 1) { //返回第一个时间段的价格
       return charging.timeSegment[0].price;
@@ -589,156 +555,151 @@ Page({
     return parseInt(valuesString)
   },
   input(e) {
-    console.log(e.mark.item)
+    console.log(e)
     if (e.mark.item === 'pledge') { //设置押金金额
       this.setData({
-        cashPledge: parseInt(e.detail.value === NaN ? 0 : e.detail.value)
+        cashPledge: parseInt(e.detail.value ? e.detail.value : 0)
       })
       console.log(this.data.cashPledge)
     }
   },
   async awaitOrderResult(orderNum) {
-    var RES = undefined;
-    // 创建一个promise，该promise在3秒后resolve  
-    const timeoutPromise = new Promise(resolve => {
-      setTimeout(() => {
-        resolve('timeout');
-      }, 3000);
-    });
     for (let index = 0; index < 50; index++) {
       // 使用Promise.race，哪个promise先resolve或reject，就处理哪个  
-      await Promise.race([
-        app.callFunction({
-          name: 'inquirePayOrder',
-          data: {
-            out_trade_no: orderNum,
-            sub_mch_id: appData.shopInfo.proceedsAccount,
-            appid: 'wxad610929898d4371'
-          }
-        }),
-        timeoutPromise
-      ]).then(res => {
-        // 如果callFunction的promise先resolve，那么就处理它的结果  
-        console.log(res);
-        if ('trade_state' in res) {
-          if (res.trade_state === "SUCCESS") { //支付成功
-            RES = true;
+      try {
+        const res = await app.payOrderQuery(orderNum, appData.shop_account.proceedAccount)
+        console.log(res)
+        if (res.success && 'trade_state' in res.data) {
+          if (res.data.trade_state === "SUCCESS") { //支付成功
+            return true;
           }
         }
-      }).catch(err => {
-        // 如果timeoutPromise先resolve，那么就处理它的结果  
-        console.log('Timeout or error:', err);
-      });
-      if (RES === true) {
-        return true;
+        //这里要加 取消支付的情况处理
+      } catch (e) {
+        console.log('orderQuery catch ', e);
       }
-      await app.delay(1000);
+      await app.delay(2000);
     }
     return false;
+  },
+  async sanCodePay(pledge, orderNum) {
+    let cardId
+    try {
+      cardId = await wx.scanCode({
+        onlyFromCamera: true, // 是否只能从相机扫码，不允许从相册选择图片
+      });
+    } catch (e) {
+      console.log('支付 error:' + e)
+      return false
+    }
+    console.log('调用微信支付!:' + cardId.result)
+    let payCode
+    try {
+      payCode = await app.cardPay((pledge * 100).toString(), '开台押金', appData.shop_account.proceedAccount, orderNum, cardId.result, 'wxad610929898d4371')
+      if (!payCode.success && payCode.data.err_code_des !== '需要用户输入支付密码') { //支付返回错误
+        await app.payErrCodeMsg(payCode.data)
+        //支付错误撤销订单
+        return false
+      }
+    } catch (e) {
+      console.log('支付ERROR:' + e)
+    }
+    console.log('查询支付结果')
+    if (await this.awaitOrderResult(orderNum)) {
+      console.log('支付成功!')
+      return true
+    }
   },
   async waiterOpen(tableNum) { //服务员开台
     const now = new Date(); //下单时间种子
     const orderNum = app.createOrderNum(now, 'W'); //订单编号
     const price = await this.getNowPrice(this.data.optNum - 1); //获取现阶段价格
     var pledge = this.data.cashPledge;
+    const pledgeState = pledge === 0 || this.data.payMode === '现金' ? 1 : 0 //后付款模式默认 为付款成功
     console.log({
       '此时段价:': price,
       '押金:': pledge
     })
+    //先下单  再检测支付结果  再开台
+    const placeOrderRes = await this.placeOrder({
+      cashPledge: pledge,
+      commotidyCost: 0,
+      endTime: '',
+      integral: 0,
+      joinCost: 0,
+      log: [`${app.getNowTime(now)}---开台.押金${pledge}元`],
+      orderName: '店员开台订单', //自助开台  店员开台
+      orderNum: orderNum,
+      payMode: '未结账',
+      pledgeMode: `${this.data.payMode === '微信' ? 'wx' : 'cash'}`, // wx   cash mtCoupon dyCoupon cashCoupon 
+      pledgeState: pledgeState,
+      price: price, //单价
+      shopId: appData.shop_account._id,
+      tableCost: 0,
+      tableNum: tableNum, //桌台号码
+      time: now.getTime(),
+      userName: appData.status, //开台人 名字
+      userOpenid: appData.merchant_info._openid//开台人 openid
+    })
+    if (!placeOrderRes.success) {//下单失败
+      app.showModal('提示', '下单失败!')
+      return
+    }
     //支付押金 选择界面  现金or微信   微信则直接展示收款码
-    if (pledge > 0 && this.data.payMode === '微信') { //押金模式 且支付方式 为微信
-      const cardId = await wx.scanCode({
-        onlyFromCamera: true, // 是否只能从相机扫码，不允许从相册选择图片
-      });
-      console.log('调用微信支付!:' + cardId.result)
-      const payCode = await app.cardPay((pledge * 100).toString(), '开台押金', appData.shopInfo.proceedsAccount, orderNum, cardId.result, 'wxad610929898d4371')
-      console.log({
-        '调用结果:': payCode
-      })
-      if (payCode === undefined) { //支付返回错误
-        app.showToast('支付失败!', 'error')
-        return;
+    if (pledge > 0) { //押金模式
+      if (this.data.payMode === '微信') {//押金模式 且支付方式 为微信
+        const payRes = await this.sanCodePay(pledge, orderNum)
+        if (!payRes) { //支付失败
+          app.showToast('支付失败!', 'error')
+          await app.repealOrder(orderNum, tableNum, appData.shop_account._id)
+          return;
+        }
+        console.log('支付成功!')
+        //执行支付完成 函数
+        const paymentDoneRes = await app.paymentDone(orderNum, appData.shop_account._id, tableNum, await app.getTableVersion(tableNum))
+        if (!paymentDoneRes.success) {
+          app.showModal('提示', '处理付款成功失败!')
+          return
+        }
+      } else {//现金付款模式
+        app.showModal('提示', `开台成功!请收取押金:${pledge}元`)
       }
-      const payRes = await this.awaitOrderResult(orderNum);
-      if (!payRes) { //支付失败
-        app.showToast('支付失败!', 'error')
-        return;
-      }
+    } else {//后付款模式
+      app.showModal('提示', `后结账模式,请关台时收取台费!`)
+    }
+    app.lightCtrl(tableNum, '1').then(res => {
+      app.showToast('开台成功!')
+    })
+  },
+  /**
+   * 异步函数 placeOrder 用于处理下单操作
+   * @param {Object} orderOBJ - 包含订单相关信息的对象
+   * @returns {Promise<string>} 返回开台人的 openid
+   * 
+   * 该函数会创建一个订单记录，包括押金、消费成本、积分、订单名称、订单号等信息，
+   * 并将其添加到 'table_order' 集合中。同时记录开台的日志信息。
+   */
+  async placeOrder(orderOBJ) {
+    const tableVersion = await app.getTableVersion(orderOBJ.tableNum)
+    if (tableVersion === -1) {
+      return
     }
     //开台 开始
     const addOrderRes = await app.callFunction({
-      name: 'userOpenTable',
+      name: 'place_order_table',
       data: {
-        pledge: pledge,
-        pledgeMode: `${this.data.payMode === '微信' ? 'wx' :'cash'}`, // wx   cash mtCoupon dyCoupon cashCoupon 
-        openPersonName: appData.status, //开台人 名字
-        openPersonOpenid: appData.status, //开台人 openid
-        orderNum: orderNum,
-        orderName: '店员开台订单', //自助开台  店员开台
-        price: price, //单价
-        integral: 0,
-        shopFlag: appData.shopInfo.shopFlag,
-        tableNum: this.data.optNum, //桌台号码
-        userOpenid: '店员'
+        order: orderOBJ,
+        tableVersion: tableVersion
       }
     })
-    app.showLoading('加载中...', true)
     console.log({
       '下单结果': addOrderRes
     })
-    var timeLong = pledge / price * 60; //订单总时长  单位分钟
-    if (addOrderRes === 'ok') { //下单成功
-      //判断是否是 押金模式  或非押金模式
-      console.log(pledge)
-      if (pledge > 0) { //押金模式
-        //下达定时关灯
-        lightRes = await app.callFunction({
-          name: 'lightCtrl',
-          data: {
-            lightName: appData.device.lightCtrl,
-            lightData: `{"A${(this.data.optNum).toString().padStart(2, '0') }":21${timeLong.toString().padStart(4,'0')},"res":"123"}`
-          }
-        })
-        //判断开灯指令是否下发正确
-        if (lightRes !== 'ok') { //下发指令失败
-          wx.hideLoading();
-          Dialog.alert({
-            title: '提示',
-            message: '指令下达失败!请点击开灯按钮!',
-          }).then(() => {
-            return;
-          })
-        } else {
-          console.log('下单成功!');
-        }
-      } else { //非押金  定时 模式
-        var lightRes = await app.callFunction({
-          name: 'lightCtrl',
-          data: {
-            lightName: appData.device.lightCtrl,
-            lightData: `{"A${(this.data.optNum).toString().padStart(2, '0') }":110000,"res":"123"}`
-          }
-        })
-        app.showLoading('指令下发中...', true)
-        //判断开灯指令是否下发正确
-        if (lightRes !== 'ok') { //下发指令失败
-          wx.hideLoading();
-          Dialog.alert({
-            title: '提示',
-            message: '指令下达失败!请点击开灯按钮!',
-          }).then(() => {
-            return;
-          })
-        }
-      }
-      wx.hideLoading();
-    } else {
-      console.log('下单函数返回失败值!')
-    }
+    return addOrderRes
   },
   async open(e) { //开台
     //判断此桌台年费是否已过期
-    if (new Date().getTime() >= new Date(this.data.table_data[this.data.optNum - 1].useEndTime).getTime()) {
+    if (new Date().getTime() >= new Date(this.data.shop_table[this.data.optNum - 1].useEndTime).getTime()) {
       app.showModal('提示', '此桌台已过期,请续费后使用!')
       return;
     }
@@ -749,11 +710,8 @@ Page({
       return;
     }
     //判断桌台是否绑定 计费规则 及 灯控器
-    if (await app.haveLight() === false || this.data.table_data[this.data.optNum - 1].chargingFlag === '') { //没有绑定灯控器
-      Dialog.alert({
-        title: '提示',
-        message: '请先设置桌台计费规则并且绑定灯控器后方可开台!',
-      }).then(() => {})
+    if (await app.haveLight() === false || this.data.shop_table[this.data.optNum - 1].chargingId === '') { //没有绑定灯控器
+      app.showModal('提示', '请先设置桌台计费规则并且绑定灯控器后方可开台!')
       return;
     }
     if (this.data.closeOrOpen === '开台') { //不定时开台
@@ -777,77 +735,68 @@ Page({
           payModeShow: true
         })
       } else {
-        this.waiterOpen();
+        this.waiterOpen(this.data.optNum);
       }
     } else if (e.mark.item === 'payMode') { //支付押金方式选择界面
       //分析支付方式
       if (this.data.payMode === '现金') { //现金支付
-        //现金支付 直接开台 收取方式为现金
-        Dialog.alert({
-          message: `请收取顾客现金${this.data.cashPledge}元`,
-        }).then(() => {
-          // on close
-        });
-        this.waiterOpen();
+        this.waiterOpen(this.data.optNum);
       } else if (this.data.payMode === '微信') { //微信支付
-        this.waiterOpen();
+        this.waiterOpen(this.data.optNum);
       }
     }
   },
   async closeTable(tableNum) {
     console.log('结账')
     const now = new Date();
-    const orderForm = this.data.tableOrder[tableNum - 1];
+    const orderForm = this.data.tableOrder[this.data.optNum - 1];
     //计算应返现金 后修改押金金额
     if (orderForm.orderName === '自助套餐订单') {
       orderForm.tableCost = orderForm.cashPledge;
     } else {
-      orderForm.tableCost = app.computeTableCost(this.data.charging, appData.shopInfo.shop.tableSum[this.data.optNum - 1].chargingFlag, orderForm.price > 0 ? orderForm.price : this.getNowPrice(this.data.optNum - 1), orderForm.startTime, app.getNowTime(now)) //计算桌台费
+      orderForm.tableCost = app.computeTableCost(this.data.shop_charging, this.data.shop_table[this.data.optNum - 1].chargingId, orderForm.price > 0 ? orderForm.price : this.getNowPrice(this.data.optNum - 1), orderForm.time, app.getNowTime(now)) //计算桌台费
     }
     //重新按结账时间 计算积分
-    orderForm.integral = app.computeIntegral(this.data.integral, orderForm.tableCost, 0, 0)
+    orderForm.integral = app.computeIntegral(this.data.shop_integral_set, orderForm.tableCost, 0, 0)
     //此处判断是否为 非计时模式 非计时模式需要缴费
     if (orderForm.cashPledge === 0) { //计时模式 
       if (orderForm.tableCost > 0) { //且需要支付的金额大于0
         //显示选择支付方式选择界面
-        var payMode = 'cash';
-        try {
-          await Dialog.confirm({
-            title: '选择支付方式',
-            message: `${orderForm.tableCost}元\n现金收取请直接收取\n微信支付需扫客人首付款码.`,
-            confirmButtonText: '微信支付',
-            cancelButtonText: '现金支付'
-          });
-          //点击确认键   微信支付
-          payMode = 'wx'
+        const res = await wx.showModal({
+          title: '支付方式选择',
+          content: '选择支付方式',
+          confirmText: '微信支付',
+          cancelText: '现金支付',
+          cancelColor: 'red',
+          confirmColor: 'green'
+        })
+        if (res.cancel) { //现金支付
+          console.log('选择现金支付!');
+          orderForm.payMode = '现金';
+          orderForm.pledgeMode = 'cash';
+        } else {//微信支付
           const cardId = await wx.scanCode({
             onlyFromCamera: true, // 是否只能从相机扫码，不允许从相册选择图片
           });
-          console.log('调用微信支付!:' + cardId.result)
-          const payCode = await app.cardPay((orderForm.tableCost * 100).toString(), `${orderForm.tableNum}号台台费`, appData.shopInfo.proceedsAccount, orderForm.orderNum, cardId.result, 'wxad610929898d4371')
-          console.log({
-            '调用结果:': payCode
-          })
-          if (payCode === undefined) { //支付返回错误
-            app.showToast('支付失败!', 'error')
+          //生成一个随机支付订单
+          const payOrder = orderForm.orderNum + app.getRandomString(6)
+          const payCode = await app.cardPay((orderForm.tableCost * 100).toString(), `${orderForm.tableNum}号台台费`, appData.shop_account.proceedAccount, payOrder, cardId.result, 'wxad610929898d4371')
+          console.log(payCode)
+          if (!payCode.success && payCode.data.err_code_des !== '需要用户输入支付密码') { //支付返回错误
+            app.payErrCodeMsg(payCode.data)
             return;
           }
-          const payRes = await this.awaitOrderResult(orderForm.orderNum);
+          const payRes = await this.awaitOrderResult(payOrder);
           if (!payRes) { //支付失败
             app.showToast('支付失败!', 'error')
             return;
           }
+          orderForm.payOrder = payOrder
           orderForm.payMode = '微信';
           orderForm.pledgeMode = 'wx';
-
-        } catch { //点击取消按钮  现金支付
-          if (payMode === 'wx') { //判断是否为 微信支付模式 在扫描界面退出导致的 误进此选项
-            return; //误进入
-          }
-          console.log('选择现金支付!');
-          orderForm.payMode = '现金';
-          orderForm.pledgeMode = 'cash';
         }
+      } else {//订单金额为0  默认为现金模式
+        orderForm.payMode = '现金'
       }
       console.log('支付完成!')
     } else { //计时模式
@@ -858,14 +807,13 @@ Page({
         try {
           await Dialog.confirm({
             title: '返还金额',
-            message: `退还押金:${orderForm.cashPledge - orderForm.tableCost}元\n返还方式${orderForm.pledgeMode==='cash'?'现金':'微信'}\n现金模式请直接退给顾客现金`,
+            message: `退还押金:${orderForm.cashPledge - orderForm.tableCost}元\n返还方式${orderForm.pledgeMode === 'cash' ? '现金' : '微信'}\n现金模式请直接退给顾客现金`,
           })
           //点击确认
           if (orderForm.pledgeMode === 'wx') { //判断是否为 微信退还
             console.log('微信退还:' + (orderForm.cashPledge - orderForm.tableCost) + '元')
-            const refundRes = await app.refund(orderForm.cashPledge * 100, (orderForm.cashPledge - orderForm.tableCost) * 100, orderForm.orderNum, `R${orderForm.orderNum}`, appData.shopInfo.proceedsAccount); //退还押金  
-            console.log(refundRes)
-            //应该此处 添加判断 是否返还成功!
+            orderForm.refundOrder = `R_${app.getRandomString(5)}_${orderForm.orderNum}`
+            orderForm.refundCost = (orderForm.cashPledge - orderForm.tableCost) * 100
           } else { //退还现金
 
           }
@@ -878,24 +826,34 @@ Page({
     orderForm.endTime = app.getNowTime(now); //修改结账时间
     orderForm.log.push(`${app.getNowTime(now)}${appData.status}---结算`) //添加结算日志
     console.log(orderForm)
+    const tableVersion = await app.getTableVersion(orderForm.tableNum)
+    if (tableVersion === -1) {
+      return
+    }
     //修改服务器订单数据  
+    delete orderForm._id
     const res = await app.callFunction({
-      name: 'closeTable',
+      name: 'close_table',
       data: {
-        shopFlag: appData.shopInfo.shopFlag,
-        orderFormDate: app.getOrderFormDate(orderForm.orderNum),
-        overOrderForm: orderForm
+        overOrderForm: orderForm,
+        tableVersion: tableVersion,
+        sub_mchid: appData.shop_account.proceedAccount
       }
     })
     console.log(res)
+    if (!res.success) {
+      app.showModal('提示', '关台失败!')
+      return
+    }
+    if (orderForm.refundOrder) {//需要退款
+      //退还押金
+      const refundRes = await app.refund(orderForm.cashPledge * 100, orderForm.refundCost, orderForm.orderNum, orderForm.refundOrder, appData.shop_account.proceedAccount); //退还押金  
+      console.log(refundRes)
+
+      //应该此处 添加判断 是否返还成功! 成功则修改 退款数据库 数据订单为 退款成功
+    }
     //执行关灯指令
-    await app.callFunction({
-      name: 'lightCtrl',
-      data: {
-        lightName: appData.device.lightCtrl,
-        lightData: `{"A${(this.data.optNum).toString().padStart(2, '0') }":100000},"res":"123"}`
-      }
-    })
+    await app.lightCtrl(this.data.optNum, '0')
     return;
   },
   async timedOpen(e) { //开台
@@ -925,44 +883,10 @@ Page({
     this.data.switchName === '重发关灯指令' ? io = 'off' : io = 'on';
     app.showLoading('指令发送中...', true)
     if (io === 'off') { //关灯
-      const res = await app.callFunction({
-        name: 'lightCtrl',
-        data: {
-          lightName: appData.device.lightCtrl,
-          lightData: `{"A${this.data.optNum.toString().padStart(2, '0') }":100000,"res":"123"}`
-        }
-      })
+      await app.lightCtrl(this.data.optNum, '0')
     } else { //开灯  需要获取订单信息 判断延迟关灯时间
-      const startTime = new Date(this.data.tableOrder[this.data.optNum - 1].startTime).getTime() / 1000; //开始时间截---秒
-      const now = new Date().getTime() / 1000; //现在时间截--- 秒
-      var timeLong = 0;
-      if (this.data.tableOrder[this.data.optNum - 1].orderName === '自助套餐订单') { //套餐订单
-        timeLong = this.data.tableOrder[this.data.optNum - 1].orderTotalTimeLong * 60 //订单总时长---秒
-      } else {
-        timeLong = this.data.tableOrder[this.data.optNum - 1].cashPledge / this.data.tableOrder[this.data.optNum - 1].price * 60 * 60 //订单总时长---秒
-      }
-      var surplusTime = timeLong - (parseInt(now) - parseInt(startTime)) //总时长  减去  已经过去的时间  = 剩余时间---秒
-      if (surplusTime < 15) { //剩余时间多发于15秒开灯  否则不开灯
-        return;
-      }
-      app.showLoading('指令下达...', true)
-      //下达开灯定时关灯
-      const lightRes = await app.callFunction({
-        name: 'lightCtrl',
-        data: {
-          lightName: appData.device.lightCtrl,
-          lightData: `{"A${(this.data.optNum).toString().padStart(2, '0') }":21${(parseInt(surplusTime/60)).toString().padStart(4,'0')},"res":"123"}`
-        }
-      })
-      //判断开灯指令是否下发正确
-      if (lightRes !== 'ok') { //下发指令失败
-        wx.hideLoading();
-        app.showToast('指令下达失败', 'error');
-        return;
-      }
-      wx.hideLoading();
+      await app.lightCtrl(this.data.optNum, '1')
     }
-    wx.hideLoading();
     this.tableCtrlClose() //关闭菜单
   },
   async tapTableInfo() {
@@ -985,69 +909,58 @@ Page({
    * 生命周期函数--监听页面显示
    */
   async onShow() {
-    console.log({
-      'appShopInfo': appData.shopInfo.shopFlag,
-      'thisShopInfo': this.data.shopInfo.shopFlag
-    })
     //处理 订单 消息 
-    appData.orderForm = await app.getOrderForm(appData.shopInfo.shopFlag, app.getNowDate(), 'null', 'null')
     this.setData({
       [`menu_data[1].showRedDot`]: this.disposeMessage(appData.orderForm)
     })
 
-    if (appData.shopInfo.shopFlag === this.data.shopInfo.shopFlag) { //没有切换店铺
-      return;
+    if (appData.shop_account._id !== this.data.shop_account._id) { //有切换店铺
+      this.setData({
+        shop_table: appData.shop_table,
+        shop_account: appData.shop_account,
+        ['options[0]']: this.getAttendanceState() === false ? '上班' : '下班' //获取打卡信息,
+      })
     }
-    this.setData({
-      shopInfo: appData.shopInfo,
-      ['options[0]']: this.getAttendanceState() === false ? '上班' : '下班' //获取打卡信息,
-    })
-    //获取本店计费规则  积分规则
-    this.setData({
-      charging: await app.callFunction({
-        name: 'getDatabaseRecord_fg',
-        data: {
-          collection: 'charging',
-          record: 'charging',
-          shopFlag: appData.shopInfo.shopFlag
-        }
-      }),
-      integral: await app.callFunction({
-        name: 'getDatabaseRecord_fg',
-        data: {
-          collection: 'integral',
-          record: 'integral',
-          shopFlag: appData.shopInfo.shopFlag
-        }
-      }),
-      operateSet: await this.getSweepSet()
-    })
+
     console.log(this.data.options)
-    //关闭以前的监听器
-    await appData.watcher.close();
-    await app.delay(1000)
-    //开启监听本店桌台状态变化信息
+    //开启监听本店桌台订单
     const that = this;
-    console.log(appData.shopInfo.shopFlag)
-    appData.watcher = db.collection('shopAccount').where({
-      shopFlag: appData.shopInfo.shopFlag
+    appData.watcher = db.collection('shop_table').where({
+      shopId: appData.shop_account._id
     }).watch({
       onChange: function (snapshot) {
         console.log('snapshot:', snapshot);
-        if (appData.shopInfo.shopFlag === snapshot.docChanges[0].doc.shopFlag) { //确保店铺没有被切换  数据对应没有错误
-          appData.shopInfo = snapshot.docChanges[0].doc;
-          that.refreshTableState();
+        if (snapshot.docChanges.length && appData.shop_account._id === snapshot.docChanges[0].doc.shopId) { //确保店铺没有被切换  数据对应没有错误
+          for (let index = 0; index < appData.shop_table.length; index++) {
+            const element = appData.shop_table[index];
+            if (element._id === snapshot.docChanges[0].doc._id) {
+              Object.assign(appData.shop_table[index], snapshot.docChanges[0].doc)
+              break
+            }
+          }
+          that.setData({
+            shop_table: appData.shop_table
+          })
+          that.refreshTableState(snapshot.docs);
+          return
         }
+        that.refreshTableState(snapshot.docs);
       },
       onError: function (err) {
         console.error('the watch closed because of error', err)
       }
     })
     console.log(appData.watcher);
-    //
-    await app.checkMerchantBalance(appData.shopInfo, this.data.operateSet)
     //定时修改 桌台 实时费用
-    this.data.setIntervalId = setInterval(this.refreshTableState, 60000, false) //定时刷新
+    this.data.setIntervalId = setInterval(this.refreshTableState, 60000) //定时刷新
+  },
+  //获取今天和昨天的所有订单
+  async getOrder_TodayAndYesterday() {
+    const today = new Date()
+    const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
+    const totalOrder = await app.getOrderData(today, yesterday)
+    this.data.totalOrder = totalOrder
+    return totalOrder
   },
 
   /**
@@ -1073,8 +986,23 @@ Page({
    */
   async onPullDownRefresh() {
     app.showLoading('数据加载中...', true);
-    //获取店铺信息
-    await app.getShopInfo(this.data.shopInfo.shopFlag);
+    //获取店铺桌台信息
+    const res = await app.callFunction({
+      name: 'getData_where',
+      data: {
+        collection: 'shop_table',
+        query: {
+          shopId: appData.shop_account._id
+        }
+      }
+    })
+    console.log(res)
+    if (!res.success) {
+      app.showModal('提示', '获取桌台信息失败!')
+      return
+    }
+    appData.shop_table = res.data
+    this.data.shop_table = res.data
     await this.refreshTableState()
     wx.hideLoading()
     wx.stopPullDownRefresh()

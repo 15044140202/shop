@@ -1,4 +1,5 @@
 <!--pages/operate/tableInfo/tableQr/tableQr.wxml-->
+<view style="width: 100%;height: 80rpx;"></view>
 <view style="display: flex; flex-direction: row; justify-content: center; align-items: center; width: 100%;">
 	<canvas type="2d" id="myCanvas" style=" border: 1rpx #eee solid; width:{{item === 'tableNum' ? '90vw' : '80vw'}}; height:{{item === 'tableNum' ? '30vw' : '108.5vw'}};"></canvas>
 </view>

@@ -36,14 +36,14 @@
 	<view class="item" style="width: 90%; margin-left: 5%; color: #999;" wx:if="{{itemSelect === 'luckSudoku'}}">
 		<text style="font-size: 35rpx; color: #000; ">起始时间 : </text>
 		<picker mode="date" bindchange="change" mark:item="luckSudokuStartDate">
-			<text>{{luckSudoku.startDate}}</text>
+			<text>{{luckSudoku.startTime?luckSudoku.startTime:'请选择开始时间'}}</text>
 		</picker>
 	</view>
 	<!-- 项目结束时间 -->
 	<view class="item" style="width: 90%; margin-left: 5%; color: #999;" wx:if="{{itemSelect === 'luckSudoku'}}">
 		<text style="font-size: 35rpx; color: #000; ">结束时间 : </text>
 		<picker mode="date" bindchange="change" mark:item="luckSudokuEndDate">
-			<text>{{luckSudoku.endDate}}</text>
+			<text>{{luckSudoku.endTime?luckSudoku.endTime:'请选择结束时间'}}</text>
 		</picker>
 	</view>
 	<!-- 每人每天次数 -->

@@ -9,5 +9,7 @@
 <view style="height: 35rpx;"></view>
 <template is="sysSet" data="{{...menuData.integralSet}}"/>
 <view style="height: 35rpx;"></view>
+<template is="sysSet" data="{{...menuData.shop_transfer}}"/>
+<view style="height: 35rpx;"></view>
 <template is="sysSet" data="{{...menuData.suggest}}"/>
 

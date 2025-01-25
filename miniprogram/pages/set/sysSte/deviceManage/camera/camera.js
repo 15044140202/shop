@@ -8,9 +8,10 @@ Page({
    * 页面的初始数据
    */
   data: {
-    tableSum: [],
-    device: {},
-    shopInfo: {},
+    sportShowCost:1,//此为调取一次收取商家的价格  修改请修改此处
+    shop_table: [],
+    shop_device: {},
+    shop_account: {},
 
     cameraNum: '',
     cameraSecurityCode: '',
@@ -27,30 +28,13 @@ Page({
    */
   async onLoad(options) {
     this.setData({
-      device: appData.device,
-      tableSum: appData.shopInfo.shop.tableSum,
-      shopInfo: appData.shopInfo
+      shop_device: appData.shop_device,
+      shop_table: appData.shop_table,
+      shop_account: appData.shop_account
     })
     this.setData({
-      deviceState: await this.refreshDeviceState(this.data.device.camera)
+      deviceState: await this.refreshDeviceState(this.data.shop_device.camera)
     })
-    //获取调取监控的价格
-    await this.getSportShowPrice(appData.shopInfo.shopFlag)
-  },
-  async getSportShowPrice(shopFlag){
-    const res = await app.callFunction({
-      name:'getDatabaseRecord_fg',
-      data:{
-        collection:'charging',
-        record:'sportShowPrice',
-        shopFlag:shopFlag
-      }
-    })
-    console.log(res)
-    this.setData({
-      sportShowPrice:res
-    })
-    return res;
   },
   async tap(e) {
     console.log(e)
@@ -80,19 +64,23 @@ Page({
     }
     //支付成功  修改用户余额
     const res = await app.callFunction({
-      name:'payMerchantSportShowAmount',
+      name:'record_inc',
       data:{
-        shopFlag:appData.shopInfo.shopFlag,
-        orderNum:orderNum,
-        amount:amount,
-        payTime:app.getNowTime(now)
+        collection:'shop_account',
+        query:{
+          _id:appData.shop_account._id
+        },
+        record:'sportShowAmount',
+        amount:amount
       }
     })
-    if (res === 'ok') {
+    console.log(res)
+    if (res.success) {
       app.showToast('提示','充值成功!')
       this.setData({
-        ['shopInfo.sportShowAmount']:'sportShowAmount' in this.data.shopInfo ? this.data.shopInfo.sportShowAmount + amount : amount
+        ['shop_account.sportShowAmount']:this.data.shop_account.sportShowAmount + amount
       })
+      appData.shop_account.sportShowPrice = this.data.shop_account.sportShowAmount + amount
       return;
     }else{
       app.showModal('提示','充值失败,稍后查看,如已成功扣费未到账请联系客服!')
@@ -103,18 +91,20 @@ Page({
     console.log(e)
     //处理数据
     const res = await app.callFunction({
-      name: 'amendDatabase_fg',
+      name: 'upDate',
       data: {
-        collection: 'shopAccount',
-        flagName: 'shopFlag',
-        flag: appData.shopInfo.shopFlag,
-        objName: `shop.device.camera.${e.mark.index}.channel.${e.mark.channelIndex}.bindTable`,
-        data: parseInt(e.detail.value) + 1
+        collection: 'shop_device',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        upData:{
+          [`camera.${e.mark.index}.channel.${e.mark.channelIndex}.bindTable`]:parseInt(e.detail.value) + 1
+        }
       }
     })
-    if (res === 'ok') { //保存成功
+    if (res.success) { //保存成功
       this.setData({
-        [`device.camera[${e.mark.index}].channel[${e.mark.channelIndex}].bindTable`]: parseInt(e.detail.value) + 1
+        [`shop_device.camera[${e.mark.index}].channel[${e.mark.channelIndex}].bindTable`]: parseInt(e.detail.value) + 1
       })
       app.showToast('保存成功!', 'success')
     } else { //保存失败
@@ -151,8 +141,18 @@ Page({
     const res = await imou.unBindDevice(deviceId, undefined, undefined, this.data.imouAppID, this.data.imouAppSecret)
     if (res === 'ok') {
       app.showToast('解绑成功!', 'success')
+      return {
+        success:true,
+        message:'unBind success',
+        data:res
+      }
     } else {
       app.showToast('解绑失败!', 'error')
+      return {
+        success:false,
+        message:'unBind failed',
+        data:res
+      }
     }
   },
   cameraInfoToObj(cameraInfoString){
@@ -190,7 +190,7 @@ Page({
   },
   async delete(e) {
     const i = parseInt(e.mark.index);
-    const camera = this.data.device.camera;
+    const camera = this.data.shop_device.camera;
     const newCamera = [];
     const result = await Dialog.confirm({
       title: '确认',
@@ -205,8 +205,11 @@ Page({
       // 用户点击了"取消"  
       return;
     }
-    await this.unBindDevice(camera[i].cameraNum); //解绑设备
-
+    const unbindRes = await this.unBindDevice(camera[i].cameraNum); //解绑设备
+    if (!unbindRes.success) {
+      app.showToast('解绑失败!','error')
+      return
+    }
     for (let index = 0; index < camera.length; index++) { //删除 被选中删除的设备
       const element = camera[index];
       if (i !== index) {
@@ -217,23 +220,24 @@ Page({
     app.showLoading('保存中...', true)
     //处理数据
     const res = await app.callFunction({
-      name: 'amendDatabase_fg',
+      name: 'upDate',
       data: {
-        collection: 'shopAccount',
-        flagName: 'shopFlag',
-        flag: appData.shopInfo.shopFlag,
-        objName: `shop.device.camera`,
-        data: newCamera
+        collection: 'shop_device',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        upData:{
+          camera:newCamera
+        }
       }
     })
-    if (res === 'ok') {
-      appData.device = await app.getDevice(appData.shopInfo.shopFlag)
-      await app.getShopInfo(appData.shopInfo.shopFlag)
+    if (res.success) {
+      appData.shop_device.camera =  newCamera
       this.setData({
-        device: appData.device,
+        shop_device: appData.shop_device,
       })
       this.setData({
-        deviceState: await this.refreshDeviceState(this.data.device.camera)
+        deviceState: await this.refreshDeviceState(this.data.shop_device.camera)
       })
       wx.hideToast({})
       app.showToast('保存成功!', 'success', )
@@ -244,16 +248,22 @@ Page({
   },
   async priceSave(){
     const res = await app.callFunction({
-      name:'databaseRecord_set',
+      name:'upDate',
       data:{
-        collection:'charging',
-        flagName:'shopFlag',
-        flag:appData.shopInfo.shopFlag,
-        record:'sportShowPrice',
-        value:this.data.sportShowPrice
+        collection:'shop_device',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        upData:{
+          sportShowPrice:this.data.sportShowPrice
+        }
       }
     })
-    if (res === 'ok') {
+    if (res.success) {
+      appData.shop_device.sportShowPrice = this.data.sportShowPrice
+      this.setData({
+        [`shop_device.sportShowPrice`]:this.data.sportShowPrice
+      })
       app.showToast('保存成功!','success')
       return;
     }else{
@@ -286,28 +296,27 @@ Page({
     }
     //处理数据
     const res = await app.callFunction({
-      name: 'addArrayDatabase_fg',
+      name: 'record_push',
       data: {
-        collection: 'shopAccount',
-        shopFlag: appData.shopInfo.shopFlag,
-        objName: `shop.device.camera`,
-        data: {
-          ...deviceData
-        }
+        collection: 'shop_device',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        record:'camera',
+        data:deviceData
       }
     })
-    if (res === 'ok') {
+    if (res.success) {
       await this.bindDevice(this.data.cameraNum, this.data.cameraSecurityCode)
-      appData.device = await app.getDevice(appData.shopInfo.shopFlag)
-      await app.getShopInfo(appData.shopInfo.shopFlag)
+      appData.shop_device.camera.push(deviceData)
       this.setData({
-        device: appData.device,
+        shop_device: appData.shop_device,
         cameraNum: '',
         cameraSecurityCode: '',
         cameraName: ''
       })
       this.setData({
-        deviceState: await this.refreshDeviceState(this.data.device.camera)
+        deviceState: await this.refreshDeviceState(this.data.shop_device.camera)
       })
       wx.hideToast({})
       app.showToast('保存成功!', 'success', )

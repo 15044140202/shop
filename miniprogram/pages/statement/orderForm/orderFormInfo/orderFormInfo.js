@@ -18,19 +18,20 @@ Page({
     if (e.mark.item === "vipDetail") {
       //获取这个会员的会员信息
       const res = await app.callFunction({
-        name: 'searchVip',
+        name: 'getData_where',
         data: {
-          shopFlag: appData.shopInfo.shopFlag,
-          userTelephone: null,
-          userName: null,
-          userOpenid: this.data.orderForm[this.data.index].openPerson.openPersonOpenid
+          collection:'vip_list',
+          query:{
+            shopId:appData.shop_account._id,
+            userOpenid:this.data.orderForm[this.data.index].userOpenid
+          }
         }
       })
-      if (res === 'noVipInfo' || res === 'error') {
+      if (!res.success || res.data.length === 0) {
         app.showModal('提示', '获取会员信息失败!')
         return;
       }
-      this.data.vipList.push(res)
+      this.data.vipList.push(res.data[0])
       const that = this;
       wx.navigateTo({
         url: `../../../set/vipManage/vipDetail/vipDetail?index=0&returnData=false`,
@@ -74,6 +75,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
+    console.log(options)
     const that = this;
     const eventChannel = this.getOpenerEventChannel()
     eventChannel.on('giveData', function (data) {
@@ -83,13 +85,18 @@ Page({
         index: options.index
       })
     })
-    if ('item' in options) { //判断项目
+    if (options.item) { //判断项目
       if (options.item === 'inShopCustomer') { //在店账单
 
       }
     } else {
+      for (let index = 0; index < appData.disPlayOrderForm.length; index++) {
+        const element =JSON.parse(appData.disPlayOrderForm[index]) ;
+        element.time = app.getNowTime(new Date(element.time))
+        this.data.orderForm.push(element)
+      }
       this.setData({
-        orderForm: appData.disPlayOrderForm,
+        orderForm: this.data.orderForm,
         index: options.index,
       })
       //统计总退款金额

@@ -11,7 +11,7 @@
   <block wx:if="{{item.disPlay === true}}">
     <view class="border1" wx:if="{{item.orderName === '店员开台订单' || item.orderName === '自助开台订单' || item.orderName === '自助套餐订单'}}">
       <view class="border2">
-        <text style="font-size:32rpx;margin-left: 25rpx;">{{item.tableNum}}号台 - {{item.openPerson.openPersonName}}</text>
+        <text style="font-size:32rpx;margin-left: 25rpx;">{{item.tableNum}}号台 - {{item.userName}}</text>
         <text style="color:#999999; font-size: 30rpx;margin-left: 25rpx;">{{item.endTime}}</text>
       </view>
       <view class="border3">
@@ -31,7 +31,7 @@
     </view>
     <view class="border1" wx:if="{{item.orderName === '储值单'}}">
       <view class="border2">
-        <text style="font-size:32rpx;margin-left: 25rpx;">储值单-{{item.person.name}}</text>
+        <text style="font-size:32rpx;margin-left: 25rpx;">储值单-{{item.userName}}</text>
         <text style="color:#999999; font-size: 30rpx;margin-left: 25rpx;">{{item.time}}</text>
       </view>
       <view class="border3">
@@ -41,7 +41,7 @@
     </view>
     <view class="border1" wx:if="{{item.orderName === '精彩秀单'}}">
       <view class="border2">
-        <text style="font-size:32rpx;margin-left: 25rpx;">精彩秀单-{{item.personName}}</text>
+        <text style="font-size:32rpx;margin-left: 25rpx;">精彩秀单-{{item.userName}}</text>
         <text style="color:#999999; font-size: 30rpx;margin-left: 25rpx;">{{item.time}}</text>
       </view>
       <view class="border3">

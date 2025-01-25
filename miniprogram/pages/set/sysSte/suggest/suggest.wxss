@@ -5,8 +5,9 @@ page{
 .titel{
   height: 120rpx;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: #ccc solid 1rpx;
 }
 .titel_1{
@@ -16,4 +17,40 @@ page{
   align-items: center;
   background-color: white; 
   height: 600rpx;
+}
+.history{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 95%;
+  height: 200rpx;
+  border: solid #ccc 1rpx;
+  border-radius: 10rpx;
+  margin-left: 2.5%;
+  margin-top: 20rpx;
+}
+.history_title{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #3498db;
+  height: 50rpx;
+  border-top-left-radius: 10rpx;
+  border-top-right-radius: 10rpx;
+}
+.textView{
+  width: 95%;
+  margin-left:2.5%;
+  height: 150rpx;
+}
+.reply_title{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #2ecc71;
+  height: 50rpx;
+  border-top-left-radius: 10rpx;
+  border-top-right-radius: 10rpx;
 }

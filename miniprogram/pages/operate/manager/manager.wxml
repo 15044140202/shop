@@ -1,7 +1,7 @@
 <!--pages/operate/manager/manager.wxml-->
 <view style="background-color: #0097ff; color: #fff;height: 80rpx; display: flex;flex-direction: column; align-items: center; justify-content: center;">桌台续费管理</view>
 <view style="background-color: #1aad19;color: #fff;width: 80%; margin-left:10%; border-radius: 10rpx; height: 60rpx; margin-top: 30rpx;display: flex; flex-direction: column; justify-content: center; align-items: center;" bind:tap="payTableCost" mark:index="all" >一键续费\n(剩余不足一个月的桌台)</view>
-<view wx:for="{{table_data}}" wx:key="index" class="border">
+<view wx:for="{{shop_table}}" wx:key="index" class="border">
   <view wx:if="{{index === 0}}" class="row" style="margin-top: 30rpx;">
     <view class="tableNum">
       <text>桌台号码</text>

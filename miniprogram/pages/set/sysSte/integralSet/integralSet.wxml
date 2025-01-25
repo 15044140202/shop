@@ -10,37 +10,37 @@
 <!-- 台费积分 -->
   <view class="border">
     <text style="font-size: 38rpx;">台费积分</text>
-    <switch style="margin-right: 50rpx;" checked="{{integral.tableCost.values}}" mark:select='tableCost' bindchange="change" />
+    <switch style="margin-right: 50rpx;" checked="{{shop_integral_set.tableCost.switch}}" mark:select='tableCost' bindchange="change" />
   </view>
-  <view class="border" hidden="{{!integral.tableCost.values}}">
+  <view class="border" hidden="{{!shop_integral_set.tableCost.switch}}">
     <text style="font-size: 32rpx; margin-left: 50rpx;">消费</text>
-    <input style="height: 100%;width: 100rpx;" class="input" type="text" value='{{integral.tableCost.everyCost}}' mark:every="tableCost"	bindinput='every' />
+    <input style="height: 100%;width: 100rpx;" class="input" type="text" value='{{shop_integral_set.tableCost.everyCost}}' mark:every="tableCost"	bindinput='every' />
     <text style="font-size: 32rpx; ">元获得</text>
-    <input style="height: 100%;width: 100rpx;" class="input"  type="text" value='{{integral.tableCost.giveValues}}' mark:give="tableCost" bindinput='give' />
+    <input style="height: 100%;width: 100rpx;" class="input"  type="text" value='{{shop_integral_set.tableCost.giveValues}}' mark:give="tableCost" bindinput='give' />
     <text style="font-size: 32rpx;margin-right: 200rpx; ">积分</text>
   </view>
   <!-- 商品积分 -->
   <view class="border">
     <text style="font-size: 38rpx;">商品积分</text>
-    <switch style="margin-right: 50rpx;" mark:select='commotidy' checked="{{integral.commotidy.values}}" bindchange="change" />
+    <switch style="margin-right: 50rpx;" mark:select='commotidy' checked="{{shop_integral_set.commotidy.switch}}" bindchange="change" />
   </view>
-  <view class="border" hidden="{{!integral.commotidy.values}}">
+  <view class="border" hidden="{{!shop_integral_set.commotidy.switch}}">
     <text style="font-size: 32rpx; margin-left: 50rpx;">消费</text>
-    <input style="height: 100%;width: 100rpx;" class="input" type="text" value='{{integral.commotidy.everyCost}}' mark:every='commotidy'	bindinput='every' />
+    <input style="height: 100%;width: 100rpx;" class="input" type="text" value='{{shop_integral_set.commotidy.everyCost}}' mark:every='commotidy'	bindinput='every' />
     <text style="font-size: 32rpx; ">元获得</text>
-    <input style="height: 100%;width: 100rpx;" class="input"  type="text" value='{{integral.commotidy.giveValues}}' mark:give='commotidy' bindinput='give' />
+    <input style="height: 100%;width: 100rpx;" class="input"  type="text" value='{{shop_integral_set.commotidy.giveValues}}' mark:give='commotidy' bindinput='give' />
     <text style="font-size: 32rpx;margin-right: 200rpx; ">积分</text>
   </view>
   <!-- 充值积分 -->
   <view class="border">
     <text style="font-size: 38rpx;">充值积分</text>
-    <switch style="margin-right: 50rpx;" mark:select='stored' checked="{{integral.stored.values}}" bindchange="change" />
+    <switch style="margin-right: 50rpx;" mark:select='stored' checked="{{shop_integral_set.stored.switch}}" bindchange="change" />
   </view>
-  <view class="border" hidden="{{!integral.stored.values}}">
+  <view class="border" hidden="{{!shop_integral_set.stored.switch}}">
     <text style="font-size: 32rpx; margin-left: 50rpx;">充值</text>
-    <input style="height: 100%;width: 100rpx;" class="input" type="text" value='{{integral.stored.everyCost}}' mark:every='stored' 	bindinput='every' />
+    <input style="height: 100%;width: 100rpx;" class="input" type="text" value='{{shop_integral_set.stored.everyCost}}' mark:every='stored' 	bindinput='every' />
     <text style="font-size: 32rpx; ">元获得</text>
-    <input style="height: 100%;width: 100rpx;" class="input"  type="text" value='{{integral.stored.giveValues}}' mark:give='stored' bindinput='give' />
+    <input style="height: 100%;width: 100rpx;" class="input"  type="text" value='{{shop_integral_set.stored.giveValues}}' mark:give='stored' bindinput='give' />
     <text style="font-size: 32rpx;margin-right: 200rpx; ">积分</text>
   </view>
 </view>

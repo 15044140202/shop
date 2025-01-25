@@ -1,7 +1,7 @@
 <!--pages/set/commotidySet/commotidyPurchaseSet/commotidyPurchaseSet.wxml-->
 <van-tabs active="{{ active }}">
-  <van-tab wx:for="{{commotidy}}" wx:key="index" title="{{item.name}}">
-    <view class="border1" wx:for="{{item.commotidy}}" wx:key="index_1" wx:for-item="item_1" wx:for-index="index1" bind:tap="addCommotidy" mark:class='{{index}}' mark:index="{{index1}}">
+  <van-tab wx:for="{{class}}" wx:key="index" title="{{item}}">
+    <view class="border1" wx:for="{{shop_commotidy}}" wx:key="index_1" wx:for-item="item_1" wx:for-index="index1" bind:tap="addCommotidy" mark:index="{{index1}}" wx:if="{{item === item_1.class}}">
       <view class='titel'>
         <image style="height: 150rpx; width: 150rpx; border-radius: 10%; border: solid 1rpx #ccc ; margin: 10rpx;" src="{{item_1.picId === '' ? 'cloud://cloud-4g9re7jfd5333736.636c-cloud-4g9re7jfd5333736-1325756030/image/没有图片.png' : item_1.picId}}" />
         <view class="titel_1">
@@ -27,10 +27,10 @@
       </view>
     </view>
     <view wx:for="{{addCommotidy}}" wx:key="index" class="list">
-      <text style="font-size: 32rpx;">{{commotidy[item.class].commotidy[item.index].name}}</text>
+      <text style="font-size: 32rpx;">{{shop_commotidy[item.index].name}}</text>
       <view class="list_1">
         <input style="width: 50rpx; font-size: 32rpx;" type="text" value="{{item.sum}}" bindinput="input" mark:index='{{index}}' />
-        <text style="font-size: 32rpx;">{{commotidy[item.class].commotidy[item.index].units}}</text>
+        <text style="font-size: 32rpx;">{{shop_commotidy[item.index].units}}</text>
         <van-icon style="margin-left:30rpx;" size="40rpx" name='close' bind:tap="delete" mark:index='{{index}}' />
       </view>
     </view>

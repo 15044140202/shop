@@ -6,7 +6,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    proceedsAccount: ''
+    proceedAccount: ''
   },
   apply(){
     app.showToast('请联系客服!','none')
@@ -32,7 +32,7 @@ Page({
       data: {
         amount: '1',
         description: '账号测试',
-        sub_mchid: this.data.proceedsAccount,
+        sub_mchid: this.data.proceedAccount,
         out_trade_no: new Date().getTime() + '2024n06y06r'
       }
     })
@@ -61,16 +61,24 @@ Page({
       })
     } else {
       const res = await app.callFunction({
-        name: 'amendDatabase_fg',
+        name: 'upDate',
         data: {
-          collection: 'shopAccount',
-          flagName: 'shopFlag',
-          flag: appData.shopInfo.shopFlag,
-          objName: 'proceedsAccount',
-          data: this.data.proceedsAccount
+          collection: 'shop_account',
+          query:{
+            _id:appData.shop_account._id
+          },
+          upData:{
+            proceedAccount:this.data.proceedsAccount
+          }
         }
       })
-      res === 'ok' ? app.showToast('保存成功!', 'success') : app.showToast('保存失败!', 'error')
+      if (res.success) {
+        appData.shop_account.proceedAccount = this.data.proceedAccount
+        app.showToast('保存成功!', 'success')
+      }else{
+        app.showToast('保存失败!', 'error')
+      }
+
     }
   },
   proceedsAccount(e) {
@@ -84,7 +92,7 @@ Page({
    */
   onLoad(options) {
     this.setData({
-      proceedsAccount: appData.shopInfo.proceedsAccount
+      proceedAccount: appData.shop_account.proceedAccount
     })
   },
 

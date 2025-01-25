@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    commotidy: []
+    shop_commotidy: []
 
   },
   async goto(e) {
@@ -35,53 +35,58 @@ Page({
         break;
     }
     if (itemSum === -1) {//不验证全向项
-    }else{
-      if (await app.power(itemType,itemSum,itemName) === false) {
+    } else {
+      if (await app.power(itemType, itemSum, itemName) === false) {
         app.noPowerMessage();
         return;
       }
     }
-
     const that = this;
     wx.navigateTo({
       url: `./${e.mark.name}/${e.mark.name}`,
       events: {
         updata: function (data) {
           that.setData({
-            commotidy: data
+            shop_commotidy: data
           })
-          console.log(that.data.commotidy)
+          console.log(that.data.shop_commotidy)
         }
       },
       success: function (res) {
         // 通过eventChannel向被打开页面传送数据
         res.eventChannel.emit('acceptDataFromOpenerPage', {
-          data: that.data.commotidy
+          data: that.data.shop_commotidy
         })
       }
-
     })
-  },
-  async getCommotidy(shopFlag) {
-    const res = await app.callFunction({
-      name:'getDatabaseRecord_fg',
-      data:{
-        collection:'commotidy',
-        shopFlag:shopFlag,
-        record:'commotidy'
-      }
-    })
-    return res;
   },
   /**
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
-    this.setData({
-      commotidy: await this.getCommotidy(appData.shopInfo.shopFlag)
+    await this.getCommotidy(appData.shop_account._id)
+    console.log(this.data.shop_commotidy)
+    
+  },
+  async getCommotidy(shopId) {
+    const res = await app.callFunction({
+      name: 'getData_where',
+      data: {
+        collection: 'shop_commotidy',
+        query: {
+          shopId: shopId
+        }
+      }
     })
-    console.log(this.data.commotidy)
-
+    console.log(res)
+    if (res.success) {
+      this.setData({
+        shop_commotidy: res.data
+      })
+      appData.shop_commotidy = this.data.shop_commotidy
+    } else {
+      app.showModal('错误', '获取店铺商品信息错误!')
+    }
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

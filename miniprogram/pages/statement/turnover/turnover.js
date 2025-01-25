@@ -14,7 +14,7 @@ Page({
     cWidth: 750,
     cHeight: 500,
 
-    hidden:true,
+    hidden: true,
 
     orderArray: [],
     everyDayAmount: []
@@ -23,10 +23,15 @@ Page({
   async getOrder(date) {
     const now = new Date().getTime();
     //获取七日营业数据
+    const task = []
     for (let index = 0; index < 7; index++) {
-      const date = app.getNowDate(new Date(now - index * 24 * 60 * 60 * 1000))
-      const res = await app.getOrderForm(appData.shopInfo.shopFlag, date, 'null', 'null')
-      this.data.orderArray.push(res);
+      const date = app.getNowTime(new Date(now - index * 24 * 60 * 60 * 1000))
+      task.push(app.getOrderData(date, date))
+    }
+    const res = await Promise.all(task)
+    for (let index = 0; index < res.length; index++) {
+      const element = res[index];
+      this.data.orderArray.push(element);
     }
   },
   computeEveryDayAmount() {
@@ -39,16 +44,16 @@ Page({
         const e = element[i]; //每个账单
         if (e.orderName === '精彩秀单') {
           dayAmount += parseInt(e.cost)
-        } else if (e.orderName === '自助开台订单' || e.orderName === '店员开台订单'  || e.orderName === '店员开台订单') {
+        } else if (e.orderName === '自助开台订单' || e.orderName === '店员开台订单' || e.orderName === '店员开台订单') {
           dayAmount += parseInt(e.tableCost)
         } else if (e.orderName === '储值单') {
           dayAmount += parseInt(e.amount)
-        } else if (e.orderName === '商品单'){
+        } else if (e.orderName === '商品单') {
           dayAmount += parseInt(e.commotidyCost)
         }
       }
       this.data.everyDayAmount.unshift({
-        date: (app.getNowDate(new Date(now - index * 24 * 60 * 60 * 1000))),
+        date: (app.getNowTime(new Date(now - index * 24 * 60 * 60 * 1000))),
         amount: dayAmount === NaN ? 0 : dayAmount
       })
     }
@@ -142,7 +147,7 @@ Page({
       return rdata
     } else return []
   },
-  goto(e){
+  goto(e) {
     console.log(this.data.everyDayAmount[e.mark.index].date)
     appData.disPlayDate = this.data.everyDayAmount[e.mark.index].date
     wx.switchTab({
@@ -150,7 +155,7 @@ Page({
     })
   },
   async getServerData() {
-    app.showLoading('数据加载中...',true)
+    app.showLoading('数据加载中...', true)
     //获取近七日账单列表
     await this.getOrder();
     console.log(this.data.orderArray)
@@ -159,7 +164,7 @@ Page({
     //加载成功!
     wx.hideLoading();
     this.setData({
-      hidden:false
+      hidden: false
     })
     //模拟从服务器获取数据时的延时
     setTimeout(() => {
@@ -167,9 +172,9 @@ Page({
       let res = {
         categories: this.getTuenoverData('date'),
         series: [{
-            name: "营业额",
-            data: this.getTuenoverData('turnover')
-          }
+          name: "营业额",
+          data: this.getTuenoverData('turnover')
+        }
         ]
       };
       this.drawCharts('OkJFRGvSCMIemruYSgfuLQZuZqkFxSGB', res);

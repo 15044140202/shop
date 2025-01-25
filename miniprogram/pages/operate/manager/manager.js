@@ -8,8 +8,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    table_data: [],
-    price: 1
+    shop_table: [],
+    price: 100
   },
   //桌台续费函数
   async payTableCost(e) {
@@ -67,29 +67,31 @@ Page({
   //添加桌台函数
   async addNewTable() {
     const newTable = {
-      chargingFlag: '',
-      tableName: '预览桌台',
-      tableNum: this.data.table_data.length + 1,
+      shopId: appData.shop_account._id,
+      chargingId:'',
       orderForm: '',
-      useEndTime: app.getNowTime()
+      tableName: '预览桌台',
+      tableNum: this.data.shop_table.length + 1,
+      useEndTime: app.getNowTime(),
+      version:0
     };
     const res = await app.callFunction({
-      name: 'addArrayDatabase_fg',
+      name: 'addRecord',
       data: {
-        collection: 'shopAccount',
-        shopFlag: appData.shopInfo.shopFlag,
-        objName: `shop.tableSum`,
-        data: newTable
+        collection: 'shop_table',
+        data:newTable
       }
     });
-    if (res === 'ok') {
+    console.log(res)
+    if (res.success === true) {
       app.showToast('添加成功', 'success');
-      this.data.table_data.push(newTable)
+      this.data.shop_table.push(newTable)
+      appData.shop_table.push(newTable)
       this.setData({
-        table_data: this.data.table_data
+        shop_table: this.data.shop_table
       })
       const eventChannel = this.getOpenerEventChannel()
-      eventChannel.emit('updata', this.data.table_data)
+      eventChannel.emit('updata', this.data.shop_table)
     } else {
       app.showToast('添加失败!', 'error')
     }
@@ -102,9 +104,9 @@ Page({
     const that = this;
     eventChannel.on('giveData', function (data) {
       that.setData({
-        table_data: data
+        shop_table: data
       })
-      console.log(that.data.table_data)
+      console.log(that.data.shop_table)
     })
   },
 

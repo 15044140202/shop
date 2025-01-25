@@ -1,8 +1,8 @@
 <!--pages/satement/statement.wxml-->
 <!-- 店铺选择  营业额查询  -->
 <view class="titel">
-  <picker class="name" bindchange="bindPickerChange" mark:item="shopSelect" value="{{shopName_seletNum}}" range="{{shopNameArray}}">
-    <text style="font-size: 36rpx;">{{shopNameArray[shopName_seletNum]}}</text>
+  <picker class="name" bindchange="bindPickerChange" mark:item="shopSelect" value="{{merchant_info.shopId[shopName_seletNum].shopName}}" range="{{merchant_info.shopId}}" range-key="shopName">
+    <text style="font-size: 36rpx;">{{merchant_info.shopId[shopName_seletNum].shopName}}</text>
     <van-icon name="arrow-down" size="40rpx" color="#a7c0d1" />
   </picker>
   <view class="amount">
@@ -88,7 +88,7 @@
 </view>
 <!-- 营业简报  -->
 <view class="title_6">
-  <view class="cash" wx:for="{{sattement_data}}" wx:key="index" bind:tap="goto" mark:path="{{item.path}}" mark:item="{{index === 0 ? '未结账单据' : index === 1 ? '已结账单据' : index === 6 ? '商品销售报表' :index === 8 ?'员工打卡记录':''}}">
+  <view class="cash" wx:for="{{sattement_data}}" wx:key="index" bind:tap="goto" mark:path="{{item.path}}" mark:item="{{index === 0 ? '未结账单据' : index === 1 ? '已结账单据' :index === 2 ?'新增会员':index === 3 ?'会员储值':index === 4 ?'商品入库记录':index === 5 ?'商品入库报表': index === 6 ? '商品销售报表' :index === 7 ?'员工收取现金记录':index === 8 ?'员工打卡记录':''}}">
     <view class="cash_1">
       <text wx:if="{{index==7||index==16}}" style="font-size: 40rpx; color:red;">{{item.sum}}</text>
       <text wx:else="" style="font-size: 40rpx;">{{item.sum}}</text>

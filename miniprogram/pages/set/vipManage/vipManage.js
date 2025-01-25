@@ -10,9 +10,8 @@ Page({
     vipList: [],
     vipHeadImage: [],
 
-    startSum: 1,
-    endSum: 40,
-    noData: false
+    skit: 0,
+    limit: 100,
   },
   onCancel(e) {
     console.log(e)
@@ -20,37 +19,37 @@ Page({
   async onSearch(e) {
     app.showLoading('加载中...', true)
     console.log(e.detail)
-    const res = await this.getOneVipInfo(appData.shopInfo.shopFlag, /\D/.test(e.detail) === false ? e.detail : 'null', /\D/.test(e.detail) === false ? 'null' : e.detail)
-    if (res === 'noVipInfo') { //没有此会员
+    const res = await this.getOneVipInfo(appData.shop_account._id, e.detail)
+    if (res.length === 0) { //没有此会员
       wx.hideLoading();
       app.showToast('无此会员', 'error');
       return;
     } else {
-      var vipInfo = [res];
-      wx.hideLoading();
-      wx.navigateTo({
-        url: `./vipDetail/vipDetail?index=0&returnData=${false}`,
-        events: {
-
-        },
-        success: function (res) {
-          res.eventChannel.emit('giveData', vipInfo)
-        }
+      this.setData({
+        vipList:res
       })
+      await this.getImage()
+      wx.hideLoading();
     }
-
   },
-  async getOneVipInfo(shopFlag, telephone, name) {
+  async getOneVipInfo(shopId, telephone) {
     const res = await app.callFunction({
-      name: 'searchVip',
+      name: 'getData_where',
       data: {
-        shopFlag: shopFlag,
-        userTelephone: telephone,
-        userName: name
+        collection: 'vip_list',
+        query: {
+          shopId: shopId,
+          telephone: telephone,
+        }
+
       }
     })
-    console.log(res);
-    return res;
+    if (res.success) {
+      return res.data
+    }else{
+      app.showModal('提示','error')
+      return []
+    }
   },
   goto(e) {
     const that = this;
@@ -69,66 +68,51 @@ Page({
       }
     })
   },
-  async getdata() {
-    const res = await wx.cloud.callFunction({
-      name: 'getDatabaseArray_fg',
+  async getdata(skip = 0) {
+    const res = await app.callFunction({
+      name: 'fetchData',
       data: {
-        collection: 'vipList',
-        shopFlag: appData.shopInfo.shopFlag,
-        ojbName: 'vipList',
-        startSum: this.data.startSum,
-        endSum: this.data.endSum
+        collection: 'vip_list',
+        query: {
+          shopId: appData.shop_account._id
+        },
+        skip: skip,
+        limit: 100,
+        orderBy: 'time|asc'
       }
     })
-    if (res.errMsg === "cloud.callFunction:ok") { //调用函数成功!
-      if (res.result == 'error') { //没有数据
-        wx.showToast({
-          title: '没有数据!',
-          icon: 'error'
-        })
-        return;
-      }
-      console.log(res.result)
-      if (res.result.length > 0) {
-        for (let index = 0; index < res.result.length; index++) {
-          const element = res.result[index];
-          this.data.vipList.push(element)
-        }
-        this.data.startSum += 20;
-        this.data.endSum += 20;
-        this.setData({
-          vipList: this.data.vipList
-        })
-        return;
-      } else { //没有数据了
-        this.setData({
-          noData: true
-        })
-        console.log('没有数据了!')
-      }
-    } else {
-      wx.showToast({
-        title: '获取数据失败!',
-        icon: 'error'
-      })
-      return;
+    console.log(res)
+    if (!res.success) {
+      app.showToast('错误', '获取信息错误!')
     }
+
+    this.data.vipList.push(...res.data.data)
+    this.setData({
+      count: res.count,
+      vipList: this.data.vipList
+    })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
+    //预下载 default 图片
+    await app.getHeadImage('cloud://billiards-0g53628z5ae826bc.6269-billiards-0g53628z5ae826bc-1326882458/image/没有图片.png')
     await this.getdata()
     //循环 下载会员头像
+    await this.getImage()
+  },
+  async getImage(){
+    this.data.vipHeadImage.length = 0
+    const task = []
     for (let index = 0; index < this.data.vipList.length; index++) {
       const element = this.data.vipList[index];
-      this.data.vipHeadImage.push(await app.getHeadImage(element.image === '' ? 'cloud://billiards-0g53628z5ae826bc.6269-billiards-0g53628z5ae826bc-1326882458/image/没有图片.png' : element.image))
+      task.push(app.getHeadImage(element.headImage === '' ? 'cloud://billiards-0g53628z5ae826bc.6269-billiards-0g53628z5ae826bc-1326882458/image/没有图片.png' : element.headImage))
     }
     this.setData({
-      vipHeadImage: this.data.vipHeadImage
+      vipHeadImage:await Promise.all(task)
     })
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -168,7 +152,7 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   async onReachBottom() {
-    if (this.data.noData === true) {
+    if (this.data.count === this.data.vipList.length) {
       wx.showToast({
         title: '没有更多数据了!',
         icon: 'error'
@@ -177,17 +161,11 @@ Page({
       wx.showLoading({
         title: '数据加载中!'
       });
-      await this.getdata();
+      await this.getdata(this.data.vipList.length);
       //下载没有下载的vip头像
       //循环 下载会员头像
-      for (let index = this.data.vipHeadImage.length; index < this.data.vipList.length; index++) {
-        const element = this.data.vipList[index];
-        this.data.vipHeadImage.push(await app.getHeadImage(element.image === '' ? 'cloud://billiards-0g53628z5ae826bc.6269-billiards-0g53628z5ae826bc-1326882458/image/没有图片.png' : element.image))
-      }
-      this.setData({
-        vipHeadImage: this.data.vipHeadImage
-      })
-      console.log(this.data.list);
+      await this.getImage()
+      console.log(this.data.vipList);
       wx.hideLoading();
     }
   }

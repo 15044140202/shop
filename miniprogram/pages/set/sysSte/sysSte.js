@@ -1,11 +1,13 @@
 // pages/set/sysSte/sysSte.js
 const app = getApp();
+const appData = app.globalData
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    appGlobalData: appData,
     menuData: {
       operateSet: {
         name: "营业参数设置",
@@ -42,6 +44,10 @@ Page({
       suggest: {
         name: '建议/意见',
         to: './suggest/suggest'
+      },
+      shop_transfer: {
+        name: '店铺转让',
+        to: './shopTransfer/shopTransfer'
       }
     }
   },
@@ -88,6 +94,10 @@ Page({
         itemNum = 5;
         itemName = '积分规则设置';
         break;
+      case './shopTransfer/shopTransfer':
+        itemNum = 999;
+        itemName = '店铺转让';
+        break;
       case './suggest/suggest':
         itemNum = 9;
         itemName = '建议和评价';
@@ -95,10 +105,13 @@ Page({
       default:
         app.showToast('权限获取错误!', 'error')
     }
-    if (await app.power(itemType, itemNum, itemName) === false) {
-      app.showToast('没有权限', 'error');
-      return;
+    if (!appData.status === 'boss') {//老板不需要验证权限
+      if (await app.power(itemType, itemNum, itemName) === false) {
+        app.showToast('没有权限', 'error');
+        return;
+      }
     }
+
     wx.navigateTo({
       url: e.mark.to,
     })

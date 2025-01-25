@@ -22,18 +22,27 @@ exports.main = async (event) => {
     out_trade_no,
     appid
   } = event;
-  appid === undefined ? config.appid = 'wxad610929898d4371':config.appid = appid;
+  appid === undefined ? config.appid = 'wxad610929898d4371' : config.appid = appid;
   const wxContext = cloud.getWXContext()
-  
+
   const api = tenpay.init(config);
 
   //统一下单函数
-  const res = await api.getPayParams({
-    out_trade_no: out_trade_no,
-    body: description,
-    total_fee: amount,
-    openid: wxContext.OPENID === '' ? wxContext.FROM_OPENID : wxContext.OPENID ,
-    sub_mch_id: sub_mchid,
-  })
-  return res;
+  try {
+    const res = await api.getPayParams({
+      out_trade_no: out_trade_no,
+      body: description,
+      total_fee: amount,
+      openid: wxContext.OPENID === '' ? wxContext.FROM_OPENID : wxContext.OPENID,
+      sub_mch_id: sub_mchid,
+    })
+    return res;
+  } catch (e) {
+    return {
+      success:false,
+      message:'支付失败',
+      data:e
+    }
+  }
+
 }

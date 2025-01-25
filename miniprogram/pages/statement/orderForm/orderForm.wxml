@@ -1,10 +1,10 @@
 <!--pages/statement/orderForm/orderForm.wxml-->
 <block wx:if="{{get_item === '未结账单据'}}">
-  <view class="border" wx:for="{{orderForm}}" wx:key="index" wx:if="{{(item.orderName === '店员开台订单' || item.orderName === '自助开台订单' || item.orderName === '自助套餐订单') && item.endTime === '未结账'}}" bind:tap="goto" mark:index='{{index}}'>
+  <view class="border" wx:for="{{orderForm}}" wx:key="index" wx:if="{{(item.orderName === '店员开台订单' || item.orderName === '自助开台订单' || item.orderName === '自助套餐订单') && (item.endTime === '未结账' || item.endTime === '')}}" bind:tap="goto" mark:index='{{index}}'>
     <view class="front">
       <view class="tableNum">
         <text style="font-size: 38rpx;">{{item.tableNum}}号台---</text>
-        <text>{{item.openPerson.openPersonName}}</text>
+        <text>{{item.userName}}</text>
       </view>
       <text style="font-size: 28rpx; color: #999;">{{item.startTime}}</text>
     </view>
@@ -19,9 +19,9 @@
     <view class="front">
       <view class="tableNum">
         <text style="font-size: 38rpx;">{{item.tableNum}}号台---</text>
-        <text>{{item.openPerson.openPersonName}}</text>
+        <text>{{item.userName}}</text>
       </view>
-      <text style="font-size: 28rpx; color: #999;">{{item.startTime}}</text>
+      <text style="font-size: 28rpx; color: #999;">{{item.time}}</text>
     </view>
     <view>
       <text style="font-size: 38rpx;">{{item.tableCost === '未结账' ?'押金 : ' + item.cashPledge : '台费 : ' + item.tableCost}} </text>
@@ -48,7 +48,7 @@
   <view class="border" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName === '储值单'}}" bind:tap="goto" mark:index='{{index}}'>
     <view class="front">
       <view class="tableNum">
-        <text style="font-size: 38rpx;">储值单---{{item.person.name}}\n</text>
+        <text style="font-size: 38rpx;">储值单---{{item.userName}}\n</text>
         <text>{{item.buyPerson.name}}</text>
       </view>
       <text style="font-size: 28rpx; color: #999;">{{item.time}}</text>
@@ -78,7 +78,7 @@
     <view class="front">
       <view class="tableNum">
         <text style="font-size: 38rpx;">{{item.tableNum}}号台---</text>
-        <text>{{item.openPerson.openPersonName}}</text>
+        <text>{{item.userName}}</text>
       </view>
       <text style="font-size: 28rpx; color: #999;">{{item.startTime}}</text>
     </view>
@@ -100,5 +100,18 @@
       <text style="font-size: 38rpx;">金额 : {{item.commotidyCost}} </text>
       <van-icon name="arrow" size="38rpx" style="margin-right: 30rpx;"></van-icon>
     </view>
+  </view>
+</block>
+<!-- 新增会员 -->
+<block wx:elif="{{get_item === '新增会员'}}">
+  <view class="border1" wx:for="{{newVipData}}" wx:key="index" bind:tap="goto" mark:item='新增会员' mark:index='{{index}}'>
+    <view class='titel'>
+      <image style="height: 150rpx; width: 150rpx; border-radius: 10%; border: solid 1rpx #ccc ; margin: 10rpx;" src="{{newVipDataHeadImage[index]}}" />
+      <view class="titel_1">
+        <text>{{item.name}}</text>
+        <text>积分:{{item.integral}}</text>
+      </view>
+    </view>
+    <text style="color: #aaa; margin-right: 30rpx;">{{item.amount}} 元</text>
   </view>
 </block>

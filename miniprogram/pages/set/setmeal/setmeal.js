@@ -1,12 +1,14 @@
 // pages/set/setmeal/setmeal.js
 const app = getApp();
 const appData = app.globalData;
+const dataMode = require('../../../utils/dataMode')
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    appData:appData,
     setmeal: [],
     charging: [],
     disabled:[]
@@ -14,28 +16,28 @@ Page({
   tap(e) {
     console.log(e)
     if (e.mark.item === 'addNewSetmeal') { //添加新套餐
-      this.addNewSetmeal(appData.shopInfo.shopFlag)
+      this.addNewSetmeal(appData.shop_account._id)
     } else if (e.mark.item === 'bindChargingChange') { //修改套餐绑定的计费规则
       this.setData({
-        [`setmeal[${e.mark.index}].bindCharging`]: {
-          flag: this.data.charging[e.detail.value].flag,
+        [`setmeal.setmeal[${e.mark.index}].bindChargingId`]: {
+          chargingId: this.data.charging[e.detail.value]._id,
           name: this.data.charging[e.detail.value].name,
         },
         [`disabled[${e.mark.index}]`]:false
       })
     } else if (e.mark.item === "bindStartTimeChange") {
       this.setData({
-        [`setmeal[${e.mark.index}].setmealStartTime`]: e.detail.value,
+        [`setmeal.setmeal[${e.mark.index}].setmealStartTime`]: e.detail.value,
         [`disabled[${e.mark.index}]`]:false
       })
     } else if (e.mark.item === "bindEndTimeChange") {
       this.setData({
-        [`setmeal[${e.mark.index}].setmealEndTime`]: e.detail.value,
+        [`setmeal.setmeal[${e.mark.index}].setmealEndTime`]: e.detail.value,
         [`disabled[${e.mark.index}]`]:false
       })
     }else if (e.mark.item === "cardDeduct"){
       this.setData({
-        [`setmeal[${e.mark.index}].cardDeduct`]: e.detail.value,
+        [`setmeal.setmeal[${e.mark.index}].cardDeduct`]: e.detail.value,
         [`disabled[${e.mark.index}]`]:false
       })
     }
@@ -44,17 +46,22 @@ Page({
   async save(e){
     console.log(e)
     const res = await app.callFunction({
-      name:'amendDatabase_fg',
+      name:'upDate',
       data:{
-        collection:'setmeal',
-        flagName:'shopFlag',
-        flag:appData.shopInfo.shopFlag,
-        objName:`setmeal.${e.mark.index}`,
-        data:this.data.setmeal[e.mark.index]
+        collection:'shop_setmeal',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        upData:{
+          [`setmeal.${e.mark.index}`]:this.data.setmeal.setmeal[e.mark.index]
+        }
       }
     })
-    if (res === 'ok') {
+    if (res.success) {
       app.showToast('保存成功!','success');
+      this.setData({
+        [`disabled[${e.mark.index}]`]:true
+      })
       return;
     }else{
       app.showToast('保存失败!','error');
@@ -66,21 +73,21 @@ Page({
     if (e.mark.item === 'setmealPrice') {
       if (e.detail.value !== "") {
         this.setData({
-          [`setmeal[${e.mark.index}].setmealPrice`]: parseInt(e.detail.value),
+          [`setmeal.setmeal[${e.mark.index}].setmealPrice`]: parseInt(e.detail.value),
           [`disabled[${e.mark.index}]`]:false
         })
       }
     } else if (e.mark.item === 'duration') {
       if (e.detail.value !== "") {
         this.setData({
-          [`setmeal[${e.mark.index}].duration`]: parseInt(e.detail.value),
+          [`setmeal.setmeal[${e.mark.index}].duration`]: parseInt(e.detail.value),
           [`disabled[${e.mark.index}]`]:false
         })
       }
     } else if (e.mark.item === "setmealName"){
       if (e.detail.value !== "") {
         this.setData({
-          [`setmeal[${e.mark.index}].name`]: e.detail.value,
+          [`setmeal.setmeal[${e.mark.index}].name`]: e.detail.value,
           [`disabled[${e.mark.index}]`]:false
         })
       }
@@ -118,27 +125,20 @@ Page({
     }
   },
   async addNewSetmeal(shopFlag) {
-    const defaultValue = {
-      name: '未命名套餐',
-      bindCharging: {},
-      setmealStartTime: '',
-      setmealEndTime: '',
-      duration: 1,
-      setmealPrice: 30,
-      cardDeduct:false
-    }
+    let defaultValue = dataMode.shop_setmeal.setmeal[0]
     const res = await app.callFunction({
-      name: 'databaseRecord_push',
+      name: 'record_push',
       data: {
-        collection: 'setmeal',
-        flagName: 'shopFlag',
-        flag: shopFlag,
-        record: 'setmeal',
-        value: defaultValue
+        collection: 'shop_setmeal',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        record:'setmeal',
+        data:defaultValue
       }
     })
-    if (res === 'ok') {
-      this.data.setmeal.push(defaultValue)
+    if (res.success) {
+      this.data.setmeal.setmeal.push(defaultValue)
       this.data.disabled.push(true)
       this.setData({
         setmeal: this.data.setmeal,
@@ -156,11 +156,11 @@ Page({
    */
   async onLoad(options) {
     this.setData({
-      setmeal: await app.getSetMeal(appData.shopInfo.shopFlag),
-      charging: await app.getCharging(appData.shopInfo.shopFlag)
+      setmeal: appData.shop_setmeal,
+      charging: appData.shop_charging
     })
     //设置 按钮禁用
-    for (let index = 0; index < this.data.setmeal.length; index++) {
+    for (let index = 0; index < this.data.setmeal.setmeal.length; index++) {
       this.data.disabled.push(true)
     }
     this.setData({

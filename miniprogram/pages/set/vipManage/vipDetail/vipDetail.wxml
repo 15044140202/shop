@@ -1,6 +1,6 @@
 <!--pages/set/vipManage/vipDetaill/vipDetail.wxml-->
 <view class="pic">
-  <image style="height: 180rpx; width: 180rpx; border-radius: 10%; border: solid 1rpx #ccc ; margin: 10rpx;" src="{{vipHeadImage}}" />
+  <image style="height: 180rpx; width: 180rpx; border-radius: 10%; border: solid 1rpx #ccc ; margin: 10rpx;" src="{{vipHeadImage[index]}}" />
   <view class="picR">
     <view class="titel">
       <text>名称:</text>

@@ -16,7 +16,7 @@ Page({
     const totalOrder = this.data.disPlayOrderForm;
     const newOrder = [];
     for (let index = 0; index < totalOrder.length; index++) {
-      const element = totalOrder[index];
+      const element =JSON.parse(totalOrder[index]) ;
       if (this.data.name === 'cash') { //现金
         if (element.payMode.includes('现金') || element.payMode.includes('cash')) {
           newOrder.push({...element,disPlay:true})
@@ -67,6 +67,7 @@ Page({
         }
       }else if (this.data.name === 'top_up') { //储值单
         if (element.orderName === '储值单') {
+          element.time = app.getNowTime(new Date(element.time))
           newOrder.push({...element,disPlay:true})
         }else{
           newOrder.push({...element,disPlay:false})
@@ -84,6 +85,7 @@ Page({
     })
   },
   onLoad: function (options) {
+    console.log(appData.disPlayOrderForm)
     if (options.item === 'wx' || options.item === 'cash') {
       this.setData({
         name: options.item,
@@ -91,7 +93,7 @@ Page({
         wxCost: parseInt(options.wx),
         couponCost: parseInt(options.coupon),
         cashCost: parseInt(options.cash),
-        disPlayOrderForm: appData.disPlayOrderForm
+        disPlayOrderForm:appData.disPlayOrderForm
       })
     } else if (options.item === 'vip' || options.item === 'cashCoupon' || options.item === 'mtCoupon' || options.item === 'dyCoupon') {
       this.setData({

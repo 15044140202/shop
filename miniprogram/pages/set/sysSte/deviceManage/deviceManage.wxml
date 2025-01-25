@@ -1,7 +1,7 @@
 <import src="../../../../template/SetMenu/SetMenu" />
 <template is="titel" data="{{titel:'设备管理'}}" />
 <view class="deviceBorder">
-  <view class="device" wx:for="{{device}}" wx:key="index" bind:tap="goto" mark:item="{{index}}" wx:if="{{index !== 'shopLightSet' && index !== 'cupboardUseRule'}}">
+  <view class="device" wx:for="{{device}}" wx:key="index" bind:tap="goto" mark:item="{{index}}" wx:if="{{index !== 'shopLightSet' && index !== 'cupboardUseRule' && index !== 'shopId' && index !== '_id' && index !== 'sportShowPrice'}}">
     <van-icon size="100rpx" name="{{index === 'lightCtrl' ? '../../../../icon/吊灯.png' : index === 'camera' ? '../../../../icon/录像机.png' :index === 'announcer' ?'../../../../icon/喇叭.png' : index === 'printer' ? '../../../../icon/打印机.png' :index === 'doorLock' ? '../../../../icon/智能门锁.png':index === 'cupboard' ? '../../../../icon/杆柜.png':''}}"></van-icon>
     <view style="margin-top: 20rpx;">{{index === 'lightCtrl' ? '灯控器' : index === 'camera' ? '精彩秀摄像机' :index === 'announcer' ?'播报器' : index === 'printer' ? 'pos打印机' : index === 'doorLock' ? '智能门禁': index === 'cupboard' ? '智能杆柜' :''}}</view>
   </view>

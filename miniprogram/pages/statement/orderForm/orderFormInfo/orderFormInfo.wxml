@@ -10,7 +10,7 @@
   </view>
   <view class="info">
     <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">{{orderForm[index].orderName === '储值单' ||orderForm[index].orderName === '精彩秀单' ||orderForm[index].orderName === '商品单' || orderForm[index].orderName === '杆柜租赁' ? '时间: ' : '开始时间: '}}</text>
-    <text style=" padding-right:30rpx ">{{orderForm[index].orderName === '储值单' ||orderForm[index].orderName === '精彩秀单' ||orderForm[index].orderName === '商品单' || orderForm[index].orderName === '杆柜租赁' ? orderForm[index].time : orderForm[index].startTime}}</text>
+    <text style=" padding-right:30rpx ">{{orderForm[index].orderName === '储值单' ||orderForm[index].orderName === '精彩秀单' ||orderForm[index].orderName === '商品单' || orderForm[index].orderName === '杆柜租赁' ? orderForm[index].time : orderForm[index].time}}</text>
   </view>
   <view class="info" hidden="{{orderForm[index].orderName === '储值单' ||orderForm[index].orderName === '精彩秀单' ||orderForm[index].orderName === '商品单' || orderForm[index].orderName === '杆柜租赁'}}">
     <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">结束时间: </text>
@@ -22,7 +22,7 @@
   </view>
   <view class="info" bind:tap="goto" mark:item="vipDetail">
     <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">{{orderForm[index].orderName === '储值单'  ||orderForm[index].orderName === '精彩秀单'  ||orderForm[index].orderName === '商品单'  || orderForm[index].orderName === '杆柜租赁' ? '支付人: ' : '开台人: '}}</text>
-    <text style=" padding-right:30rpx ">{{orderForm[index].orderName === '储值单' ? orderForm[index].person.name: orderForm[index].orderName === '精彩秀单' ? orderForm[index].personName: orderForm[index].orderName === '商品单' || orderForm[index].orderName === '杆柜租赁'? orderForm[index].buyPerson.name : orderForm[index].openPerson.openPersonName}}</text>
+    <text style=" padding-right:30rpx ">{{orderForm[index].orderName === '储值单' ? orderForm[index].person.name: orderForm[index].orderName === '精彩秀单' ? orderForm[index].personName: orderForm[index].orderName === '商品单' || orderForm[index].orderName === '杆柜租赁'? orderForm[index].buyPerson.name : orderForm[index].userName}}</text>
   </view>
   <view class="info" bind:tap="call">
     <text style="font-size: 32rpx; padding-left: 30rpx; color: #999;">电话: </text>

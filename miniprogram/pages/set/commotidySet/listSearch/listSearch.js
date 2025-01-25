@@ -9,53 +9,34 @@ Page({
    */
   data: {
     list: [],
-    startSum: 1,
-    endSum: 20,
-    noData: false
-
+    count: 1,
+    limit: 100,
+    skit: 0
+  },
+  computeSkit(limit,list){
+    return list / limit
   },
   async getdata() {
-    const res = await wx.cloud.callFunction({
-      name: 'getDatabaseArray_fg',
+    const res = await app.callFunction({
+      name: 'fetchData',
       data: {
-        collection: 'commotidy',
-        shopFlag: appData.shopInfo.shopFlag,
-        ojbName: 'list',
-        startSum: this.data.startSum,
-        endSum: this.data.endSum
+        query: {
+          shopId: appData.shop_account._id
+        },
+        collection:'shop_commotidy_po',
+        skip:this.computeSkit(this.data.limit,this.data.list),
+        limit:this.data.limit,
+        orderBy:('time|desc')
       }
     })
-    if (res.errMsg === "cloud.callFunction:ok") { //调用函数成功!
-      if(res.result == 'error'){//没有数据
-        wx.showToast({
-          title: '没有数据!',
-          icon:'error'
-        })
-        return;
-      }
-      console.log(res.result)
-      if (res.result.length > 0) {
-        for (let index = 0; index < res.result.length; index++) {
-          const element = res.result[index];
-          this.data.list.push(element)
-        }
-        this.data.startSum += 20;
-        this.data.endSum += 20;
-        this.setData({
-          list: this.data.list
-        })
-        return;
-      } else { //没有数据了
-        this.setData({
-          noData:true
-        })
-        console.log('没有数据了!')
-      }
+    if (res.success) { //调用函数成功!
+      this.data.list.push.apply(this.data.list,res.data.data)
+      this.setData({
+        list:this.data.list,
+        count:res.count.total
+      })  
     } else {
-      wx.showToast({
-        title: '获取数据失败!',
-        icon: 'error'
-      })
+      app.showToast('获取数据失败!','error')
       return;
     }
   },
@@ -111,12 +92,9 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   async onReachBottom() {
-    if(this.data.noData === true){
-      wx.showToast({
-        title: '没有更多数据了!',
-        icon:'error'
-      })
-    }else{
+    if (this.data.count <= this.data.list.length) {
+      app.showToast('没有更多数据了!','error')
+    } else {
       wx.showLoading({
         title: '数据加载中!'
       });

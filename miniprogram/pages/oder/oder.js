@@ -10,7 +10,7 @@ Page({
   data: {
     position: '',
     time: '',
-    shopFlag: '',
+    shopId: '',
     shopName: '',
     name: '',
     telephone: '',
@@ -52,7 +52,7 @@ Page({
       console.log('没有获取到手机号码!')
     }
   },
-  examine(merchantInfo, shopFlag) { //此函数  用于检查 本用户的 shopInfo 里面是否已经有 要添加的店铺  有返回true 没有返回false
+  examine(merchantInfo, shopFlag) { //此函数  用于检查 本用户的 merchant_info 里面是否已经有 要添加的店铺  有返回true 没有返回false
     console.log(merchantInfo)
     console.log(shopFlag)
     for (let index = 0; index < merchantInfo.shopFlag.length; index++) {
@@ -67,7 +67,7 @@ Page({
     if (this.data.name === '') {
       app.showToast('请输入姓名', 'error');
       return;
-    } else if (this.data.telephone === '') {
+    }else if (this.data.telephone === '') {
       app.showToast('请输入电话', 'error');
       return;
     }
@@ -75,63 +75,35 @@ Page({
       app.showToast('二维码过期!', 'error');
     } else {
       app.cloudInit()
-      //获取店铺信息 以便以下面使用店铺 _openid
-      await app.getShopInfo(this.data.shopFlag);
-      if ('_openid' in appData.shopInfo) {
-       
-      } else {
-        app.showToast('获取店铺信息失败!!', 'error')
-        return;
-      }
-      //修改merchantInfo  数据
-      const res = await this.getMerchantInfo() //获取 merchantInfo数据 如果用户第一次使用本程序  会自动创建一个空数据
-      if ('shopFlag' in res) {
-        appData.merchantInfo = res;
-
-        if ( this.examine(appData.merchantInfo, this.data.shopFlag) === true) {//判断是否  已经添加过 防止重复添加
-          app.showToast('此用户已存在!','error')
-          wx.restartMiniProgram({
-            path: "../login/login"
-          })
-          return;
+      const res = await app.getMerchantInfo()
+      console.log(res)
+      const merchantInfo = res[0]
+      console.log(merchantInfo)
+      for (let index = 0; index < merchantInfo.shopId.length; index++) {
+        const element = merchantInfo.shopId[index];
+        if (element.shopId === this.data.shopId) {
+          app.showModal('错误', '已经是店员,禁止重复添加.')
+          return
         }
-        const r = await utils.addArrayDatabase_op({
-          collection: 'merchantInfo',
-          openid: appData.merchantInfo._openid,
-          objName: 'shopFlag',
-          data: {
-            shopFlag: this.data.shopFlag,
-            shopName: this.data.shopName
-          }
-        });
-        if (r === 'ok') {
-          const e = await utils.addArrayDatabase_op({
-            collection: 'shopAccount',
-            openid: appData.shopInfo._openid,
-            objName: 'shop.member',
-            data: {
-              name: this.data.name,
-              telephone: this.data.telephone,
-              memberOpenid: appData.merchantInfo._openid,
-              position: this.data.position,
-              attendanceState:false
-            }
-          });
-          if (e === 'ok') {
-            app.showToast('添加成功!', 'success')
-            wx.restartMiniProgram({
-              path: "../login/login"
-            })
-          } else {
-            app.showToast('添加信息失败!', 'error')
-          }
-        } else {
-          app.showToast('添加信息失败!', 'error')
-        }
-      } else {
-        app.showToast('获取用户信息失败!请重新进入小程序!', 'error')
       }
-      //this.addNewMember()
+      //向merchant_info 里面添加本店铺数据
+      const merchantUpdataRes = await app.callFunction({
+        name: 'addMember',
+        data: {
+          shopId: this.data.shopId,
+          shopName: this.data.shopName,
+          position: this.data.position,
+          telephone: this.data.telephone
+        }
+      })
+      if (merchantUpdataRes.success) {
+        app.showToast('添加成功!', 'success')
+        wx.restartMiniProgram({
+          path: "../login/login"
+        })
+      } else {
+        app.showToast('添加信息失败!', 'error')
+      }
     }
   },
   async addNewMember() {
@@ -154,18 +126,61 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(query) {
+    let _id = undefined
     console.log(query)
-    this.setData({
-      position: query.position,
-      time: query.time,
-      shopFlag: query.shopFlag,
-      shopName: query.shopName
+    if ('scene' in query) {
+      _id = query.scene
+    } else {//模拟测试
+      _id = '27txO7hZxj0uSZZYrKz3aqvB7QkO'
+    }
+    console.log(_id)
+    const qrData = await app.callFunction({
+      name: 'getData_doc',
+      data: {
+        collection: 'shop_qr_data',
+        _id: _id
+      }
     })
-    const now = new Date().getTime();
-    console.log(now)
-    if ((now - this.data.time) / 1000 / 60 > 50) {
-      app.showToast('二维码过期!', 'error');
-      this.data.timeOut = true;
+    console.log(qrData)
+    //此处分析分支  
+    if (qrData.data.itemName === 'addWaiter') {//添加服务员
+      this.setData({
+        position: qrData.data.position,
+        time: qrData.data.time,
+        shopId: qrData.data.shopId,
+        shopName: qrData.data.shopName
+      })
+      const now = new Date().getTime();
+      console.log(now)
+      if ((now - this.data.time) / 1000 / 60 > 50) {
+        app.showToast('二维码过期!', 'error');
+        this.data.timeOut = true;
+      }
+    }else if (qrData.data.itemName === 'shopTransfer'){//店铺转让
+      await this.shopTransfer(qrData.data)
+    }
+  },
+  async shopTransfer(old_shopInfo){
+    //判断二维码是否失效
+    if (new Date().getTime() - old_shopInfo.time > 10 * 60 *1000) {//大于十分钟 过期
+      app.showModal('提示','二维码已过期!')
+      return
+    }
+    //调用店铺转让云函数
+    const res = await app.callFunction({
+      name:'shop_transfer',
+      data:{
+        ...old_shopInfo
+      }
+    })
+    if (res.success) {
+      await app.showModal('提示','信息处理成功!')
+      wx.navigateTo({
+        url: '../login/login',
+      })
+    }else{
+      await app.showModal('提示','更新转让信息错误!')
+      return
     }
   },
   async getMerchantInfo() {

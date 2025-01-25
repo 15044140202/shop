@@ -7,21 +7,29 @@ page{
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
-  height: 80rpx;
+  height: 50rpx;
   border-bottom: solid 1rpx #ccc;
   width: 100%;
   text-align: left;
-  padding-left: 5%;
 }
 .border{
   display: flex;
   flex-direction: row;
-
+  width: 100%;
 }
 .info{
   display: flex;
   flex-direction: column;
+  width: 94%;
+  margin-left: 3%;
 }
 .one{
   width: 33%;
+}
+.listInfo{
+  width: 98%;
+  margin-left: 1%;
+  border:#ccc 1rpx solid;
+  border-top-left-radius: 15rpx;  
+  border-top-right-radius: 15rpx;
 }

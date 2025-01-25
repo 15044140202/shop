@@ -1,0 +1,21 @@
+/* pages/set/sysSte/shopTransfer/shopTransfer.wxss */
+.shopInfo_border {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 380rpx;
+  width: 95%;
+  margin-left: 2.5%;
+  border: solid 1rpx #eee;
+  border-radius: 15rpx;
+}
+
+.viewLine {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 90%;
+  height: 80rpx;
+}

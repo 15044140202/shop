@@ -7,84 +7,107 @@ Page({
    * 页面的初始数据
    */
   data: {
-    titel:'设置会员的折扣、价格及存款',
-    vipInfo:[],
-    getIndex:0,
-    tableDiscountIO:true
-   
+    titel: '设置会员的折扣、价格及存款',
+    vipSet: [],
+    getIndex: 0,
+    tableDiscountIO: true
+
   },
-  async save(){
+  async longpress(e) {
+    const that = this
+    if (e.mark.item === 'deletaSaveMoney') {
+      wx.showModal({
+        title: '确认',
+        content: '确认删除此充值规则?',
+        complete: (res) => {
+          if (res.cancel) {
+            return
+          }
+          if (res.confirm) {
+            that.data.vipSet[that.data.getIndex].saveMoney.splice(e.mark.index, 1)
+            that.setData({
+              vipSet: that.data.vipSet
+            })
+          }
+        }
+      })
+    }
+
+  },
+  async save() {
     const res = await app.callFunction({
-      name:'amendDatabase_fg',
-      data:{
-        collection: 'vipInfo',
-        flagName:'shopFlag',
-        flag:appData.shopInfo.shopFlag,
-        objName:'vipInfo',
-        data:this.data.vipInfo
+      name: 'upDate',
+      data: {
+        collection: 'shop_vip_set',
+        query: {
+          shopId: appData.shop_account._id
+        },
+        upData: {
+          vipSet: this.data.vipSet
+        }
       }
     })
-    if (res === 'ok') {
-      app.showToast('保存成功!','success');
+    if (res.success) {
+      app.showToast('保存成功!', 'success');
       const eventChannel = this.getOpenerEventChannel();
-      eventChannel.emit('returnData', {data: 'ok'});
+      eventChannel.emit('returnData', this.data.vipSet);
       wx.navigateBack();
-    }else{
-      app.showToast('保存失败!','error');
+    } else {
+      app.showToast('保存失败!', 'error');
     }
   },
-  addNewSave(){
-    const NewSave = {amount:0,give:0,name:'存款'};
-    this.data.vipInfo[this.data.getIndex].saveMoney.push(NewSave);
+  addNewSave() {
+    const NewSave = { amount: 0, give: 0, name: '存款' };
+    this.data.vipSet[this.data.getIndex].saveMoney.push(NewSave);
     this.setData({
-      [`vipInfo[${this.data.getIndex}].saveMoney`]:this.data.vipInfo[this.data.getIndex].saveMoney
+      [`vipSet[${this.data.getIndex}].saveMoney`]: this.data.vipSet[this.data.getIndex].saveMoney
     })
   },
-  change(e){
+  change(e) {
     this.setData({
-      [`vipInfo[${this.data.getIndex}].${e.mark.name}`]:this.data.vipInfo[this.data.getIndex][`${e.mark.name}`]===true ? false : true
+      [`vipSet[${this.data.getIndex}].${e.mark.name}`]: this.data.vipSet[this.data.getIndex][`${e.mark.name}`] === true ? false : true
     })
-    console.log(this.data.vipInfo[this.data.getIndex][`${e.mark.name}`])
+    console.log(this.data.vipSet[this.data.getIndex][`${e.mark.name}`])
   },
-  hiddenTap(e){
+  hiddenTap(e) {
     this.setData({
-      [e.mark.name]:this.data[e.mark.name] === true ? false : true
+      [e.mark.name]: this.data[e.mark.name] === true ? false : true
     })
   },
-  input(e){
+  input(e) {
     console.log(e.mark.name1 + e.mark.name2)
     console.log(e.detail.value)
     if (e.mark.name1 === 'name' && this.data.getIndex == 0) {
       wx.showToast({
         title: '非会员不可修改!',
-        icon:'error'
+        icon: 'error'
       })
       this.setData({
-        [`vipInfo[${this.data.getIndex}].${e.mark.name1}${e.mark.name2}`]: this.data.vipInfo[this.data.getIndex].name
+        [`vipSet[${this.data.getIndex}].${e.mark.name1}${e.mark.name2}`]: this.data.vipSet[this.data.getIndex].name
       })
-    }else{
-      const temp = e.mark.name1 === 'name' ? e.detail.value :parseFloat(e.detail.value)
+    } else {
+      const temp = e.mark.name1 === 'name' ? e.detail.value : parseFloat(e.detail.value)
       this.setData({
-        [`vipInfo[${this.data.getIndex}].${e.mark.name1}${e.mark.name2}`]:temp
+        [`vipSet[${this.data.getIndex}].${e.mark.name1}${e.mark.name2}`]: temp
       })
     }
-    console.log(this.data.vipInfo[this.data.getIndex][`${e.mark.name1}`])
+    console.log(this.data.vipSet[this.data.getIndex][`${e.mark.name1}`])
   },
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) { 
+  onLoad(options) {
     console.log(options.index);
     this.setData({
-      getIndex:options.index
+      getIndex: options.index
     })
     const eventChannel = this.getOpenerEventChannel();
-    const that = this ;
-    eventChannel.on('giveData', function(data) {
+    const that = this;
+    eventChannel.on('giveData', function (data) {
       that.setData({
-        vipInfo:data.data
+        vipSet: data.data
       })
-      console.log(that.data.vipInfo)
+      console.log(that.data.vipSet)
     });
   },
 

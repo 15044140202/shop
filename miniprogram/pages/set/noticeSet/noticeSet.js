@@ -18,7 +18,7 @@ Page({
    */
   onLoad(options) {
     //获取已发布或者已过期的 公告数据
-    this.getNotice(appData.shopInfo._openid)
+    this.getNotice(appData.shop_account._id)
 
   },
 
@@ -27,16 +27,22 @@ gotoNewNotice() {
     url: './newNotice/newNopice',
   })
 },
-async getNotice(openid) {
-    const notice = await app.callFunction({
-      name:'getDatabaseRecord_fg',
+async getNotice(shopId) {
+    const res = await app.callFunction({
+      name:'getData_where',
       data:{
-        collection:'notice',
-        shopFlag:appData.shopInfo.shopFlag,
-        record:'notice'
+        collection:'shop_notice',
+        query:{
+          shopId:shopId
+        }
       }
     });
-    console.log(notice)
+    console.log(res)
+    if (!res.success) {
+      app.showModal('错误','拉取公告信息错误!')
+      return
+    }
+    const notice = res.data
     //把全部数据按是否过期  分类 
     let now = new Date().getTime() //现在的时间截
     console.log(now)

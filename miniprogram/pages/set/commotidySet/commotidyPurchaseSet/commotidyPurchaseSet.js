@@ -9,7 +9,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    commotidy: [],
+    shop_commotidy: [],
+    class: [],
     active: 0,
     addCommotidy: [],
     inventoryHidden: false,
@@ -18,11 +19,7 @@ Page({
   async save() {
     var payMode = '微信';
     this.deletZero();
-    //修改库存数量 //先处理本地商品数据
-    for (let index = 0; index < this.data.addCommotidy.length; index++) {
-      const element = this.data.addCommotidy[index];
-      this.data.commotidy[element.class].commotidy[element.index].sum = parseInt(this.data.commotidy[element.class].commotidy[element.index].sum) + parseInt(element.sum)
-    }
+
 
     console.log(this.data.commotidy)
     //生成入库记录
@@ -30,59 +27,51 @@ Page({
     for (let index = 0; index < this.data.addCommotidy.length; index++) {
       const element = this.data.addCommotidy[index];
       commotidyList.push({
-        name: this.data.commotidy[element.class].commotidy[element.index].name,
-        sum: -element.sum,
-        price: this.data.commotidy[element.class].commotidy[element.index].primeCost
+        name: this.data.shop_commotidy[element.index].name,
+        sum: element.sum,
+        price: this.data.shop_commotidy[element.index].primeCost,
+        _id: this.data.shop_commotidy[element.index]._id
       })
     }
-    const list = {//进货记录
-      status: appData.status,
-      time: app.getNowTime(),
-      commotidy: commotidyList,
-      amount: this.data.sum / 100
-    }
     const order = {//进货单
+      shopId: appData.shop_account._id,
       orderName: '进货单',
       status: appData.status,
       time: app.getNowTime(),
-      commotidy: commotidyList,
+      commotidyList: commotidyList,
       amount: this.data.sum / 100,
-      payMode: payMode
+      payMode: payMode,
+      time: app.getNowTime(),
+      amount: this.data.sum / 100
     }
-    //修改商品库存数量
-    const res = await app.callFunction({
-      name: 'commotidyPurchase',
-      data: {
-        shopFlag: appData.shopInfo.shopFlag,
-        addCommotidy: this.data.addCommotidy,
-        list: list,
-        date: app.getNowDate(),
-        orderData: order
+    for (let index = 0; index < 10; index++) {
+      //云函数进货流程
+      const res = await app.callFunction({
+        name: 'commotidyPurchase',
+        data: {
+          order: order,
+        }
+      })
+      if (!res.success) {
+        app.showToast('入库失败!', 'error')
       }
-    })
-    if (res !== 'ok') {
-      app.showToast('入库失败!','error')
+
     }
+
+
+    //修改库存数量 //先处理本地商品数据
+    for (let index = 0; index < this.data.addCommotidy.length; index++) {
+      const element = this.data.addCommotidy[index];
+      this.data.shop_commotidy[element.index].sum = parseInt(this.data.shop_commotidy[element.index].sum) + parseInt(element.sum)
+    }
+
     this.setData({
-      commotidy: this.data.commotidy,
+      shop_commotidy: this.data.shop_commotidy,
       addCommotidy: [],
       sum: 0
     })
-    app.showToast('入库成功!','success')
+    app.showToast('入库成功!', 'success')
     return;
-  },
-  async getList(shopFlag) {
-    const res = await wx.cloud.callFunction({
-      name: 'getDatabaseArray_fg',
-      data: {
-        collection: 'commotidy',
-        shopFlag: shopFlag,
-        ojbName: 'list',
-        startSum: 1,
-        endSum: 20
-      }
-    })
-    return res;
   },
   deletZero() {
     var newdata = [];
@@ -150,7 +139,7 @@ Page({
     var sum = 0
     for (let index = 0; index < this.data.addCommotidy.length; index++) {
       const element = this.data.addCommotidy[index];
-      sum = sum + parseFloat(this.data.commotidy[element.class].commotidy[element.index].primeCost) * parseInt(element.sum)
+      sum = sum + parseFloat(this.data.shop_commotidy[element.index].primeCost) * parseInt(element.sum)
     }
     console.log(sum)
     this.setData({
@@ -173,12 +162,24 @@ Page({
     const that = this;
     eventChannel.on('acceptDataFromOpenerPage', function (data) {
       that.setData({
-        commotidy: data.data
+        shop_commotidy: data.data
       })
-      console.log(that.data.commotidy)
+      console.log(that.data.shop_commotidy)
+      that.computeClass(that.data.shop_commotidy)
     })
   },
-
+  computeClass(shop_commotidy) {
+    const newClass = []
+    for (let index = 0; index < shop_commotidy.length; index++) {
+      const element = shop_commotidy[index];
+      if (!newClass.includes(element.class)) {
+        newClass.push(element.class)
+      }
+    }
+    this.setData({
+      class: newClass
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

@@ -28,7 +28,6 @@
     "pages/set/vipSet/vipSet",
     "pages/set/vipSet/vipInfoSet/vipInfoSet",
     "pages/set/commotidySet/commotidySet",
-    "pages/set/commotidySet/commotidyClassSet/commotidyClassSet",
     "pages/set/commotidySet/commotidyPurchaseSet/commotidyPurchaseSet",
     "pages/set/commotidySet/commotidyNameSet/commotidyNameSet",
     "pages/set/commotidySet/commotidyNameSet/addNewCommotidy/addNewCommotidy",
@@ -55,7 +54,8 @@
     "pages/login/agree/agree",
     "pages/set/setmeal/setmeal",
     "pages/set/sysSte/deviceManage/cupboard/cupboard",
-    "pages/set/marketing/marketing"
+    "pages/set/marketing/marketing",
+    "pages/set/sysSte/shopTransfer/shopTransfer"
   ],
   "usingComponents": {
     "van-icon": "@vant/weapp/icon/index",

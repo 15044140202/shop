@@ -45,3 +45,11 @@ page{
 .logo .image{
   border-radius: 10%;
 }
+.pickerFont{
+  width: 90%;
+  height: 80rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}

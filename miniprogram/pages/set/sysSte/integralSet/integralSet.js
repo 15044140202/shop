@@ -10,23 +10,8 @@ Page({
    */
   data: {
     titel: '积分规则设置',
-    integral: {
-      tableCost: {
-        values: false,
-        everyCost: 10,
-        giveValues: 1
-      },
-      commotidy: {
-        values: false,
-        everyCost: 10,
-        giveValues: 1
-      },
-      stored: {
-        values: false,
-        everyCost: 1,
-        giveValues: 1
-      }
-    },
+    shop_integral_set: appData.shop_integral_set,
+    changed:false,
     videoShow:false,
     videoUrl:'https://6269-billiards-0g53628z5ae826bc-1326882458.tcb.qcloud.la/video/%E5%A6%82%E4%BD%95%E8%AE%BE%E7%BD%AE%E7%A7%AF%E5%88%86.mp4?sign=93f97d93349efd18f9736c14352fd1c2&t=1721454885'
   },
@@ -36,86 +21,62 @@ Page({
     })
   },
   async save() {
+    if (!this.data.changed) {
+      return
+    }
+    let newData = this.data.shop_integral_set
+    delete newData._id
     const res = await app.callFunction({
-      name: 'amendDatabase_fg',
+      name: 'upDate',
       data: {
-        collection: 'integral',
-        flagName: 'shopFlag',
-        flag: appData.shopInfo.shopFlag,
-        objName: 'integral',
-        data: this.data.integral
+        collection: 'shop_integral_set',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        upData:newData
       }
     })
-    if (res === 'ok') {
+    if (res.success) {
+      Object.assign(appData.shop_integral_set,this.data.shop_integral_set)
       app.showToast('保存成功!', 'success');
     } else {
       app.showToast('保存失败!', 'error');
     }
   },
   every(e) {
+    if (!e.detail.value) {
+      return
+    }
     this.setData({
-      [`integral.${e.mark.every}.everyCost`]: parseInt(e.detail.value)
+      [`shop_integral_set.${e.mark.every}.everyCost`]: parseInt(e.detail.value)
     })
-    console.log(this.data.integral[e.mark.every].everyCost)
+    this.data.changed = true
+    console.log(this.data.shop_integral_set[e.mark.every].everyCost)
   },
   give(e) {
     console.log(e)
+    if (!e.detail.value) {
+      return
+    }
     this.setData({
-      [`integral.${e.mark.give}.giveValues`]: parseInt(e.detail.value)
+      [`shop_integral_set.${e.mark.give}.giveValues`]: parseInt(e.detail.value)
     })
+    this.data.changed = true
   },
   change(e) {
     console.log(e.mark.select)
-    this.data.integral[e.mark.select].values === true ? this.setData({
-      [`integral.${e.mark.select}.values`]: false
+    this.data.shop_integral_set[e.mark.select].switch === true ? this.setData({
+      [`shop_integral_set.${e.mark.select}.switch`]: false
     }) : this.setData({
-      [`integral.${e.mark.select}.values`]: true
+      [`shop_integral_set.${e.mark.select}.switch`]: true
     })
-  },
-  //获取 积分规则 函数
-  async getIntegral(shopFlag) {
-    const res = await app.callFunction({
-      name: 'getDatabaseRecord_fg',
-      data: {
-        collection: 'integral',
-        record: 'integral',
-        shopFlag: shopFlag
-      }
-    });
-    console.log(typeof (res))
-    if ('tableCost' in res) { //新创建的空数据
-      return res;
-    } else {
-      //创建积分模版
-      console.log('创建积分模版')
-      const r = await app.callFunction({
-        name: 'amendDatabase_fg',
-        data: {
-          collection: 'integral',
-          flagName: 'shopFlag',
-          flag: shopFlag,
-          objName: 'integral',
-          data: this.data.integral
-        }
-      });
-      return r;
-    }
+    this.data.changed = true
   },
   /**
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
-    app.showLoading('数据加载中...', true)
-    const res = await this.getIntegral(appData.shopInfo.shopFlag)
-    if (res === 'ok') { //条件成立 则 数据库中  有积分数据  否则 则是第一次初始化 没有积分数据
-      
-    }else{
-       this.setData({
-        integral: res
-      })
-    }
-    console.log(this.data.integral);
-    wx.hideLoading();
+ 
   },
 
   /**
@@ -129,7 +90,11 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    if (appData.shop_integral_set !== this.data.shop_integral_set) {
+     this.setData({
+       shop_integral_set:appData.shop_integral_set
+     }) 
+    }
   },
 
   /**

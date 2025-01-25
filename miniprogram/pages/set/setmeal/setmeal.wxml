@@ -1,9 +1,9 @@
 <!--pages/set/setmeal/setmeal.wxml-->
 <import src="../../../template/SetMenu/SetMenu" />
 <template is="titel" data="{{titel:'套餐/包时段设置'}}" />
-<view class="setmeal" wx:for="{{setmeal}}" wx:key="index">
+<view class="setmeal" wx:for="{{setmeal.setmeal}}" wx:key="index">
 	<view class="setmealName" style="height: 90rpx;">
-		<input style="height: 100%; margin-left: 25vw; width: 50%; text-align: center;" type="text" value="{{item.name}}" bindinput="input" mark:item="setmealName" mark:index="{{index}}" />
+		<input style="height: 100%; margin-left: 25vw; width: 50%; text-align: center;" type="text" value="{{item.name?item.name:'未设置套餐名称'}}" bindinput="input" mark:item="setmealName" mark:index="{{index}}" />
 		<van-icon style="width: 25vw; height: 100%;" color="red" name='delete-o' size="45rpx" bind:tap="delete" mark:index="{{index}}"></van-icon>
 	</view>
 	<view class="priceSet">
@@ -25,7 +25,7 @@
 		<view>绑定的计费规则 : </view>
 		<picker mode="selector" range="{{charging}}" range-key="name" bindchange="tap" mark:item="bindChargingChange" mark:index="{{index}}">
 			<view>
-				{{item.bindCharging.name === undefined ? '未绑定' : item.bindCharging.name}}
+				{{item.bindChargingId.chargingId === undefined ? '未绑定' : item.bindChargingId.name}}
 			</view>
 		</picker>
 	</view>

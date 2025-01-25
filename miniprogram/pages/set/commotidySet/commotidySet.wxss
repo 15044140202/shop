@@ -1,4 +1,4 @@
 /* pages/set/commoditySet/commotidySet.wxss */
 .border{
-  height: 100%;
+  height: 80%;
 }

@@ -7,14 +7,14 @@ Page({
    * 页面的初始数据
    */
   data: {
-    device:appData.device,
+    device:appData.shop_device,
   },
   async announcerTest(){
         //播报器 
     await app.callFunction({
       name:'announcerSendMessage',
       data:{
-        announcerId:this.data.device.announcer,
+        announcerId:this.data.shop_device.announcer,
         first:'7571',
         last:'7595',
         randomNum:app.getRandomString(5) + new Date().getTime()
@@ -52,18 +52,19 @@ Page({
     app.showLoading('保存中...',true)
     //处理数据
     const res = await app.callFunction({
-      name:'amendDatabase_fg',
+      name:'upDate',
       data:{
-        collection:'shopAccount',
-        flagName:'shopFlag',
-        flag:appData.shopInfo.shopFlag,
-        objName:`shop.device.announcer`,
-        data:this.data.device.announcer
+        collection:'shop_device',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        upData:{
+          announcer:this.data.device.announcer
+        }
       }
     })
-    if (res === 'ok') {
-      appData.device = await app.getDevice(appData.shopInfo.shopFlag)
-      await app.getShopInfo(appData.shopInfo.shopFlag)
+    if (res.success) {
+      appData.shop_device = this.data.device
       wx.hideToast({})
       app.showToast('保存成功!','success',)
     } else {
@@ -76,7 +77,7 @@ Page({
    */
   onLoad(options) {
     this.setData({
-      device:appData.shopInfo.shop.device
+      device:appData.shop_device
     })
   },
 

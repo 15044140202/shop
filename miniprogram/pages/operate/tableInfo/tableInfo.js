@@ -16,12 +16,12 @@ Page({
     tebleInfo: {},
     shopSelect: 0,
     inputValue: '',
-    charging: [], //计费规则组
+    shop_charging: appData.shop_charging, //计费规则组
     chargingSelect: -1,
   },
-  goto(e){
+  goto(e) {
     wx.navigateTo({
-      url:`./tableQr/tableQr?optNum=${this.data.optNum}`,
+      url: `./tableQr/tableQr?optNum=${this.data.optNum}`,
     })
   },
   removeTap() {
@@ -37,43 +37,59 @@ Page({
   },
   async removeBind() {
     console.log('开始解除绑定')
-    const res = await utils.amendDatabase({
-      collectionName: 'shopAccount',
-      _id: appData.shopInfo._id,
-      objName: `shop.tableSum.${this.data.optNum - 1}.chargingFlag`,
-      data: ''
+    const res = await app.callFunction({
+      name: 'upDate',
+      data: {
+        collection: 'shop_table',
+        query: {
+          shopId: appData.shop_account._id,
+          tableNum: parseInt(this.data.optNum)
+        },
+        upData: {
+          chargingId: ''
+        }
+      }
     })
-    res === 'ok' ? this.setData({
-      chargingSelect: -1
-    }) : console.log('解除失败!')
-
+    if (res.success) {
+      this.setData({
+        chargingSelect: -1
+      })
+      appData.shop_table[this.data.optNum - 1].chargingId = ''
+    } else {
+      console.log('解除失败!')
+    }
   },
   async chargingSelect(e) {
     console.log(e.detail.value)
     const res = await app.callFunction({
-      name: 'amendDatabase_fg',
+      name: 'upDate',
       data: {
-        collection: 'shopAccount',
-        flagName: 'shopFlag',
-        flag: appData.shopInfo.shopFlag,
-        objName: `shop.tableSum.${this.data.optNum -1 }.chargingFlag`,
-        data: this.data.charging[e.detail.value].flag
+        collection: 'shop_table',
+        query: {
+          shopId: appData.shop_account._id,
+          tableNum: parseInt(this.data.optNum)
+        },
+        upData: {
+          chargingId: this.data.shop_charging[e.detail.value]._id
+        }
       }
     })
-    if (res === 'ok') {
+    console.log(res)
+    if (res.success) {
       console.log('保存成功!')
       this.setData({
         chargingSelect: e.detail.value
       })
+      appData.shop_table[this.data.optNum - 1].chargingId = this.data.shop_charging[e.detail.value]
     } else {
       console.log('保存失败!')
     }
 
   },
-  getChargingSelect(tableChargingFlag, chaging) {
+  getChargingSelect(tableChargingId, chaging) {
     for (let index = 0; index < chaging.length; index++) {
       const element = chaging[index];
-      if (element.flag === tableChargingFlag) {
+      if (element._id === tableChargingId) {
         this.setData({
           chargingSelect: index
         })
@@ -107,10 +123,13 @@ Page({
       })
     }
     const res = await app.callFunction({
-      name:'lightCtrl',
-      data:{
-        lightName: appData.device.lightCtrl,
-        lightData: `{"A${this.data.optNum.toString().padStart(2, '0') }":1${this.data.checked === true ? 1 : 0}0000,"res":"123"}`
+      name: 'lightCtrl',
+      data: {
+        lightName: appData.shop_device.lightCtrl,
+        lightData: `{"A${this.data.optNum.toString().padStart(2, '0')}":1${this.data.checked === true ? 1 : 0}0000,"res":"123"}`,
+        tableNum:this.data.optNum,
+        shopId:appData.shop_account._id,
+        ONOFF:this.data.checked === true ? 1 : 0
       }
     })
     console.log(res)
@@ -123,14 +142,20 @@ Page({
       duration: 20000
     })
     //处理数据
-    console.log("_id:" + appData.shopInfo._id)
-    const res = await utils.amendDatabase({
-      collectionName: 'shopAccount',
-      _id: appData.shopInfo._id,
-      objName: `shop.tableSum.${this.data.optNum-1}.tableName`,
-      data: this.data.inputValue
+    const res = await app.callFunction({
+      name: 'upDate',
+      data: {
+        collection: 'shop_table',
+        query: {
+          shopId: appData.shop_account._id,
+          tableNum: parseInt(this.data.optNum)
+        },
+        upData: {
+          tableName: this.data.inputValue
+        }
+      }
     })
-    if (res === 'ok') {
+    if (res.success) {
       wx.hideToast({})
       wx.showToast({
         title: '保存成功!',
@@ -176,22 +201,28 @@ Page({
     console.log(options);
     this.setData({
       optNum: options.tableNum,
-      shopInfo: appData.shopInfo
+      shop_table: appData.shop_table
     })
-    console.log(this.data.shopInfo.shop.tableSum[this.data.optNum - 1].tableName)
+    console.log(this.data.shop_table[this.data.optNum - 1].tableName)
     //获取 计费规则
-    this.setData({
-      charging: await this.getCharging(appData.shopInfo.shopFlag)
-    })
+    // this.setData({
+    //   charging: await this.getCharging(appData.shopInfo.shopFlag)
+    // })
 
     //获取此桌台选择的 计费规则
-    this.getChargingSelect(this.data.shopInfo.shop.tableSum[this.data.optNum - 1].chargingFlag, this.data.charging)
-
+    this.getChargingSelect(this.data.shop_table[this.data.optNum - 1].chargingId, this.data.shop_charging)
+    //获取灯控器状态
+    this.setData({
+      lightStatus:await app.getLightStatus(appData.shop_device.lightCtrl)
+    }) 
+    this.setData({
+      checked:this.data.lightStatus.data[`A${this.data.optNum.padStart(2,'0')}`] === 0 ? false : true
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady() {},
+  onReady() { },
   /**
    * 生命周期函数--监听页面显示
    */

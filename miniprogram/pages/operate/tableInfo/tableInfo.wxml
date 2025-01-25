@@ -6,8 +6,8 @@
 <view style="background-color: #fff;">
   <view class="costRule">
     <text style="font-size: 35rpx;">计费规则</text>
-    <picker header-text='选择计费规则' value="{{chargingSelect}}" range='{{charging}}' range-key="{{'name'}}" bindchange='chargingSelect'>
-      <text style="font-size: 35rpx; margin-right: 35rpx;">{{chargingSelect > -1 ? charging[chargingSelect].name : '未绑定'}}</text>
+    <picker header-text='选择计费规则' value="{{chargingSelect}}" range='{{shop_charging}}' range-key="{{'name'}}" bindchange='chargingSelect'>
+      <text style="font-size: 35rpx; margin-right: 35rpx;">{{chargingSelect > -1 ? shop_charging[chargingSelect].name : '未绑定'}}</text>
     </picker>
   </view>
   <view class="costRule">
@@ -22,7 +22,7 @@
 <view style="background-color: #fff; margin-top: 40rpx;">
   <view class="costRule">
     <text style="font-size: 35rpx;">桌台名称</text>
-    <input style="height: 100%; width: 180rpx; text-align: center; margin-right: 20rpx;" type="text" value="{{shopInfo.shop.tableSum[optNum-1].tableName}}" focus="false" bindinput="bindKeyInput" />
+    <input style="height: 100%; width: 180rpx; text-align: center; margin-right: 20rpx;" type="text" value="{{shop_table[optNum-1].tableName}}" focus="false" bindinput="bindKeyInput" />
   </view>
 </view>
 <!-- 按钮 -->

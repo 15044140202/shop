@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    device: {}
+    device:appData.shop_device
   },
   goto(e) {
     console.log(e)
@@ -23,27 +23,32 @@ Page({
    * @returns {object} 返回添加后的新 设备数据
    */
   async testDeviceKind(nowDevice) {
-    const newKind = [{
-      name: 'cupboard',data:[]
-    }]
+    const newKind = [
+      {
+        name:'printer',
+        data:''
+      }
+    ]//新设备应以obj格式出现在数组中
     for (let index = 0; index < newKind.length; index++) {
       const element = newKind[index];
       if (!(element.name in nowDevice)) {//数据库中没有这个设备种类
+        //刷新数据库数据
+        await app.callFunction({
+          name:'upDate',
+          data:{
+            collection:'shop_device',
+            query:{
+              shopId:appData.shop_account._id
+            },
+            upData:{
+              [`${element.name}`]:element.data
+            }
+          }
+        })
         const newData = {
           ...nowDevice,
           [element.name]:element.data
         }
-        //刷新数据库数据
-        await app.callFunction({
-          name:'amendDatabase_fg',
-          data:{
-            collection:'shopAccount',
-            flagName:'shopFlag',
-            flag:appData.shopInfo.shopFlag,
-            objName:'shop.device',
-            data:newData
-          }
-        })
         appData.device = newData;
         this.setData({
           device:newData
@@ -55,9 +60,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
-    this.setData({
-      device: appData.device
-    })
     await this.testDeviceKind(this.data.device)
     
   },

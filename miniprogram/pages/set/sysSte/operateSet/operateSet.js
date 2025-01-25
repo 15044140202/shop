@@ -8,137 +8,59 @@ Page({
    */
   data: {
     titel: '营业参数设置',
-    operateSet: {
-      startSet: {
-        detectDistance: true,
-        phoneImpower: true,
-        degree: 0
-      },
-      settleAmountsSet: {
-        commotidyAtOncePay: true,
-        payFor: true,
-        scanQrPay: 0
-      },
-      commotidySet: {
-        selfBuy: true
-      },
-      clientSet: {
-        integralNoDispaly: false,
-        amountSeparateDispaly: false,
-        selfExchange: true,
-        selfMerge: true,
-        displayPrice: true
-      },
-      sweepSet: {
-        sweep: true,
-        sweepTime: 2
-      }
-    },
+    operateSet: appData.shop_operate_set,
     sacnMode: ['客人扫收款码', '店员扫付款码'],
     paker: ['20.0元500条', '40.0元1000条', '120.0元3000条', '200.0元5000条', '400.0元10000条'],
     pakerIndex: 0
   },
-  async pakerOnChange(e) {
+  input(e) {
     console.log(e)
-    const amount = this.data.paker[e.detail.value].slice(0, e.detail.value > 1 ? 3 : 2)
-    const degree = e.detail.value === "0" ? 500 : e.detail.value === "1" ? 1000 : e.detail.value === "2" ? 3000 : e.detail.value === "3" ? 5000 : 10000
-    console.log(degree)
-    const now = new Date();
-    const orderNum = app.createOrderNum(now, 'shortMsg')
-    const payRes = await app.pay(amount, '短信验证费', appData.my_sub_mchid, orderNum);
-    if (payRes === 'error') { //支付成功
-      return;
-    }
-    //支付成功  修改营业设置中的  验证手机号码次数
-    const res = await app.callFunction({
-      name:'payMerchantShortMsgDegree',
-      data:{
-        shopFlag:appData.shopInfo.shopFlag,
-        degree:degree,
-        orderNum:orderNum,
-        amount:amount,
-        payTime:app.getNowTime(new Date(now))
-      }
-    })
-    if (res === 'ok') {
-      app.showModal('提示','充值成功!')
+    if (parseInt(e.detail.value) > 0 && parseInt(e.detail.value) <= 15) {
       this.setData({
-        ['operateSet.startSet.degree']:this.data.operateSet.startSet.degree + degree
+        [`operateSet.${e.mark.name}.${e.mark.name2}`]: parseInt(e.detail.value)
       })
-      return;
-    }else{
-      app.showModal('提示','充值失败!如成功支付稍后未到账请联系客服!')
-      return;
     }
-
   },
-  change(e) {
+  onchange(e) {
     console.log(e)
     this.setData({
-      ['operateSet.settleAmountsSet.scanQrPay']: e.detail.value
+      [`operateSet.${e.mark.name}.${e.mark.name2}`]: e.detail.value
     })
   },
-  set(e) {
+  pickerChange(e) {
     console.log(e)
-    if (e.mark.name === 'sweepSet.sweepTime') { //打扫时间设置
-      this.setData({
-        ['operateSet.sweepSet.sweepTime']: e.detail.value
-      })
-    } else {
-      this.setData({
-        ['operateSet.' + e.mark.name + '.' + e.mark.name2]: this.data.operateSet[e.mark.name][e.mark.name2] === true ? false : true
-      })
-      console.log(this.data.operateSet[e.mark.name][e.mark.name2])
-    }
+    this.setData({
+      [`operateSet.${e.mark.name}.${e.mark.name2}`]: parseInt(e.detail.value)
+    })
   },
   async save() {
+    //删除 本地数据 的shopId 和 _id 键
+    delete this.data.operateSet._id
+    delete this.data.operateSet.shopId
     app.showLoading('保存中...', true);
     const res = await app.callFunction({
-      name: 'amendDatabase_fg',
-      data: {
-        collection: 'operateSet',
-        flagName: 'shopFlag',
-        flag: appData.shopInfo.shopFlag,
-        objName: 'operateSet',
-        data: this.data.operateSet
+      name:'upDate',
+      data:{
+        collection:'shop_operate_set',
+        query:{
+          shopId:appData.shop_account._id
+        },
+        upData:this.data.operateSet
       }
     })
     wx.hideLoading();
-    if (res === 'ok') {
+    if (res.success) {
       app.showToast('保存成功!', 'success');
+      Object.assign(appData.shop_operate_set,this.data.operateSet)
     } else {
       app.showToast('保存失败!', 'error');
     }
-  },
-  //获取 积分规则 函数
-  async getOperateSet(shopFlag) {
-    const res = await app.callFunction({
-      name: 'getDatabaseRecord_fg',
-      data: {
-        collection: 'operateSet',
-        record: 'operateSet',
-        shopFlag: shopFlag
-      }
-    });
-    console.log(res);
-    return res;
   },
   /**
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
-    app.showLoading('加载中...', true);
-    const res = await this.getOperateSet(appData.shopInfo.shopFlag);
-    if ('startSet' in res) {
-      console.log('保存服务器返回数据!');
-      this.setData({ //设置获取的 服务器数据
-        operateSet: res
-      })
-    } else {
-      console.log('服务器无数据,执行保存默认配置!');
-      await this.save()
-    }
-    wx.hideLoading();
+
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -151,6 +73,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
+    this.setData({
+      operateSet:appData.shop_operate_set
+    })
 
   },
 
