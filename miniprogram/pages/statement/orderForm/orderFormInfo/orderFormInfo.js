@@ -1,7 +1,6 @@
 // pages/operate/inShopCustomer/orderFormInfo/orderFormInfo.js
 const app = getApp();
 const appData = getApp().globalData;
-
 Page({
 
   /**
@@ -12,6 +11,26 @@ Page({
     index: 0,
     vipList: [],
     refundTotalAmount: 0,
+  },
+  async rePay_miniMall (e){
+    console.log(e)
+    const res = await app.callFunction({
+      name:'repeal_shop_miniMall_order',
+      data:{
+        order:this.data.orderForm[e.mark.index],
+        cancelOrRefund:'refund'
+      }
+    })
+    console.log(res)
+    if(!res.success){
+      app.showModal('退货失败!')
+      return
+    }
+    this.setData({
+      [`orderForm[${e.mark.index}].payState`]:3
+    })
+    app.showModal('退货成功!')
+    return
   },
   async goto(e) {
     console.log(e)
@@ -55,7 +74,7 @@ Page({
   },
   async rePay(e) {
     //检测权限
-    if (await app.power('systemSet', '7', '退款/部分退款')) {
+    if (await app.power('systemSet', '退款/部分退款')) {
       console.log('有权限');
     } else {
       app.showToast('没有权限', 'error');
@@ -67,8 +86,11 @@ Page({
     })
   },
   call() {
+    if (this.data.orderForm[this.data.index].userTelephone) {
+      
+    }
     wx.makePhoneCall({
-      phoneNumber: this.data.orderForm[this.data.index].openPerson.openPersonPhone,
+      phoneNumber: this.data.orderForm[this.data.index].userTelephone,
     })
   },
   /**
@@ -91,7 +113,7 @@ Page({
       }
     } else {
       for (let index = 0; index < appData.disPlayOrderForm.length; index++) {
-        const element =JSON.parse(appData.disPlayOrderForm[index]) ;
+        const element = appData.disPlayOrderForm[index];
         element.time = app.getNowTime(new Date(element.time))
         this.data.orderForm.push(element)
       }

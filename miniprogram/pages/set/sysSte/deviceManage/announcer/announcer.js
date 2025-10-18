@@ -7,19 +7,21 @@ Page({
    * 页面的初始数据
    */
   data: {
-    device:appData.shop_device,
+    device: appData.shop_device,
   },
-  async announcerTest(){
-        //播报器 
+  async announcerTest() {
+    console.log('测试播报器')
+    //播报器 
     await app.callFunction({
-      name:'announcerSendMessage',
-      data:{
-        announcerId:this.data.shop_device.announcer,
-        first:'7571',
-        last:'7595',
-        randomNum:app.getRandomString(5) + new Date().getTime()
+      name: 'announcerSendMessage',
+      data: {
+        shopId: this.data.device.shopId,
+        first: '7571',
+        last: '7595',
+        randomNum: app.getRandomString(5) + new Date().getTime()
       }
     })
+    app.showModal('提示','如听到开台提示,则播报器链接成功!')
   },
   bindKeyInput(e) {
     if (e.mark.item === 'announcer') {
@@ -46,30 +48,30 @@ Page({
   async save() {
     //首先检测输入是否正确
     if (this.data.device.announcer === '') {
-      app.showToast('请输入正确号码','error')
+      app.showToast('请输入正确号码', 'error')
       return
     }
-    app.showLoading('保存中...',true)
+    app.showLoading('保存中...', true)
     //处理数据
     const res = await app.callFunction({
-      name:'upDate',
-      data:{
-        collection:'shop_device',
-        query:{
-          shopId:appData.shop_account._id
+      name: 'upDate',
+      data: {
+        collection: 'shop_device',
+        query: {
+          shopId: appData.shop_account._id
         },
-        upData:{
-          announcer:this.data.device.announcer
+        upData: {
+          announcer: this.data.device.announcer
         }
       }
     })
     if (res.success) {
       appData.shop_device = this.data.device
       wx.hideToast({})
-      app.showToast('保存成功!','success',)
+      app.showToast('保存成功!', 'success',)
     } else {
       wx.hideToast({})
-      wx.showToast('保存失败!','error',)
+      wx.showToast('保存失败!', 'error',)
     }
   },
   /**
@@ -77,7 +79,7 @@ Page({
    */
   onLoad(options) {
     this.setData({
-      device:appData.shop_device
+      device: appData.shop_device
     })
   },
 

@@ -2,52 +2,67 @@
 <import src="../../../../../template/SetMenu/SetMenu" />
 <template is="titel_video" data="{{titelName:'智能杆柜设置',video_tap:'video'}}" />
 <view style="display: flex; flex-direction: row; justify-content: flex-end; align-items: center; margin-left: 5%; height: 80rpx; width: 90%; margin-top: -25px;">
-	<van-icon name="setting-o" size="50rpx" bind:tap="setting"></van-icon>
+  <van-icon name="setting-o" size="50rpx" bind:tap="setting"></van-icon>
 </view>
 <view class="border">
-	<view class="cupboard" wx:for="{{shop_device.cupboard}}" wx:key="index">
-		<view class="serialNum" bind:tap="tap" mark:item="setShow" mark:index="{{index}}">{{index +1 }}号</view>
-		<view class="cupboardInfo" bind:tap="tap" mark:item="setShow" mark:index="{{index}}">
-			<view style="font-size: 35rpx;">使用人 : {{item.userInfo.userName === undefined ? '空闲' : item.userInfo.userName}}</view>
-			<view style="display: flex; flex-direction: row; justify-content: flex-start; align-items: center;">
-				<view style="font-size: 30rpx;">最后时间:</view>
-				<view style="font-size: 22rpx;">{{item.lastTime}}</view>
-			</view>
-
-		</view>
-		<button type="primary" style="width: 20%; height: 60%; font-size: 30rpx;" bind:tap="tap" mark:item="openDoor" mark:index="{{index}}" disabled="{{item.lockCode === ''}}">开门</button>
-	</view>
+  <view class="cupboard" wx:for="{{shop_device.cupboard}}" wx:key="index">
+    <view class="serialNum" bind:tap="tap" mark:item="setShow" mark:index="{{index}}">{{index +1 }}号</view>
+    <view class="cupboardInfo" bind:tap="tap" mark:item="setShow" mark:index="{{index}}">
+      <view style="font-size: 35rpx;" catch:tap="tap" mark:item="vipInfo" mark:index="{{index}}" >使用人 : {{item.userInfo.userName === undefined ? '空闲' : item.userInfo.userName}} </view>
+      <view style="display: flex; flex-direction: row; justify-content: flex-start; align-items: center;">
+        <view style="font-size: 30rpx;">最后时间:</view>
+        <view style="font-size: 22rpx;">{{item.lastTime}}</view>
+      </view>
+    </view>
+    <button wx:if="{{item.lockType !== '密码锁'}}" type="primary" style="width: 25%; height: 60%; font-size: 30rpx;" bind:tap="tap" mark:item="openDoor" mark:index="{{index}}" disabled="{{!item.lockCode && !item.androidLockCode}}">开门</button>
+    <button wx:if="{{item.lockType === '密码锁'}}" type="primary" style="width: 25%; height: 60%; font-size: 30rpx;" disabled="true" >密码锁</button>
+  </view>
 </view>
 <button style="margin: 80rpx;" type="primary" bind:tap="addCupboard">新增柜子</button>
 <view style="height: 80rpx;"></view>
-<van-dialog  show-cancel-button cancelButtonText="下载指引配图" use-slot title="柜门锁设置" show="{{ lockSetShow }}" bind:cancel="downPic">
-	<view class="lockSet">
-		<view style="height: 50rpx; width: 100%;"></view>
-		<view class="button">
-			<button type="primary" style="width: 40%; font-size: 28rpx;" bind:tap="tap" mark:item="initialize" mark:index="{{lockSelect}}">{{(!shop_device.cupboard[lockSelect].lockCode && !shop_device.cupboard[lockSelect].androidLockCode) ? '绑定密码锁' : '解绑密码锁'}}</button>
-			<button type="primary" style="width: 40%; font-size: 28rpx;" disabled="{{!shop_device.cupboard[lockSelect].lockCode && !shop_device.cupboard[lockSelect].androidLockCode}}" bind:tap="tap" mark:item="setPassword" mark:index="{{lockSelect}}">添加周期密码</button>
-		</view>
-		<view style="height: 50rpx; width: 100%;"></view>
-		<view class="button">
-			<button type="primary" style="width: 40%; font-size: 28rpx;" disabled="{{(!shop_device.cupboard[lockSelect].lockCode && !shop_device.cupboard[lockSelect].androidLockCode)}}" bind:tap="tap" mark:item="clearAll" mark:index="{{lockSelect}}">清除所有密码</button>
-			<button type="primary" style="width: 40%; font-size: 28rpx;" disabled="{{shop_device.cupboard[lockSelect].userInfo.userName === undefined}}" bind:tap="tap" mark:item="clearUser" mark:index="{{lockSelect}}">置空使用人</button>
-		</view>
-		<view style="height: 50rpx; width: 100%;"></view>
-	</view>
+<!-- 杆柜设置按钮 -->
+<van-dialog show-cancel-button cancelButtonText="下载指引配图" use-slot title="柜门锁设置" show="{{ lockSetShow }}" bind:cancel="downPic">
+  <!-- 锁类型设置 -->
+  <view class="lockTypeSetBoard">
+    <text>柜锁类型</text>
+    <van-radio-group value="{{ shop_device.cupboard[lockSelect].lockType === '蓝牙锁' ? '蓝牙锁' : '密码锁' }}" direction="horizontal" bind:change="onChange" mark:index="{{lockSelect}}">
+      <van-radio name="蓝牙锁">蓝牙锁</van-radio>
+      <van-radio name="密码锁">密码锁</van-radio>
+    </van-radio-group>
+  </view>
+  <!-- 蓝牙锁 锁设置 -->
+  <view class="lockSet" wx:if="{{shop_device.cupboard[lockSelect].lockType === '蓝牙锁'}}">
+    <view style="height: 50rpx; width: 100%;"></view>
+    <button type="primary" bind:tap="tap" mark:item="initialize" mark:index="{{lockSelect}}">{{(!shop_device.cupboard[lockSelect].lockCode && !shop_device.cupboard[lockSelect].androidLockCode) ? '绑定密码锁' : '解绑密码锁'}}</button>
+    <button type="primary" disabled="{{!shop_device.cupboard[lockSelect].lockCode && !shop_device.cupboard[lockSelect].androidLockCode}}" bind:tap="tap" mark:item="setPassword" mark:index="{{lockSelect}}">添加周期密码</button>
+    <button type="primary" disabled="{{(!shop_device.cupboard[lockSelect].lockCode && !shop_device.cupboard[lockSelect].androidLockCode)}}" bind:tap="tap" mark:item="clearAll" mark:index="{{lockSelect}}">清除所有密码</button>
+    <button type="primary" disabled="{{shop_device.cupboard[lockSelect].userInfo.userName === undefined}}" bind:tap="tap" mark:item="clearUser" mark:index="{{lockSelect}}">置空使用人</button>
+    <view style="height: 50rpx; width: 100%;"></view>
+  </view>
+  <!-- 密码锁 所设置 -->
+  <view wx:else class="lockSet">
+    <view style="height: 50rpx; width: 100%;"></view>
+    <input type="number" value="{{shop_device.cupboard[lockSelect].managerPs}}" placeholder="未设置" mark:index="{{lockSelect}}" mark:item="managerPs" bindinput="input" />
+    <button type="primary" bind:tap="tap" mark:item="saveManagerPs" mark:index="{{lockSelect}}">保存管理密码</button>
+    <input type="number" value="{{shop_device.cupboard[lockSelect].userPs}}" placeholder="未设置" mark:index="{{lockSelect}}" mark:item="userPs" bindinput="input" />
+    <button type="primary" bind:tap="tap" mark:item="saveUserPs" mark:index="{{lockSelect}}">保存用户密码</button>
+    <button style="width: 80%;" type="primary" disabled="{{shop_device.cupboard[lockSelect].userInfo.userName === undefined}}" bind:tap="tap" mark:item="clearUser" mark:index="{{lockSelect}}">置空使用人</button>
+    <view style="height: 50rpx; width: 100%;"></view>
+  </view>
 </van-dialog>
 <van-dialog use-slot title="杆柜使用规则" showCancelButton show="{{ useRuleSetShow }}" bind:confirm="save" confirmButtonText="保存">
-	<view class="lockSet">
-		<view style="height: 50rpx; width: 100%;"></view>
-		<view class="ruleBorder" wx:for="{{shop_device.cupboardUseRule}}" wx:key="index">
-			<view class="integral">
-				<text>积分 : </text>
-				<input style="width: 120rpx; text-align: center; height: 100%;" type="number" value="{{item.integral}}" bindinput="input" mark:item="integral" mark:index="{{index}}" />
-				<text>以上</text>
-			</view>
-			<view class="integral">
-				<input style="width: 120rpx; text-align: center; height: 100%;" type="number" value="{{item.price}}" bindinput="input" mark:item="price" mark:index="{{index}}" />
-				<text> 元/月</text>
-			</view>
-		</view>
-	</view>
+  <view class="lockSet">
+    <view style="height: 50rpx; width: 100%;"></view>
+    <view class="ruleBorder" wx:for="{{shop_device.cupboardUseRule}}" wx:key="index">
+      <view class="integral">
+        <text>积分 : </text>
+        <input style="width: 120rpx; text-align: center; height: 100%;" type="number" value="{{item.integral}}" bindinput="input" mark:item="integral" mark:index="{{index}}" />
+        <text>以上</text>
+      </view>
+      <view class="integral">
+        <input style="width: 120rpx; text-align: center; height: 100%;" type="number" value="{{item.price}}" bindinput="input" mark:item="price" mark:index="{{index}}" />
+        <text> 元/月</text>
+      </view>
+    </view>
+  </view>
 </van-dialog>

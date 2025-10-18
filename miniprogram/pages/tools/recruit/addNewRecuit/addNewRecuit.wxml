@@ -1,0 +1,46 @@
+<!--pages/tools/recruit/addNewRecuit/addNewRecuit.wxml-->
+<view class="page-header">
+  <text class="header-title">新增招聘信息</text>
+  <text class="header-intro">增加新的招聘信息</text>
+</view>
+<view class="container">
+  <!-- 表单 -->
+  <view class="form">
+    <!-- 岗位 -->
+    <view class="form-item">
+      <text class="label">岗位</text>
+      <view class="post">
+        <input class="input" placeholder="请输入岗位" value="{{formData.post}}" bindinput="handleInput" data-field="post" disabled="{{postInputDisabled}}" />
+        <text>助教</text>
+        <switch checked="{{formData.isGril}}" bindchange="girl"/>
+      </view>
+
+    </view>
+
+    <!-- 职责 -->
+    <view class="form-item">
+      <text class="label">职责</text>
+      <input class="input" placeholder="请输入职责" value="{{formData.duty}}" bindinput="handleInput" data-field="duty" />
+    </view>
+
+    <!-- 薪酬 -->
+    <view class="form-item">
+      <text class="label">薪酬</text>
+      <input class="input" placeholder="请输入薪酬" value="{{formData.salary}}" bindinput="handleInput" data-field="salary" />
+    </view>
+
+    <!-- 工作时间 -->
+    <view class="form-item">
+      <text class="label">工作时间</text>
+      <input class="input" placeholder="请输入工作时间" value="{{formData.workTime}}" bindinput="handleInput" data-field="workTime" />
+    </view>
+    <!-- 薪酬 -->
+    <view class="form-item">
+      <text class="label">微信/电话号：</text>
+      <input class="input" placeholder="请输入联系方式" value="{{formData.wx}}" bindinput="handleInput" data-field="wx" />
+    </view>
+
+    <!-- 提交按钮 -->
+    <button class="submit-btn" bindtap="submitForm">提交</button>
+  </view>
+</view>

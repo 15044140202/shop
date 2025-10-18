@@ -1,7 +1,54 @@
 /* pages/set/sysSte/waiter/waiter.wxss */
-page{
-  background-color: #eee;
+@import '../../../../template/SetMenu/SetMenu.wxss';
+
+.settings-container {
+  padding: 2.5vw;
 }
+.setting-card {
+  background: #fff;
+  border-radius: 24rpx;
+  margin-bottom: 32rpx;
+  width: 95%;
+  box-shadow: 0 8rpx 24rpx rgba(0, 151, 255, 0.08);
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx;
+  border-bottom: 1rpx solid #eee;
+}
+.option-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+.option-label {
+  font-size: 30rpx;
+  color: #333;
+  line-height: 1.4;
+}
+.custom-switch {
+  transform: scale(0.9);
+}
+.button_board{
+  display: flex;
+  flex-direction: row;
+  width: 48%;
+}
+.add_button{
+  border-radius: 10rpx;
+  background: linear-gradient(135deg, #0097FF, #0066CC);
+  box-shadow: 0 8rpx 24rpx rgba(0, 151, 255, 0.3);
+  font-size: 34rpx;
+  color: #f5f5f5;
+}
+
+
+
+
 .list_titel{
   height: 80rpx;
   display: flex;

@@ -7,6 +7,11 @@ page{
   display: flex;
   flex-direction: column;
   justify-self: start;
+  width: 95%;
+  margin-left: 2.5%;
+  height: 95%;
+  margin-top: 2.5%;
+  border-radius: 16rpx;
 }
 .titel{
   display: flex;

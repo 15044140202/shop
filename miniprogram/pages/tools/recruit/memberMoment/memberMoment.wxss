@@ -1,0 +1,196 @@
+/* pages/firendCircle/firendFirendCircle/firendFirendCircle.wxss */
+/* pages/firendCircle/firendCircle.wxss */
+/* 页面整体样式 */
+.container1 {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #c0bfbfa9;
+}
+
+/* 头部样式 */
+.header {
+  position: relative;
+  height: 56vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-bg {
+  width: 100%;
+  height: 56vw;
+  z-index: 0;
+}
+
+/* 朋友圈列表样式 */
+.moments-list {
+  flex: 1;
+  padding: 20rpx 0;
+  margin-top: -20rpx;
+  min-height: 90vh;
+  background-color: #fff;
+}
+
+.moment-item {
+  background-color: #fff;
+  padding: 30rpx;
+  border-bottom: solid 1rpx #576b95;
+}
+
+.moment-user {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.moment-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.moment-nickname {
+  font-size: 32rpx;
+  color: #576b95;
+  font-weight: bold;
+}
+
+.moment-content {
+  margin-left: 100rpx;
+}
+
+.moment-text {
+  font-size: 34rpx;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+/* 图片样式 */
+.moment-images {
+  margin-top: 15rpx;
+}
+
+.single-image {
+  width: 90%;
+  max-height: 500rpx;
+  border-radius: 8rpx;
+}
+
+.multi-images {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.multi-images image {
+  width: 22vw;
+  height: 22vw;
+  margin-right: 10rpx;
+  margin-bottom: 10rpx;
+  border-radius: 8rpx;
+}
+
+.multi-images image:nth-child(3n) {
+  margin-right: 0;
+}
+
+.image-4 {
+  width: 158rpx;
+  height: 158rpx;
+}
+
+/* 位置信息 */
+.moment-location {
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+  color: #576b95;
+  margin-top: 10rpx;
+}
+
+.location-icon {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: 8rpx;
+}
+
+/* 底部操作栏 */
+.moment-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20rpx;
+  margin-left: 100rpx;
+}
+
+.moment-time {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.moment-actions {
+  position: relative;
+}
+
+.action-icon {
+  width: 40rpx;
+  height: 40rpx;
+  color: #576b95;
+}
+
+/* 点赞和评论区域 */
+.moment-interaction {
+  margin-top: 15rpx;
+  background-color: #f7f7f7;
+  border-radius: 8rpx;
+  padding: 15rpx;
+}
+
+.likes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: 40rpx;       /* 确保最小高度 */
+  max-height: 80rpx;       /* 最大高度限制 */
+  padding-bottom: 10rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.like-icon {
+  width: 30rpx;
+  height: 30rpx;
+  margin-right: 10rpx;
+}
+
+.likes text {
+  font-size: 28rpx;
+  color: #576b95;
+  margin-right: 15rpx;
+}
+.showMoreComments{
+  width: 100%;
+  height: 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.comments {
+  padding-top: 10rpx;
+}
+
+.comment-item {
+  font-size: 28rpx;
+  line-height: 1.5;
+  margin-bottom: 10rpx;
+}
+
+.comment-item:last-child {
+  margin-bottom: 0;
+}
+
+.comment-user, .comment-reply {
+  color: #576b95;
+}

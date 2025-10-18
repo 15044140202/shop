@@ -1,0 +1,92 @@
+<view class="page-header">
+  <text class="header-title">店铺招聘</text>
+  <text class="header-intro">发布店铺招聘信息</text>
+</view>
+<view class="container">
+  <!-- 招聘信息列表 -->
+  <view class="list" wx:for="{{recruitList}}" wx:key="id">
+    <!-- 基本信息 -->
+    <view class="item">
+      <view class="info">
+        <!-- 店铺名称 + 删除图标 -->
+        <view class="shop-name-wrapper">
+          <text class="shop-name">{{item.shopName}}</text>
+          <van-icon name="delete" size="16" color="#ff4d4f" bindtap="deleteRecruit" mark:index="{{index}}" />
+        </view>
+        <view class="recruit-intro">
+          <text class="label">岗位：</text>
+          <text class="post">{{item.post}}</text>
+        </view>
+        <view class="recruit-intro">
+          <text class="label">职责：</text>
+          <text class="duty">{{item.duty}}</text>
+        </view>
+        <view class="recruit-intro">
+          <text class="label">薪酬：</text>
+          <text class="salary">{{item.salary}}</text>
+        </view>
+        <view class="recruit-intro">
+          <text class="label">工作时间：</text>
+          <text class="work-time">{{item.workTime}}</text>
+        </view>
+        <view class="recruit-intro">
+          <text class="label">发布日期：</text>
+          <text class="publish-date">{{item.publishDate || '未知'}}</text>
+        </view>
+        <view class="recruit-intro">
+          <text class="label">发布人：</text>
+          <text class="publisher">{{item.publisher || '未知'}}</text>
+        </view>
+        <view class="recruit-intro">
+          <text class="label">微信/电话号：</text>
+          <text class="publisher">{{item.wx || '未知'}}</text>
+        </view>
+        <view class="recruit-intro">
+          <text class="label">浏览数量：</text>
+          <text class="views">{{item.views || 0}}</text>
+        </view>
+      </view>
+
+      <!-- 应聘人列表 -->
+      <view class="applicant-list">
+        <view class="applicant-header" bindtap="toggleApplicantList" data-id="{{item.id}}">
+          <text class="applicant-title">应聘人列表：{{item.applicantList.length || 0}} 人</text>
+          <van-icon name="{{item.isExpanded  ? 'arrow-up' : 'arrow-down'}}" size="16" color="#0094ff" />
+        </view>
+        <view class="applicant-content" wx:if="{{item.isExpanded}}">
+          <view class="applyPersonInfo">
+            <block wx:for="{{item.applicantList}}" wx:key="name" wx:for-item="applyItme" wx:for-index="applyIndex">
+              <view class="applicant-item">
+                <!-- 姓名、性别、年龄 -->
+                <view class="basic-info">
+                  <text class="name">{{applyItme.name}}</text>
+                  <view class="gender">
+                    <text>{{applyItme.gender}}</text>
+                  </view>
+                  <text class="age">生日 : {{applyItme.birthday}}</text>
+                </view>
+                <!-- 电话号码 -->
+                <view class="phone" bindtap="makeCall" mark:phoneNum="{{applyItme.telephone}}">
+                  <text>{{applyItme.telephone}}</text>
+                  <van-icon name="phone-o" size="16" color="#0094ff" />
+                  <!-- 申请人球友圈 -->
+                  <van-icon style="margin-left: 50rpx;" wx:if="{{item.isGril}}" name="comment-circle-o" color="#0094ff" size="50rpx" catch:tap="lookMemberMoment" mark:index="{{index}}" mark:memberIndex="{{applyIndex}}"></van-icon>
+                  <button wx:if="{{item.isGril}}" bind:tap="hire" mark:index="{{index}}" mark:memberIndex="{{applyIndex}}">录用</button>
+                </view>
+              </view>
+
+            </block>
+
+          </view>
+        </view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="actions">
+        <button class="btn" type="default" wx:if="{{item.status  === '生效'}}" bindtap="toggleStatus" data-status="{{'作废'}}" data-id="{{item.id}}"> 作废</button>
+        <button class="btn" wx:else bindtap="toggleStatus" data-status="{{'生效'}}" data-id="{{item.id}}"> 生效</button>
+      </view>
+    </view>
+  </view>
+  <button class="btn" bind:tap="addNewRecuit">新增招聘信息</button>
+</view>

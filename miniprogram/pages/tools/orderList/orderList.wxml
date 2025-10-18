@@ -1,0 +1,27 @@
+<!-- pages/billList/billList.wxml  -->
+<view class="bill-page">
+  <!-- 页面头部 -->
+  <view class="page-header">
+    <view class="header-content">
+      <text class="header-title">缴费记录</text>
+      <text class="header-date">2025年3月9日 星期日</text>
+    </view>
+  </view>
+
+  <!-- 账单列表 -->
+  <view class="bill-list">
+    <block wx:for="{{orders}}" wx:key="_id">
+      <view class="bill-item">
+        <view class="bill-info">
+          <text class="bill-name">{{item.orderName || '未命名账单'}}</text>
+          <text class="bill-status" >缴费人 : {{item.status}}</text>
+          <text class="bill-time">{{item.time}}</text>
+
+        </view>
+        <view class="bill-detail">
+          <text class="bill-amount">￥{{item.amount}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

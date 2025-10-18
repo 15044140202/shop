@@ -1,117 +1,157 @@
 <!--pages/statement/orderForm/orderForm.wxml-->
-<block wx:if="{{get_item === '未结账单据'}}">
-  <view class="border" wx:for="{{orderForm}}" wx:key="index" wx:if="{{(item.orderName === '店员开台订单' || item.orderName === '自助开台订单' || item.orderName === '自助套餐订单') && (item.endTime === '未结账' || item.endTime === '')}}" bind:tap="goto" mark:index='{{index}}'>
-    <view class="front">
-      <view class="tableNum">
-        <text style="font-size: 38rpx;">{{item.tableNum}}号台---</text>
-        <text>{{item.userName}}</text>
+<import src="../../../template/noData/noData.wxml" />
+<template is="noData" data="{{switch:orderForm.length ||newVipData.length}}" />
+<block wx:if="{{get_item === '未结单据'}}">
+  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{(item.orderName  === '店员开台订单' || item.orderName  === '自助开台订单' || item.orderName  === '自助套餐订单') && (item.endTime  === '未结账' || item.endTime  === '')}}" bind:tap="goto" mark:index='{{index}}'>
+    <view class="content-left">
+      <view class="header">
+        <text class="table-num">{{item.tableNum}} 号台</text>
+        <text class="divider">|</text>
+        <text class="user-name">{{item.userName}}</text>
       </view>
-      <text style="font-size: 28rpx; color: #999;">{{item.startTime}}</text>
+      <text class="time-text">{{item.startTime}}</text>
     </view>
-    <view>
-      <text style="font-size: 38rpx;">押金 : {{item.cashPledge}} </text>
-      <van-icon name="arrow" size="38rpx" style="margin-right: 30rpx;"></van-icon>
+    <view class="content-right">
+      <view class="amount-text">¥{{item.cashPledge}}</view>
+      <van-icon name="arrow" color="#9AA4B6" size="36rpx" />
     </view>
   </view>
 </block>
-<block wx:elif="{{get_item === '已结账单据'}}">
-  <view class="border" wx:for="{{orderForm}}" wx:key="index" wx:if="{{(item.orderName === '店员开台订单' || item.orderName === '自助开台订单' || item.orderName === '自助套餐订单') &&  item.endTime !== '未结账'}}" bind:tap="goto" mark:index='{{index}}'>
-    <view class="front">
-      <view class="tableNum">
-        <text style="font-size: 38rpx;">{{item.tableNum}}号台---</text>
-        <text>{{item.userName}}</text>
-      </view>
-      <text style="font-size: 28rpx; color: #999;">{{item.time}}</text>
-    </view>
-    <view>
-      <text style="font-size: 38rpx;">{{item.tableCost === '未结账' ?'押金 : ' + item.cashPledge : '台费 : ' + item.tableCost}} </text>
-      <van-icon name="arrow" size="38rpx" style="margin-right: 30rpx;"></van-icon>
-    </view>
-  </view>
-</block>
-<block wx:elif="{{get_item === '商品单'}}">
-  <view class="border" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName === '商品单'}}" bind:tap="goto" mark:index='{{index}}'>
-    <view class="front">
-      <view class="tableNum">
-        <text style="font-size: 38rpx;">商品单---{{item.sellPerson}}\n</text>
-        <text>{{item.buyPerson.name}}</text>
-      </view>
-      <text style="font-size: 28rpx; color: #999;">{{item.time}}</text>
-    </view>
-    <view>
-      <text style="font-size: 38rpx;">金额 : {{item.commotidyCost}} </text>
-      <van-icon name="arrow" size="38rpx" style="margin-right: 30rpx;"></van-icon>
-    </view>
-  </view>
-</block>
-<block wx:elif="{{get_item === '会员储值'}}">
-  <view class="border" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName === '储值单'}}" bind:tap="goto" mark:index='{{index}}'>
-    <view class="front">
-      <view class="tableNum">
-        <text style="font-size: 38rpx;">储值单---{{item.userName}}\n</text>
-        <text>{{item.buyPerson.name}}</text>
-      </view>
-      <text style="font-size: 28rpx; color: #999;">{{item.time}}</text>
-    </view>
-    <view>
-      <text style="font-size: 38rpx;">金额 : {{item.amount}} </text>
-      <van-icon name="arrow" size="38rpx" style="margin-right: 30rpx;"></van-icon>
-    </view>
-  </view>
-</block>
-<block wx:elif="{{get_item === '入库单'}}">
-  <view class="border" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName === '进货单'}}" bind:tap="goto" mark:index='{{index}}'>
-    <view class="front">
-      <view class="tableNum">
-        <text style="font-size: 38rpx;">进货单---{{item.status}}\n</text>
-      </view>
-      <text style="font-size: 28rpx; color: #999;">{{item.time}}</text>
-    </view>
-    <view>
-      <text style="font-size: 38rpx;">金额 : {{item.amount}} </text>
-      <van-icon name="arrow" size="38rpx" style="margin-right: 30rpx;"></van-icon>
-    </view>
-  </view>
-</block>
-<block wx:elif="{{get_item === '收取现金'}}">
-  <view class="border" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName === '店员开台订单' &&( item.payMode === 'cash' ||item.payMode === '现金')}}" bind:tap="goto" mark:index='{{index}}'>
-    <view class="front">
-      <view class="tableNum">
-        <text style="font-size: 38rpx;">{{item.tableNum}}号台---</text>
-        <text>{{item.userName}}</text>
-      </view>
-      <text style="font-size: 28rpx; color: #999;">{{item.startTime}}</text>
-    </view>
-    <view>
-      <text style="font-size: 38rpx;">押金 : {{item.cashPledge}} </text>
-      <van-icon name="arrow" size="38rpx" style="margin-right: 30rpx;"></van-icon>
-    </view>
 
-  </view>
-  <view class="border" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName === '商品单' &&( item.payMode === 'cash'  || item.payMode === '现金')}}" bind:tap="goto" mark:index='{{index}}'>
-    <view class="front">
-      <view class="tableNum">
-        <text style="font-size: 38rpx;">商品单---{{item.sellPerson}}\n</text>
-        <text>{{item.buyPerson.name}}</text>
+<block wx:elif="{{get_item === '已结单据'}}">
+  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{(item.orderName  === '店员开台订单' || item.orderName  === '自助开台订单' || item.orderName  === '自助套餐订单') &&  item.endTime  !== '未结账'}}" bind:tap="goto" mark:index='{{index}}'>
+    <view class="content-left">
+      <view class="header">
+        <text class="table-num">{{item.tableNum}} 号台</text>
+        <text class="divider">|</text>
+        <text class="user-name">{{item.userName}}</text>
       </view>
-      <text style="font-size: 28rpx; color: #999;">{{item.time}}</text>
+      <text class="time-text">{{item.time}}</text>
     </view>
-    <view>
-      <text style="font-size: 38rpx;">金额 : {{item.commotidyCost}} </text>
-      <van-icon name="arrow" size="38rpx" style="margin-right: 30rpx;"></van-icon>
+    <view class="content-right">
+      <view class="amount-text">
+        {{item.tableCost === '未结账' ? '¥' + item.cashPledge  : '¥' + item.tableCost}}
+      </view>
+      <van-icon name="arrow" color="#9AA4B6" size="38rpx" />
     </view>
   </view>
 </block>
-<!-- 新增会员 -->
+
+<block wx:elif="{{get_item === '商品销售报表'}}">
+  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName  === '商品单'}}" bind:tap="goto" mark:index='{{index}}'>
+    <view class="content-left">
+      <view class="header">
+        <text class="table-num">商品单</text>
+        <text class="divider">|</text>
+        <text class="user-name">{{item.sellPerson}}</text>
+      </view>
+      <text class="time-text">{{item.buyPerson.name}}</text>
+      <text class="time-text">{{item.time}}</text>
+    </view>
+    <view class="content-right">
+      <view class="amount-text" wx:if="{{item.payState !== 1}}" style="font-size:28rpx; color: red;">{{item.payState === 0 ? '未支付' : item.payState === 2 ? '已取消' : '已退款'}}</view>
+      <view class="amount-text">¥{{item.commotidyCost}}</view>
+      <van-icon name="arrow" color="#9AA4B6" size="36rpx" />
+    </view>
+  </view>
+</block>
+
+<block wx:elif="{{get_item === '会员储值'}}">
+  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName  === '储值单'}}" bind:tap="goto" mark:index='{{index}}'>
+    <view class="content-left">
+      <view class="header">
+        <text class="table-num">储值单</text>
+        <text class="divider">|</text>
+        <text class="user-name">{{item.userName}}</text>
+      </view>
+      <text class="time-text">{{item.buyPerson.name}}</text>
+      <text class="time-text">{{item.time}}</text>
+    </view>
+    <view class="content-right">
+      <view class="amount-text" wx:if="{{item.payMode === '未支付'}}" style="font-size:28rpx; color: red;">未支付</view>
+      <view class="amount-text">¥{{item.amount}}</view>
+      <van-icon name="arrow" color="#9AA4B6" size="36rpx" />
+    </view>
+  </view>
+</block>
+
+<block wx:elif="{{get_item === '商品入库报表'}}">
+  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName  === '进货单'}}" bind:tap="goto" mark:index='{{index}}'>
+    <view class="content-left">
+      <view class="header">
+        <text class="table-num">进货单</text>
+        <text class="divider">|</text>
+        <text class="user-name">{{item.status}}</text>
+      </view>
+      <text class="time-text">{{item.time}}</text>
+    </view>
+    <view class="content-right">
+      <view class="amount-text">¥{{item.amount}}</view>
+      <van-icon name="arrow" color="#9AA4B6" size="36rpx" />
+    </view>
+  </view>
+</block>
+
+<block wx:elif="{{get_item === '收取员工现金记录'}}">
+  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName  === '店员开台订单' &&( item.payMode  === 'cash' ||item.payMode  === '现金')}}" bind:tap="goto" mark:index='{{index}}'>
+    <view class="content-left">
+      <view class="header">
+        <text class="table-num">{{item.tableNum}} 号台</text>
+        <text class="divider">|</text>
+        <text class="user-name">{{item.userName}}</text>
+      </view>
+      <text class="time-text">{{item.startTime}}</text>
+    </view>
+    <view class="content-right">
+      <view class="amount-text">¥{{item.cashPledge}}</view>
+      <van-icon name="arrow" color="#9AA4B6" size="36rpx" />
+    </view>
+  </view>
+
+  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName  === '商品单' &&( item.payMode  === 'cash'  || item.payMode  === '现金')}}" bind:tap="goto" mark:index='{{index}}'>
+    <view class="content-left">
+      <view class="header">
+        <text class="table-num">商品单</text>
+        <text class="divider">|</text>
+        <text class="user-name">{{item.sellPerson}}</text>
+      </view>
+      <text class="time-text">{{item.buyPerson.name}}</text>
+      <text class="time-text">{{item.time}}</text>
+    </view>
+    <view class="content-right">
+      <view class="amount-text">¥{{item.commotidyCost}}</view>
+      <van-icon name="arrow" color="#9AA4B6" size="36rpx" />
+    </view>
+  </view>
+</block>
+
 <block wx:elif="{{get_item === '新增会员'}}">
-  <view class="border1" wx:for="{{newVipData}}" wx:key="index" bind:tap="goto" mark:item='新增会员' mark:index='{{index}}'>
-    <view class='titel'>
-      <image style="height: 150rpx; width: 150rpx; border-radius: 10%; border: solid 1rpx #ccc ; margin: 10rpx;" src="{{newVipDataHeadImage[index]}}" />
-      <view class="titel_1">
-        <text>{{item.name}}</text>
-        <text>积分:{{item.integral}}</text>
-      </view>
+  <view class="vip-card" wx:for="{{newVipData}}" wx:key="index" bind:tap="goto" mark:item='新增会员' mark:index='{{index}}'>
+    <image class="vip-avatar" src="{{newVipDataHeadImage[index]}}" />
+    <view class="vip-info">
+      <text class="vip-name">{{item.name}}</text>
+      <text class="vip-points">积分：{{item.integral}}</text>
+      <text class="vip-points">{{item.startTime}}</text>
     </view>
-    <text style="color: #aaa; margin-right: 30rpx;">{{item.amount}} 元</text>
+    <view class="vip-amount">
+      <view class="amount-text">¥{{item.amount}}</view>
+    </view>
   </view>
 </block>
+
+<view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.disPlay}}" bind:tap="goto" mark:index='{{index}}'>
+  <view class="content-left">
+    <view class="header">
+      <text wx:if="{{item.tableNum}}" class="table-num">{{item.tableNum}} 号台</text>
+      <text wx:if="{{item.tableNum}}" class="divider">|</text>
+      <text class="user-name">{{item.userName}}</text>
+    </view>
+    <text class="time-text">{{item.time}}</text>
+  </view>
+  <view class="content-right">
+    <view class="amount-text">
+      {{item.tableCost ? item.tableCost : item.amount}}
+    </view>
+    <van-icon name="arrow" color="#9AA4B6" size="38rpx" />
+  </view>
+</view>

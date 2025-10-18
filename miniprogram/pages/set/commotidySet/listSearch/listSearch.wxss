@@ -1,35 +1,99 @@
-/* pages/set/commotidySet/listSearch/listSearch.wxss */
-page{
-  background-color: #eee;
+page {
+  background-color: #f5f7fa;
 }
-.titel{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-  height: 50rpx;
-  border-bottom: solid 1rpx #ccc;
-  width: 100%;
-  text-align: left;
-}
-.border{
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-.info{
+
+.container {
   display: flex;
   flex-direction: column;
-  width: 94%;
-  margin-left: 3%;
+  gap: 20rpx;
 }
-.one{
-  width: 33%;
+
+/* 记录卡片样式 */
+.record-card {
+  width: 95%;
+  margin-left: 2.5%;
+  background-color: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.2s ease;
 }
-.listInfo{
-  width: 98%;
-  margin-left: 1%;
-  border:#ccc 1rpx solid;
-  border-top-left-radius: 15rpx;  
-  border-top-right-radius: 15rpx;
+
+.record-card:hover {
+  transform: translateY(-2rpx);
+  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.08);
+}
+
+/* 记录头部 */
+.record-header {
+  background-color: #0094ff;
+  color: #fff;
+  padding: 20rpx 24rpx;
+  display: flex;
+  justify-content: space-between;
+  font-size: 28rpx;
+}
+
+.operator {
+  font-weight: 500;
+}
+
+.time {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 商品表格样式 */
+.goods-table {
+  width: 100%;
+}
+
+.table-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.table-cell {
+  flex: 1;
+  padding: 20rpx 16rpx;
+  font-size: 28rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+/* 表头样式 */
+.header-row {
+  background-color: #f7f9fc;
+}
+
+.header-row .table-cell {
+  color: #666;
+  font-weight: 500;
+  border-bottom: 2rpx solid #e5e9f2;
+}
+
+/* 合计行样式 */
+.total-row {
+  background-color: #f7f9fc;
+}
+
+.total-label {
+  text-align: right;
+  color: #333;
+  font-weight: 500;
+  padding-right: 24rpx;
+}
+
+.total-value {
+  color: #e63946;
+  font-weight: bold;
+}
+
+/* 无更多数据提示 */
+.no-more {
+  margin-top: 80rpx;
+  padding: 40rpx 0;
+  text-align: center;
+  color: #999;
+  font-size: 28rpx;
+  border-top: 2rpx dashed #e0e0e0;
 }

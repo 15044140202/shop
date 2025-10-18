@@ -1,6 +1,8 @@
 <!--pages/set/sysSte/suggest/suggest.wxml-->
+<import src="../../../../template/SetMenu/SetMenu" />
+<template is="titel_video" data="{{titelName:'意见/建议',video_tap:'video_tap'}}" />
 <view class="titel">
-  <text style="color: #999; margin-left: 50rpx;">意见/建议</text>
+<view></view>
   <van-icon style="margin-right: 7%;" name="chat" size="50rpx" info="{{unlook}}" bind:tap="tap" mark:item='history' />
 </view>
 

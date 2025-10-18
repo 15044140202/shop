@@ -1,0 +1,72 @@
+<!--pages/tools/mallManage/mallSet/mallSet.wxml-->
+<view class="container">
+  <!-- 管理员设置 -->
+  <van-cell-group title="人员管理" custom-class="group-title">
+    <van-cell title="管理员" is-link bind:click="navigateToMerberManage" mark:item="manager">
+      <van-icon name="manager" slot="icon" size="18px" color="#0094ff" />
+      <van-tag type="primary" size="medium">{{managerArr.manager.length}}人</van-tag>
+    </van-cell>
+
+    <van-cell title="客服人员" is-link bind:click="navigateToMerberManage" mark:item="customerService">
+      <van-icon name="service" slot="icon" size="18px" color="#0094ff" />
+      <van-tag type="primary" size="medium">{{managerArr.customerService.length}}人</van-tag>
+    </van-cell>
+
+    <van-cell title="物流人员" is-link bind:click="navigateToMerberManage" mark:item="logistics">
+      <van-icon name="logistics" slot="icon" size="18px" color="#0094ff" />
+      <van-tag type="primary" size="medium">{{managerArr.logistics.length}}人</van-tag>
+    </van-cell>
+
+    <van-cell title="售后人员" is-link bind:click="navigateToMerberManage" mark:item="afterSale">
+      <van-icon name="after-sale" slot="icon" size="18px" color="#0094ff" />
+      <van-tag type="primary" size="medium">{{managerArr.afterSale.length}}人</van-tag>
+    </van-cell>
+  </van-cell-group>
+
+  <!-- 运费模板 -->
+  <van-cell-group title="运费模板" custom-class="group-title">
+    <van-cell title="运费模板管理" is-link bind:click="goShippingTemplate">
+      <van-icon name="coupon" slot="icon" size="18px" color="#0094ff" />
+      <view slot="right-icon">
+        <van-tag type="primary" size="medium">{{templateCount}}个</van-tag>
+      </view>
+    </van-cell>
+  </van-cell-group>
+
+  <!-- 添加按钮 -->
+  <view class="footer">
+    <van-button type="primary" block color="#0094ff" bind:click="showAddDialog">
+      添加人员
+    </van-button>
+  </view>
+
+  <!-- 添加人员弹窗 -->
+  <van-popup show="{{showAddPopup}}" position="bottom" round bind:close="closeAddPopup">
+    <view class="popup-header">
+      <text>添加员工</text>
+      <van-icon name="close" size="18px" bind:click="closeAddPopup" />
+    </view>
+    <picker mode="selector" range="{{roleOptions}}" range-key="text" bindchange="onRoleChange" mark:item="status">
+      <van-field label="角色" value="{{selectedRole.text}}" placeholder="请选择角色" disabled input-align="right">
+        <van-icon name="arrow" slot="right-icon" />
+      </van-field>
+    </picker>
+    <picker mode="selector" range="{{shopMember}}" range-key="userName" bindchange="onRoleChange" mark:item="member">
+      <van-field label="员工" value="{{roleInfo.userName}}" placeholder="请选择员工" disabled input-align="right">
+        <van-icon name="arrow" slot="right-icon" />
+      </van-field>
+    </picker>
+    <van-button type="primary" block color="#0094ff" bind:click="confirmAdd" custom-class="confirm-btn">
+      确认添加
+    </van-button>
+  </van-popup>
+
+  <!-- 操作确认对话框 -->
+  <van-dialog id="van-dialog" use-slot show-cancel-button confirm-button-color="#0094ff" />
+</view>
+<van-tabbar active="{{ tabbaractive }}" bind:change="tabbarOnChange">
+  <van-tabbar-item icon="home-o">商品列表</van-tabbar-item>
+  <van-tabbar-item icon="search">销售记录</van-tabbar-item>
+  <van-tabbar-item icon="orders-o">营业统计</van-tabbar-item>
+  <van-tabbar-item icon="setting-o">商城设置</van-tabbar-item>
+</van-tabbar>

@@ -3,26 +3,34 @@ const app = getApp();
 const appData = app.globalData;
 import Dialog from '@vant/weapp/dialog/dialog';
 const imou = require('../../../../../utils/imou')
+const ys7 = require('../../../../../utils/ys7')
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-    sportShowCost:1,//此为调取一次收取商家的价格  修改请修改此处
+    sportShowCost: appData.sportShowCost,
     shop_table: [],
     shop_device: {},
     shop_account: {},
 
     cameraNum: '',
     cameraSecurityCode: '',
-    channel:1,
+    channel: 1,
     cameraName: '',
+    cameraBrand: '海康',
     deviceState: [],
 
+    cameraBrandArr: ['海康', '大华', '其他'],
     imouAppID: "lc4bfc16daf7d8499e",
     imouAppSecret: "45757fec5f584f60992b84489ecf54"
   },
-
+  brandChange(e) {
+    console.log(e)
+    this.setData({
+      cameraBrand: this.data.cameraBrandArr[e.detail.value]
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -48,42 +56,59 @@ Page({
       const amount = parseInt(res.content)
       if (amount > 0) {
         this.topup(amount)
-      }else{
+      } else {
         return;
       }
-      
+
     }
 
   },
-  async topup(amount){
+  async topup(amount) {
     const now = new Date();
-    const orderNum = app.createOrderNum(now,'sportShow');
-    const payRes = await app.pay(amount,'精彩秀充值',appData.my_sub_mchid,orderNum);
+    const orderNum = app.createOrderNum(now, 'sportShow');
+    const payRes = await app.pay(amount, '精彩秀充值', appData.my_sub_mchid, orderNum);
     if (payRes === 'error') {
       return;
     }
     //支付成功  修改用户余额
     const res = await app.callFunction({
-      name:'record_inc',
-      data:{
-        collection:'shop_account',
-        query:{
-          _id:appData.shop_account._id
+      name: 'record_inc',
+      data: {
+        collection: 'shop_account',
+        query: {
+          _id: appData.shop_account._id
         },
-        record:'sportShowAmount',
-        amount:amount
+        record: 'sportShowAmount',
+        amount: amount
       }
     })
     console.log(res)
     if (res.success) {
-      app.showToast('提示','充值成功!')
-      this.setData({
-        ['shop_account.sportShowAmount']:this.data.shop_account.sportShowAmount + amount
+      //添加商家账单
+      const res = await app.callFunction({
+        name: 'addRecord',
+        data: {
+          collection: 'shop_order',
+          data: {
+            orderName: '精彩秀充值',
+            orderNum: orderNum,
+            amount: amount,
+            time: now.getTime(),
+            shopId: appData.shop_account._id,
+            status: appData.status
+          }
+        }
       })
-      appData.shop_account.sportShowPrice = this.data.shop_account.sportShowAmount + amount
+      console.log(res)
+      app.showToast('提示', '充值成功!')
+      appData.shop_account.sportShowAmount += amount
+      this.setData({
+        ['shop_account']: appData.shop_account
+      })
+      console.log(appData.shop_account.sportShowAmount)
       return;
-    }else{
-      app.showModal('提示','充值失败,稍后查看,如已成功扣费未到账请联系客服!')
+    } else {
+      app.showModal('提示', '充值失败,稍后查看,如已成功扣费未到账请联系客服!')
       return;
     }
   },
@@ -94,11 +119,11 @@ Page({
       name: 'upDate',
       data: {
         collection: 'shop_device',
-        query:{
-          shopId:appData.shop_account._id
+        query: {
+          shopId: appData.shop_account._id
         },
-        upData:{
-          [`camera.${e.mark.index}.channel.${e.mark.channelIndex}.bindTable`]:parseInt(e.detail.value) + 1
+        upData: {
+          [`camera.${e.mark.index}.channel.${e.mark.channelIndex}.bindTable`]: parseInt(e.detail.value) + 1
         }
       }
     })
@@ -115,16 +140,31 @@ Page({
     const stateArray = [];
     for (let index = 0; index < cameraArray.length; index++) {
       const element = cameraArray[index];
-      const res = await imou.getDeviceOnline(element.cameraNum, this.data.imouAppID, this.data.imouAppSecret)
-      console.log(res)
-      if (res.result.msg === "操作成功。") { //操作成功
-        if (res.result.data.onLine === "1") { //在线
-          stateArray.push('1');
-        } else { //不在线
+      //此处分支 大华品牌 与海康品牌
+      if (element.cameraBrand === '海康') {
+        const res = await ys7.searchDeviceInfo(app,element.cameraNum)
+        console.log(res)
+        if (res.result.code === "20020") { //操作成功
+          if (res.result.data.status === 1) { //在线
+            stateArray.push('1');
+          } else { //不在线
+            stateArray.push('0');
+          }
+        } else { //操作失败
           stateArray.push('0');
         }
-      } else { //操作失败
-        stateArray.push('0');
+      } else {//大华
+        const res = await imou.getDeviceOnline(element.cameraNum, this.data.imouAppID, this.data.imouAppSecret)
+        console.log(res)
+        if (res.result.msg === "操作成功。") { //操作成功
+          if (res.result.data.onLine === "1") { //在线
+            stateArray.push('1');
+          } else { //不在线
+            stateArray.push('0');
+          }
+        } else { //操作失败
+          stateArray.push('0');
+        }
       }
     }
     return stateArray;
@@ -142,28 +182,28 @@ Page({
     if (res === 'ok') {
       app.showToast('解绑成功!', 'success')
       return {
-        success:true,
-        message:'unBind success',
-        data:res
+        success: true,
+        message: 'unBind success',
+        data: res
       }
     } else {
       app.showToast('解绑失败!', 'error')
       return {
-        success:false,
-        message:'unBind failed',
-        data:res
+        success: false,
+        message: 'unBind failed',
+        data: res
       }
     }
   },
-  cameraInfoToObj(cameraInfoString){
-    const cameraInfo = cameraInfoString.slice(1,-1);
+  cameraInfoToObj(cameraInfoString) {
+    const cameraInfo = cameraInfoString.slice(1, -1);
     const cameraInfoArray = cameraInfo.split(",")
     var newObj = {}
     for (let index = 0; index < cameraInfoArray.length; index++) {
       const element = cameraInfoArray[index];
       newObj = {
         ...newObj,
-        [element.split(":")[0]]:element.split(":")[1]
+        [element.split(":")[0]]: element.split(":")[1]
       }
     }
     return newObj;
@@ -178,7 +218,7 @@ Page({
         const cameraInfoObj = that.cameraInfoToObj(res.result)
         console.log(cameraInfoObj)
         if ('SC' in cameraInfoObj) {//有安全吗
-          
+
         }
         that.setData({
           cameraNum: 'SN' in cameraInfoObj ? cameraInfoObj.SN : '',
@@ -207,7 +247,7 @@ Page({
     }
     const unbindRes = await this.unBindDevice(camera[i].cameraNum); //解绑设备
     if (!unbindRes.success) {
-      app.showToast('解绑失败!','error')
+      app.showToast('解绑失败!', 'error')
       return
     }
     for (let index = 0; index < camera.length; index++) { //删除 被选中删除的设备
@@ -223,16 +263,16 @@ Page({
       name: 'upDate',
       data: {
         collection: 'shop_device',
-        query:{
-          shopId:appData.shop_account._id
+        query: {
+          shopId: appData.shop_account._id
         },
-        upData:{
-          camera:newCamera
+        upData: {
+          camera: newCamera
         }
       }
     })
     if (res.success) {
-      appData.shop_device.camera =  newCamera
+      appData.shop_device.camera = newCamera
       this.setData({
         shop_device: appData.shop_device,
       })
@@ -240,34 +280,34 @@ Page({
         deviceState: await this.refreshDeviceState(this.data.shop_device.camera)
       })
       wx.hideToast({})
-      app.showToast('保存成功!', 'success', )
+      app.showToast('保存成功!', 'success',)
     } else {
       wx.hideToast({})
-      wx.showToast('保存失败!', 'error', )
+      wx.showToast('保存失败!', 'error',)
     }
   },
-  async priceSave(){
+  async priceSave() {
     const res = await app.callFunction({
-      name:'upDate',
-      data:{
-        collection:'shop_device',
-        query:{
-          shopId:appData.shop_account._id
+      name: 'upDate',
+      data: {
+        collection: 'shop_device',
+        query: {
+          shopId: appData.shop_account._id
         },
-        upData:{
-          sportShowPrice:this.data.sportShowPrice
+        upData: {
+          sportShowPrice: this.data.sportShowPrice
         }
       }
     })
     if (res.success) {
       appData.shop_device.sportShowPrice = this.data.sportShowPrice
       this.setData({
-        [`shop_device.sportShowPrice`]:this.data.sportShowPrice
+        [`shop_device.sportShowPrice`]: this.data.sportShowPrice
       })
-      app.showToast('保存成功!','success')
+      app.showToast('保存成功!', 'success')
       return;
-    }else{
-      app.showToast('保存失败!','error')
+    } else {
+      app.showToast('保存失败!', 'error')
       return;
     }
   },
@@ -283,11 +323,13 @@ Page({
       cameraNum: this.data.cameraNum,
       cameraSecurityCode: this.data.cameraSecurityCode,
       cameraName: this.data.cameraName,
+      cameraBrand: this.data.cameraBrand
     }
+
     const channel = []
     for (let index = 0; index < this.data.channel; index++) {
       channel.push({
-        bindTable:0
+        bindTable: 0
       })
     }
     deviceData = {
@@ -299,15 +341,20 @@ Page({
       name: 'record_push',
       data: {
         collection: 'shop_device',
-        query:{
-          shopId:appData.shop_account._id
+        query: {
+          shopId: appData.shop_account._id
         },
-        record:'camera',
-        data:deviceData
+        record: 'camera',
+        data: deviceData
       }
     })
     if (res.success) {
-      await this.bindDevice(this.data.cameraNum, this.data.cameraSecurityCode)
+      if (this.data.cameraBrand === '大华') {
+        await this.bindDevice(this.data.cameraNum, this.data.cameraSecurityCode)
+      } else {
+        app.showModal('提示', '海康设备请联系售后人员为您向后台添加设备.')
+      }
+
       appData.shop_device.camera.push(deviceData)
       this.setData({
         shop_device: appData.shop_device,
@@ -319,10 +366,10 @@ Page({
         deviceState: await this.refreshDeviceState(this.data.shop_device.camera)
       })
       wx.hideToast({})
-      app.showToast('保存成功!', 'success', )
+      app.showToast('保存成功!', 'success',)
     } else {
       wx.hideToast({})
-      wx.showToast('保存失败!', 'error', )
+      wx.showToast('保存失败!', 'error',)
     }
   },
   input(e) {
@@ -335,13 +382,13 @@ Page({
       this.setData({
         cameraSecurityCode: e.detail.value
       })
-    }else if (e.mark.item === 'sportShowPrice') {
+    } else if (e.mark.item === 'sportShowPrice') {
       this.setData({
-        sportShowPrice:parseInt(e.detail.value)
+        sportShowPrice: parseInt(e.detail.value)
       })
-    }else if (e.mark.item === 'channel'){
+    } else if (e.mark.item === 'channel') {
       this.setData({
-        channel:parseInt(e.detail.value)
+        channel: parseInt(e.detail.value)
       })
     }
   },

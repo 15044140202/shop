@@ -1,70 +1,68 @@
 <!--pages/set/shopSet/shopSet.wxml-->
+<view class="page-header">
+  <text class="header-title">店铺信息设置</text>
+  <text class="header-intro">请准确设置店铺信息,该信息会展示在客户端小程序.店铺位置请精确设置,员工打卡会参考此位置.</text>
+</view>
 <view class="border">
   <view class="titel">
-    <view style="height: 60rpx; width: 60%;"></view>
-    <text style="margin-left: 60rpx; font-size:30rpx; color: #999;">店铺信息设置</text>
-    <view style="height: 60rpx;  width: 60%;"></view>
     <!-- 店铺头像 -->
-    <view style="background-color: white; width: 100%;">
-      <view class="sysset" style="height:85rpx">
-        <text style="font-size: 35rpx;">店铺头像</text>
-      </view>
+    <view class="sysset" style="height:120rpx" bind:tap="logoSet">
+      <text style="font-size: 35rpx;">店铺头像</text>
+      <image class="image" src="{{shopLogo}}" />
     </view>
   </view>
   <!-- 店铺名称 -->
-  <view style="background-color: white;">
-    <view class="sysset" style="height:85rpx">
-      <text style="font-size: 35rpx;">店铺名称</text>
-      <input class="inputFont" type="text" value="{{shop_account.shopInfo.shopName}}" style="margin-right: 45rpx;" bindinput="tap" mark:item="shopName" />
-    </view>
+  <view class="sysset">
+    <text>店铺名称</text>
+    <input class="inputFont" type="text" value="{{amendData.shopName}}" bindinput="tap" mark:item="shopName" />
+  </view>
+  <!-- 店铺标签 -->
+  <view class="sysset">
+    <text>店铺标签</text>
+    <picker class="shop_tag" mode="selector" range="{{shop_tag}}" bindchange="tap" mark:item="shop_tag">
+      <block wx:for="{{shop_account.tag}}" wx:key="index">
+        <van-tag style="margin-left: 10rpx;" type="primary">{{item}}</van-tag>
+      </block>
+      <text wx:if="{{!shop_account.tag}}" style="color: #ccc;">未设置店铺标签,点击设置.</text>
+    </picker>
   </view>
   <!-- 上班时间 -->
-  <view style="background-color: white;">
-    <view class="sysset" style="height:85rpx">
-      <text style="font-size: 35rpx;">上班时间</text>
-      <picker style="width: 400rpx; height: 80rpx;" mode="time" value="{{amendData.openTime}}" bindchange="tap" mark:item="openTime">
-        <view class="pickerFont">{{amendData.openTime}}</view>
-      </picker>
-    </view>
+  <view class="sysset">
+    <text>上班时间</text>
+    <picker mode="time" value="{{amendData.openTime}}" bindchange="tap" mark:item="openTime">
+      <view class="pickerFont">{{amendData.openTime || '未设置'}}</view>
+    </picker>
   </view>
   <!-- 下班时间 -->
-  <view style="background-color: white;">
-    <view class="sysset" style="height:85rpx">
-      <text style="font-size: 35rpx;">下班时间</text>
-      <picker style="width: 400rpx; height: 80rpx;" mode="time" value="{{amendData.closeTime}}" bindchange="tap" mark:item="closeTime">
-        <view class="pickerFont">{{amendData.closeTime}}</view>
-      </picker>
-    </view>
+  <view class="sysset">
+    <text>下班时间</text>
+    <picker mode="time" value="{{amendData.closeTime}}" bindchange="tap" mark:item="closeTime">
+      <view class="pickerFont">{{amendData.closeTime ||'未设置'}}</view>
+    </picker>
   </view>
   <!-- 电话号码 -->
-  <view style="background-color: white;">
-    <view class="sysset" style="height:85rpx">
-      <text style="font-size: 35rpx;">电话号码</text>
-      <input class="inputFont" type="text" value="{{shop_account.shopInfo.telephone}}" style="margin-right: 45rpx;" bindinput="tap" mark:item="phone" />
-    </view>
+  <view class="sysset">
+    <text>电话号码</text>
+    <input class="inputFont" type="text" value="{{amendData.telephone}}" bindinput="tap" mark:item="phone" />
   </view>
   <!-- 店铺地址 -->
-  <view style="background-color: white;">
-    <view class="sysset" style="height:85rpx">
-      <text style="font-size: 35rpx;">店铺地址</text>
-      <input class="inputFont" type="text" value="{{shop_account.shopInfo.shopAdd}}" style="margin-right: 45rpx;" bindinput="tap" mark:item="shopAdd" />
+  <view class="sysset">
+    <text>店铺地址</text>
+    <view class="localtion">
+      <van-icon bind:tap="getLocaltion" name="location" size="45rpx"></van-icon>
+      <input class="inputFont" type="text" value="{{amendData.shopAdd}}" bindinput="tap" mark:item="shopAdd" />
     </view>
   </view>
   <!-- 开业日期 -->
-  <view style="background-color: white;">
-    <view class="sysset" style="height:85rpx">
-      <text style="font-size: 35rpx;">开业时间</text>
-      <picker style="width: 400rpx; height: 80rpx;" mode="date" value="{{amendData.foundTime}}" bindchange="tap" mark:item="foundTime">
-        <view class="pickerFont">{{amendData.foundTime}}</view>
-      </picker>
-    </view>
+  <view class="sysset">
+    <text>开业时间</text>
+    <picker class="piceker" mode="date" value="{{amendData.foundTime}}" bindchange="tap" mark:item="foundTime">
+      <view class="pickerFont">{{amendData.foundTime}}</view>
+    </picker>
   </view>
   <!-- 店铺简介 -->
-  <view style="padding-left: 35rpx; margin-top: 35rpx; height: 60rpx;">店铺简介</view>
-  <textarea value="{{shop_account.shopInfo.intro}}" bindinput="tap" mark:item="intro" style="background-color: #fff; width: 90%; margin-left: 5%; border: #ddd solid 1rpx; border-radius: 20rpx;" />
-  <view class="logo" bind:tap="logoSet">
-    <image class="image" style="height: 200rpx; width: 200rpx;" src="{{shopLogo}}" />
-  </view>
+  <view class="intro-title">店铺简介</view>
+  <textarea class="textarea" value="{{amendData.intro}}" bindinput="tap" mark:item="intro" />
 </view>
 <button type="primary" style="margin:80rpx" bind:tap="tap" mark:item="save">保存</button>
 <view style="height: 150rpx;"></view>

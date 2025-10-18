@@ -1,0 +1,108 @@
+<!--pages/set/commotidySet/commotidyNameSet/addNewCommotidy/addNewCommotidy.wxml-->
+<view class="container">
+  <view class="form-card">
+    <view class="header-section">
+      <van-image width="150rpx" height="150rpx" show-menu-by-longpress src="{{newCommotidy.headPic}}" bind:tap="Image" mark:name='{{newCommotidy.commotydiName}}' class="product-image" />
+      <view class="basic-info">
+        <view class="form-item">
+          <text class="label">名称</text>
+          <input class="input" type="text" value="{{newCommotidy.commotydiName === '' ? '' : newCommotidy.commotydiName}}" placeholder='请输入商品名称' placeholder-class="placeholder" bindblur="input" mark:name='commotydiName' />
+        </view>
+        <view class="form-item">
+          <text class="label">品牌</text>
+          <input class="input" type="text" value="{{newCommotidy.brand === '' ? '' : newCommotidy.brand}}" placeholder='请输入商品品牌' placeholder-class="placeholder" bindblur="input" mark:name='brand' />
+        </view>
+        <view class="form-item">
+          <text class="label">单位</text>
+          <picker mode="selector" value="{{unitsSelect}}" range="{{units}}" bindchange='onchange' mark:name='unit' class="picker">
+            <text class="{{newCommotidy.unit === '' ? 'placeholder' : 'picker-text'}}">{{newCommotidy.unit === '' ? '请选择单位' : newCommotidy.unit}}</text>
+            <van-icon name="arrow" size="14px" color="#999" />
+          </picker>
+        </view>
+        <view class="form-item">
+          <text class="label">分类</text>
+          <picker mode="selector" value="{{classSelect}}" range="{{class}}" bindchange='onchange' mark:name='sort' class="picker">
+            <text class="{{newCommotidy.sort === '' ? 'placeholder' : 'picker-text'}}">{{newCommotidy.sort === '' ? '请选择分类' : newCommotidy.sort}}</text>
+            <van-icon name="arrow" size="14px" color="#999" />
+          </picker>
+        </view>
+        <view class="form-item">
+          <text class="label">标签</text>
+          <picker mode="selector" value="{{tagseleced}}" range="{{tags}}" range-key="text" bindchange='onchange' mark:name='tag' class="picker">
+            <text class="{{!newCommotidy.tag.length ? 'placeholder' : 'picker-text'}}">{{!newCommotidy.tag.length ? '请选择标签' : newCommotidy.tag[0].text}}</text>
+            <van-icon name="arrow" size="14px" color="#999" />
+          </picker>
+        </view>
+        <!-- 运费模版选择 -->
+        <view class="form-item">
+          <text class="label">运费模版</text>
+          <picker mode="selector" value="{{templateIndex}}" range="{{shoppingTemplate}}" range-key="name" bindchange='onchange' mark:name='template' class="picker">
+            <text class="{{!newCommotidy.shoppingTemplate ? 'placeholder' : 'picker-text'}}">{{!newCommotidy.shoppingTemplate ? '请选择运费模版' : newCommotidy.shoppingTemplate.name}}</text>
+            <van-icon name="arrow" size="14px" color="#999" />
+          </picker>
+        </view>
+      </view>
+    </view>
+    <block wx:for="{{newCommotidy.color}}" wx:key="index">
+      <view class="form-item">
+        <text class="label">颜色类别</text>
+        <input class="input" style="border-bottom: dashed 1rpx #999; width: 40%;" type="text" value="{{item.color}}" placeholder='请输入颜色名' placeholder-class="placeholder" bindblur="input" mark:name='color' mark:index="{{index}}" />
+        <view class="price-input">
+          <van-icon name="plus" size="48rpx" color="#0094ff" catch:tap="addColor" style="margin-right:35rpx;"></van-icon>
+          <van-icon name="delete" color="red" size="48rpx" catch:tap="deleteColor" mark:index="{{index}}"></van-icon>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="label">进货价格</text>
+        <view class="price-input">
+          <text class="unit">¥</text>
+          <input class="input" type="number" value="{{newCommotidy.color[index].inPrice === 0 ? '' : newCommotidy.color[index].inPrice / 100}}" placeholder='0.00' placeholder-class="placeholder" bindblur="input" mark:name='inPrice' mark:index="{{index}}" />
+        </view>
+      </view>
+      <view class="form-item" wx:if="{{mallType !== 'shop'}}">
+        <text class="label">代理商价格</text>
+        <view class="price-input">
+          <text class="unit">¥</text>
+          <input class="input" type="number" value="{{newCommotidy.color[index].merchantPrice === 0 ? '' : newCommotidy.color[index].merchantPrice / 100}}" placeholder='0.00' placeholder-class="placeholder" bindblur="input" mark:name='merchantPrice' mark:index="{{index}}" />
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="label">原售价</text>
+        <view class="price-input">
+          <text class="unit">¥</text>
+          <input class="input" type="number" value="{{newCommotidy.color[index].originalPrice === 0 ? '': newCommotidy.color[index].originalPrice / 100}}" placeholder='0.00' placeholder-class="placeholder" bindblur="input" mark:name='originalPrice' mark:index="{{index}}" />
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="label">零售价格</text>
+        <view class="price-input">
+          <text class="unit">¥</text>
+          <input class="input" type="number" value="{{newCommotidy.color[index].outPrice === 0 ? '': newCommotidy.color[index].outPrice / 100}}" placeholder='0.00' placeholder-class="placeholder" bindblur="input" mark:name='outPrice' mark:index="{{index}}" />
+        </view>
+      </view>
+    </block>
+
+    <view class="form-item">
+      <view class="label-group">
+        <text class="label">最低数量</text>
+        <text class="hint">(提示补货的数量)</text>
+      </view>
+      <input class="input" type="number" value="{{newCommotidy.lowSum === 0 ? '' : newCommotidy.lowSum}}" placeholder='请输入最低数量' placeholder-class="placeholder" bindblur="input" mark:name='lowSum' />
+    </view>
+  </view>
+
+  <view class="image-uploader">
+    <text class="section-title">商品图片</text>
+    <view class="image-list">
+      <block wx:for="{{newCommotidy.picArr}}" wx:key="index">
+        <image class="uploaded-image" src="{{item}}" mode="aspectFit" catch:tap="lookImage" bind:longpress="deleteImage" mark:index="{{index}}" />
+      </block>
+      <view class="add-image-btn" bind:tap="addImage" mark:item="addImage" mark:name='{{newCommotidy.name}}'>
+        <van-icon name="plus" size="40rpx" color="#0094ff" />
+        <text class="add-text">添加图片</text>
+      </view>
+    </view>
+  </view>
+
+  <button class="save-btn" type="primary" bind:tap="loadDownAllImage">下载所有图片</button>
+</view>

@@ -127,9 +127,10 @@ Page({
       data: {
         lightName: appData.shop_device.lightCtrl,
         lightData: `{"A${this.data.optNum.toString().padStart(2, '0')}":1${this.data.checked === true ? 1 : 0}0000,"res":"123"}`,
-        tableNum:this.data.optNum,
+        tableNum:parseInt(this.data.optNum) ,
         shopId:appData.shop_account._id,
-        ONOFF:this.data.checked === true ? 1 : 0
+        ONOFF:this.data.checked === true ? 1 : 0,
+        operater:app.getMemberName() + '(后台操作)'
       }
     })
     console.log(res)

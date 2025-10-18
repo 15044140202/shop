@@ -1,0 +1,53 @@
+<!--pages/set/groupBuying/groupBuying.wxml-->
+<!-- 现有团购列表 -->
+<!--pages/set/setmeal/setmeal.wxml-->
+<import src="../../../template/SetMenu/SetMenu" />
+<template is="titel_video" data="{{titelName:'团购管理',video_tap:'video_tap'}}" />
+<view class="setmeal" wx:for="{{shop_group_buying}}" wx:key="index">
+  <view class="setmealName">
+    <image style="height: 80rpx; width: 80rpx;" src="{{item.groupBuyType==='mtCoupon'?'../../../icon/美团.png':item.groupBuyType==='dyCoupon'?'../../../icon/抖音.png':'../../../icon/快手.png'}}" mode="scaleToFill" />
+    <view style="height: 100%; width: 50%; text-align: center;">{{item.name?item.name:'未设置套餐名称'}}</view>
+    <van-icon style="width:30rpx; height: 100%;" color="red" name='delete-o' size="45rpx" bind:tap="delete" mark:index="{{index}}"></van-icon>
+  </view>
+  <view class="priceSet">
+    <view>绑定的计费规则 : {{item.bindChargingName}}</view>
+  </view>
+  <view class="priceSet">
+    <view>套餐价格 : {{item.price}}元/{{item.timeLong}}小时</view>
+  </view>
+</view>
+
+<!-- 添加按钮 -->
+<button class="add_button" type="primary" bind:tap="tap" mark:item="addMt">添加美团团购</button>
+<button class="add_button" type="primary" bind:tap="tap" mark:item="addDy">添加抖音团购</button>
+<button class="add_button" type="primary" bind:tap="tap" mark:item="addKs">添加快手团购</button>
+<view style="width: 100%; height: 80rpx;"></view>
+<!-- 添加界面弹窗 -->
+<van-dialog use-slot show="{{ addWindowShow }}" show-cancel-button bind:close="onClose" bind:confirm="onConfirm" confirmButtonText="添加">
+  <view class="addGroupBuyingBoard">
+    <view class="logoBoard">
+      <image src="{{addType==='addMt'?'../../../icon/美团.png':addType==='addDy'?'../../../icon/抖音.png':'../../../icon/快手.png'}}" mode="aspectFit" />
+      <text>{{addType==='addMt'?'美团团购套餐设置':addType==='addDy'?'抖音团购套餐设置':'快手团购套餐设置'}}</text>
+    </view>
+    <view class="groupBuyingInput">
+      <text>套餐名称 : </text>
+      <input type="text" value="{{addName?addName : ''}}" placeholder="请输入名称" bindinput="input" mark:item="name" mark:index="{{groupSelectIndex}}" />
+    </view>
+    <view class="groupBuyingInput">
+      <text>套餐价格 : </text>
+      <input type="digit" value="{{addPrice?addPrice : ''}}" placeholder="请输入价格" bindinput="input" mark:item="price" mark:index="{{groupSelectIndex}}" />
+      <text>元</text>
+    </view>
+    <view class="groupBuyingInput">
+      <text>团购时长 : </text>
+      <input type="number" value="{{addTimeLong?addTimeLong:''}}" placeholder="请输入时长" bindinput="input" mark:item="timeLong" mark:index="{{groupSelectIndex}}" />
+      <text>小时</text>
+    </view>
+    <view class="groupBuyingInput">
+      <text>绑定的计费规则 : </text>
+      <picker mode="selector" header-text="选择绑定计费规则" range="{{shop_charging}}" range-key="name" value="{{addchangingIndex}}" bindchange="onchange" mark:index="{{groupSelectIndex}}">
+        <text style="color: #999;">{{addchangingIndex > -1 ? shop_charging[addchangingIndex].name : '请选择计费规则'}}</text>
+      </picker>
+    </view>
+  </view>
+</van-dialog>

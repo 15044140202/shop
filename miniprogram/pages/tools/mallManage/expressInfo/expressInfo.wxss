@@ -1,0 +1,130 @@
+/* pages/tools/mallManage/expressInfo/expressInfo.wxss */
+/* 页面基础样式 */
+.container {
+  padding: 20rpx;
+  background-color: #f7f7f7;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 头部样式 */
+.header {
+  text-align: center;
+  padding: 30rpx 0;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 快递信息样式 */
+.express-list {
+  background-color: #fff;
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.express-info {
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.express-company {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.express-num, .express-time, .express-status, .express-latest {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 6rpx;
+}
+
+/* 查询按钮样式 */
+.query-btn {
+  margin: 20rpx 0;
+  background-color: #07c160;
+  color: white;
+  font-size: 28rpx;
+  border-radius: 8rpx;
+}
+
+/* 商品列表样式 */
+.goods-list {
+  margin-top: 20rpx;
+}
+
+.goods-title {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 15rpx;
+}
+
+.goods-item {
+  display: flex;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.goods-image {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+}
+
+.goods-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.goods-name {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.goods-spec {
+  font-size: 24rpx;
+  color: #999;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 备注样式 */
+.remarks {
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #eee;
+}
+
+.remarks-title {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.remarks-content {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+}
+.button{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}

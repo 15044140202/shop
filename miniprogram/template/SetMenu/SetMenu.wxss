@@ -1,5 +1,56 @@
 /* template/SetMenu.wxss */
-
+/* 设置界面的  模版 */
+/* 主容器 */
+.template-header {
+  padding: 32rpx 40rpx; /* 优化间距比例 */
+  background: #FFFFFF;
+}
+ 
+/* 内容布局 */
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 96rpx; /* 黄金比例高度 */
+}
+ 
+/* 标题文本 */
+.title-text {
+  font-size: 36rpx;
+  color: #333333;
+  font-weight: 500;
+  letter-spacing: 1rpx;
+}
+ 
+/* 视频交互模块 */
+.video-trigger {
+  display: flex;
+  align-items: center;
+  gap: 16rpx; /* 元素间距 */
+}
+ 
+.video-icon {
+  transition: transform 0.2s ease;
+}
+ 
+.video-label {
+  font-size: 26rpx;
+  color: #666666;
+  margin-top: 4rpx; /* 微调垂直对齐 */
+}
+ 
+/* 分隔线 */
+.divider-line {
+  height: 2rpx;
+  background: rgba(0,151,255,0.12);
+  margin-top: 24rpx;
+}
+ 
+/* 交互反馈 */
+.hover-opacity {
+  opacity: 0.8;
+}
+/*  */
 .sysset{
   width: 100%;
   height: 80rpx;
@@ -7,8 +58,12 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-left: 25rpx;
-  border-bottom: solid #bfbfbf 2rpx;
+  width: 95%;
+  margin-left: 2.5%;
+}
+.sysset_board{
+  background-color: #fff;
+  border-bottom: solid #ccc 3rpx;
 }
 .titel{
   display: flex;

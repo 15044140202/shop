@@ -1,0 +1,13 @@
+<!--components/video-uploader/video-uploader.wxml-->
+<wxs module="tool" src="../../utils/tool.wxs"></wxs>
+<view class="video-uploader">
+  <view wx:if="{{!video}}" class="upload-btn" bindtap="chooseVideo">
+    <van-icon class="add-icon" name="plus" size="80rpx" color="#ccc" ></van-icon>
+    <text class="add-text">添加视频</text>
+  </view>
+
+  <view wx:else class="video-preview">
+    <video src="{{tool.loadcos(video)}}" controls class="video"></video>
+    <van-icon class="delete-btn" name="cross" color="red"  bindtap="deleteVideo" ></van-icon>
+  </view>
+</view>

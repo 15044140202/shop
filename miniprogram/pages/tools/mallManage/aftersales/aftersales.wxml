@@ -1,0 +1,100 @@
+<view class="container">
+  <!-- 商品信息 -->
+  <view class="goods-card">
+    <view class="goods-header">
+      <text>订单号: {{orderInfo.orderNum}}</text>
+      <text class="order-time">下单时间 : {{orderInfo.placeTimeStr}}</text>
+    </view>
+    <view class="goods-item" wx:for="{{orderInfo.goodsList}}" wx:key="index">
+      <image class="goods-image" src="{{item.goodsHeadPic}}" mode="aspectFill"></image>
+      <view class="goods-info">
+        <view class="goods-name">{{item.goodsName}}</view>
+        <view class="goods-spec">
+          <text>{{item.goodsColor}}</text>
+          <text>×{{item.goodsQuantity}}</text>
+        </view>
+        <view class="goods-price">¥{{item.goodsPrice /100}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="custom-cell">
+    <text class="cell-title">顾客实付 :</text>
+    <view class="cell-value">
+      <text class="refund-symbol">¥ {{orderInfo.orderAmount / 100}} 元 </text>
+    </view>
+  </view>
+  <!-- 售后类型选择 -->
+  <view class="custom-cell">
+    <text class="cell-title">售后类型</text>
+    <view class="cell-value">
+      <text>{{afterSaleArr[afterSaleIndex].afterSaleType === 1 ? '退货退款' : '换货'}}</text>
+      <image src="/images/arrow-right.png" class="cell-arrow"></image>
+    </view>
+  </view>
+
+  <!-- 售后原因选择 -->
+  <view class="custom-cell">
+    <text class="cell-title">售后原因</text>
+    <view class="cell-value">
+      <text>{{afterSaleArr[afterSaleIndex].afterSaleReason === 1?'不喜欢/不想要了': afterSaleArr[afterSaleIndex].afterSaleReason === 2?'商品质量问题':afterSaleArr[afterSaleIndex].afterSaleReason === 3?'商品与描述不符':afterSaleArr[afterSaleIndex].afterSaleReason === 4?'收到商品破损':afterSaleArr[afterSaleIndex].afterSaleReason === 5?'商品少发/漏发':'不喜欢/不想要了'}}</text>
+      <image src="/images/arrow-right.png" class="cell-arrow"></image>
+    </view>
+  </view>
+
+  <!-- 退款金额 (仅退款时显示) -->
+  <view class="custom-cell">
+    <text class="cell-title">退款金额</text>
+    <view class="cell-value">
+      <text class="refund-symbol">¥ {{afterSaleArr[afterSaleIndex].refundAmount / 100}} 元 </text>
+    </view>
+  </view>
+ <!-- 顾客问题描述 -->
+ <van-cell-group>
+    <view class="problem-description">
+      <text class="description-title">顾客问题描述</text>
+      <textarea style="height: 100rpx;" class="description-textarea" value="{{afterSaleArr[afterSaleIndex].problemDescription}}" ></textarea>
+    </view>
+  </van-cell-group>
+    <!-- 上传凭证 -->
+    <van-cell-group>
+    <view class="upload-title">顾客上的传凭证</view>
+    <view class="image-list">
+      <block wx:for="{{afterSaleArr[afterSaleIndex].images}}" wx:key="index">
+        <image class="uploaded-image" src="{{item}}" mode="aspectFit" catch:tap="lookImage" mark:index="{{index}}" />
+      </block>
+    </view>
+  </van-cell-group>
+  <!-- 反馈问题描述 -->
+  <van-cell-group wx:if="{{afterSaleArr.length -1 === afterSaleIndex && (orderInfo.applyReturnStatus !== 2 && orderInfo.applyReturnStatus !== 5)}}">
+    <view class="problem-description">
+      <text class="description-title">客服反馈信息</text>
+      <textarea placeholder="请详细描述您的问题(选填)" class="description-textarea" value="{{problemDescription}}" bindinput="onProblemDescriptionChange"></textarea>
+    </view>
+  </van-cell-group>
+
+  <!-- 上传凭证 -->
+  <van-cell-group wx:if="{{afterSaleArr.length -1 === afterSaleIndex && (orderInfo.applyReturnStatus !== 2 && orderInfo.applyReturnStatus !== 5)}}">
+    <view class="upload-title">上传凭证(选填)</view>
+    <view class="image-list">
+      <block wx:for="{{fileList}}" wx:key="index">
+        <image class="uploaded-image" src="{{item}}" mode="aspectFit" catch:tap="lookImage" bind:longpress="deleteImage" mark:index="{{index}}" />
+      </block>
+      <view class="add-image-btn" bind:tap="addImage">
+        <van-icon name="plus" size="40rpx" color="#0094ff" />
+        <text class="add-text">添加图片</text>
+      </view>
+    </view>
+    <view class="upload-tips">最多上传9张图片，单张不超过5M</view>
+  </van-cell-group>
+
+  <!-- 提交按钮 -->
+  <view class="submit-btn">
+    <van-button type="default" block round bind:click="pageUp">上一页</van-button>
+    <van-button type="default" block round bind:click="pageDown">下一页</van-button>
+    <van-button type="primary" block round bind:click="agreeApply" wx:if="{{afterSaleArr.length -1 === afterSaleIndex && (orderInfo.applyReturnStatus !== 2 && orderInfo.applyReturnStatus !== 5)}}">同意申请</van-button>
+    <van-button type="danger" block round bind:click="refuseApply" wx:if="{{afterSaleArr.length -1 === afterSaleIndex && (orderInfo.applyReturnStatus !== 2 && orderInfo.applyReturnStatus !== 5)}}">拒绝申请</van-button>
+    <van-button type="danger" block round bind:click="confirmRefund" wx:if="{{afterSaleArr.length -1 === afterSaleIndex && (orderInfo.applyReturnStatus === 2 || orderInfo.applyReturnStatus === 5)}}">收货退款</van-button>
+  </view>
+
+  <van-toast id="van-toast" />
+</view>

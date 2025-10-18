@@ -1,0 +1,196 @@
+<!--pages/tools/mall/mall.wxml-->
+<van-dialog id="van-dialog" />
+<!-- 商品列表 -->
+<view wx:if="{{!tabbaractive}}" class="container">
+  <!-- 页面头部（集成搜索框） --> 
+  <view class="page-header" style="height: 8vh;">
+    <view class="header-content">
+      <text class="header-title">{{mallType === 'shop' ? '店铺商城管理--商品列表' : '官方商城管理--商品列表'}}
+      </text>
+      <text class="header-intro">{{mallType === 'shop' ? '本店商城商品管理,上架商品后顾客可直接在客户端上下单购买.' : '官方商城,正品保障,源头工厂直供!'}}</text>
+    </view>
+  </view>
+  <!-- 商品搜索 -->
+  <view class="custom-search">
+    <input class="search-input" value="{{searchText}}" placeholder="请输入商品名称搜索" bindinput="searchInput" mark:item="serachGoods" />
+    <button class="search-button" bind:tap="filterCommotydiList" mark:info="{{searchValue}}">
+      <van-icon name="search" size="40rpx" color="#fff" />
+    </button>
+  </view>
+  <!-- 添加商品按钮 -->
+  <view class="addCommotydiButton" slot="action" bind:longpress="drowPriceIrder" bind:tap="addCommotidy" mark:index="{{-1}}">
+    添加商品
+  </view>
+  <!-- 商品tabs选项卡 -->
+  <view>
+    <van-tabs bind:change="onChange" active="{{ goodsactive }}" color="#0094ff" title-active-color="#0094ff" swipeable mark:item="goods">
+      <van-tab wx:for="{{class}}" wx:key="index" title="{{item}}">
+        <scroll-view scroll-y class="goods-list">
+          <view class="goods-item" wx:for="{{disPlayCommotydiList}}" wx:key="index_1" wx:for-item="item_1" wx:for-index="index_1" bind:longpress="delete" bind:tap="addCommotidy" mark:index="{{index_1}}" wx:if="{{item_1.sort === item || item === '全部'}}">
+            <view class='goods-info'>
+              <image class="goods-image" src="{{item_1.headPic === '' ? 'cloud://cloud-4g9re7jfd5333736.636c-cloud-4g9re7jfd5333736-1325756030/image/没有图片.png' : item_1.headPic}}" />
+              <view class="goods-details">
+                <view class="goods-name">
+                  <text class="name-text">{{item_1.commotydiName}}</text>
+                  <van-tag color="{{item_1.source?'#0094ff':'#999'}}" size="small">{{item_1.source?'官方':'自购'}}</van-tag>
+                </view>
+                <view class="goods-meta" wx:for="{{item_1.color}}" wx:for-item="color" wx:for-index="color_index" wx:key="color_index">
+                  <text class="meta-text">库存:({{color.color}}){{color.sum}}{{item_1.unit}}</text>
+                  <text wx:if="{{mallType !== 'shop'}}" class="meta-text price">渠道价: ¥{{color.merchantPrice / 100}}</text>
+                  <text wx:else class="meta-text price">售价: ¥{{color.outPrice / 100}}</text>
+                </view>
+              </view>
+            </view>
+            <view class="goods-actions">
+              <button class="action-btn {{item_1.sellState?'off':'on'}}" catch:tap="onSell" mark:index="{{index_1}}">
+                {{item_1.sellState?'下架':'上架'}}
+              </button>
+              <button class="action-btn restock" catch:tap="replenish" mark:index="{{index_1}}">补货</button>
+            </view>
+          </view>
+        </scroll-view>
+      </van-tab>
+    </van-tabs>
+  </view>
+  <van-divider color="{{themeColor}}" borderColor="#0094ff" textColor="#0094ff" content-position="center" dashed="{{true}}" size="24px">{{commotydiList.length < goodsTotal ? '上划加载更多...' : '无更多数据'}}</van-divider>
+  <view style="height: 200rpx; width: 100%;"></view>
+  <van-dialog id="van-dialog" />
+</view>
+
+<!-- 销售记录 -->
+<view wx:if="{{tabbaractive === 1}}" class="container">
+  <!-- 顾客取货按钮 --> 
+  <view class="addCommotydiButton" slot="action"  bind:tap="deliveryGoods" >
+    顾客取货
+  </view>
+  <!-- 页面头部（集成搜索框） -->
+  <view class="page-header" style="height: 8vh;">
+    <view class="header-content">
+      <text class="header-title">{{mallType === 'shop' ? '店铺商城管理--销售记录' : '官方商城管理--销售记录'}}
+      </text>
+      <text class="header-intro">{{mallType === 'shop' ? '本店商城商品管理,上架商品后顾客可直接在客户端上下单购买.' : '官方商城,正品保障,源头工厂直供!'}}</text>
+    </view>
+  </view>
+  <!-- 商品搜索 -->
+  <view class="custom-search">
+    <input class="search-input" value="{{searchOrderText}}" placeholder="请输入订单号/电话后/姓名/地址搜索" bindinput="searchInput" mark:item="searchOrder" />
+    <button class="search-button" bind:tap="searchOrder" mark:info="{{searchValue}}">
+      <van-icon name="search" size="40rpx" color="#fff" />
+    </button>
+  </view>
+  <!-- 商品tabs选项卡 -->
+  <view style="width: 100vw;">
+    <van-tabs active="{{ recordActive }}" color="#0094ff" title-active-color="#0094ff" swipeable bind:change="onChange">
+      <van-tab wx:for="{{tabs}}" wx:key="index" title="{{item.title}}" mark:index="{{index}}">
+        <scroll-view scroll-y class="goods-list">
+          <view class="order-list">
+            <view wx:for="{{filteredOrderList}}" wx:key="orderNum" class="order-item" data-order="{{item}}" bindtap="goToOrderDetail">
+              <!-- 订单头部 -->
+              <view class="order-header">
+                <text selectable="1">单号:{{item.orderNum}}</text>
+                <text>时间:{{item.placeTimeStr}}</text>
+              </view>
+              <!-- 商品列表 -->
+              <view class="record-goods-list">
+                <view wx:for="{{item.goodsList}}" wx:key="goodsId" wx:for-item="colorItem" wx:for-index="colorIndex" class="record-goods-item">
+                  <image class="record-goods-image" src="{{colorItem.goodsHeadPic}}" mode="aspectFill" />
+                  <view class="record-goods-info">
+                    <text class="record-goods-name">{{colorItem.goodsName}}</text>
+                    <text class="record-goods-spec">颜色：{{colorItem.goodsColor}}</text>
+                    <text class="goods-price">¥{{colorItem.goodsPrice / 100}}元</text>
+                    <text class="goods-quantity"> x {{colorItem.goodsQuantity}}</text>
+                  </view>
+                </view>
+                <view class="record-goods-info" wx:if="{{item.expressFee}}">
+                  <text class="record-goods-name">快递费</text>
+                  <text class="goods-price">¥{{item.expressFee / 100}}元</text>
+                </view>
+                <!-- 总价 和打客户电话 -->
+                <view class="total-amount">
+                  <view catch:tap="callPhone" mark:number="{{item.shoppingAdd.phone}}">
+                    <text>{{item.shoppingAdd.name}}:{{item.shoppingAdd.phone}}</text>
+                    <van-icon name="phone-o" size="38rpx"></van-icon>
+                  </view>
+                  <text>共{{item.goodsList.length}}件商品 合计：¥ {{item.orderAmount /100}} 元</text>
+                </view>
+                <!-- 顾客地址 -->
+                <view class="total-amount" bind:tap="copyAdd" mark:shoppingAdd="{{item.shoppingAdd}}">
+                  <text user-select>收货地址 : {{item.shoppingAdd.address}}</text>
+                </view>
+                <!-- 顾客备注信息 -->
+                <view class="total-amount" bind:tap="copyAdd" mark:shoppingAdd="{{item.shoppingAdd}}">
+                  <text user-select style="color: #0094ff;">备注信息 : {{item.shoppingAdd.detail}}</text>
+                </view>
+              </view>
+              <!-- 订单底部 按钮蓝 -->
+              <view class="order-footer">
+                <view class="action-buttons">
+                  <!-- 待发货订单栏 -->
+                  <block wx:if="{{item.distributionMode && item.orderState === 1}}">
+                    <van-button type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="deliveryGoods">顾客到店取货</van-button>
+                  </block>
+                  <block wx:if="{{item.orderState === 1 || item.orderState === 20}}">
+                    <van-button plain type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="transit">发货</van-button>
+                  </block>
+                  <!-- 未支付订单栏 -->
+                  <block wx:if="{{item.orderState === 0}}">
+                    <van-button type="primary" size="small" color="{{themeColor}}" catchtap="cancelOrder" mark:index="{{index}}">取消订单</van-button>
+                    <van-button type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="amendExpressFee">修改运费</van-button>
+                    <van-button type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="amendOrderAmount">修改价格</van-button>
+                  </block>
+                  <!-- 待收货订单栏-->
+                  <block wx:if="{{item.orderState === 2}}">
+                    <van-button plain type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="queryExpress">修改快递单号</van-button>
+                    <van-button plain type="primary" size="small" color="{{themeColor}}" bindtap="queryExpress" mark:index="{{index}}">查询快递</van-button>
+                  </block>
+                  <block wx:if="{{item.orderState === 20}}">
+                    <van-button plain type="primary" size="small" color="#999">已部分发货</van-button>
+                  </block>
+                  <!-- 售后中状态显示查看进度按钮 -->
+                  <block wx:if="{{item.orderState === 4 && (item.applyReturnStatus === 1 || item.applyReturnStatus === 4)}}">
+                    <van-button type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="lookAfterSale">查看顾客申请售后</van-button>
+                  </block>
+                  <block wx:if="{{item.orderState === 4}}">
+                    <van-button plain type="primary" size="small" color="{{themeColor}}" catch:tap="queryExpress" mark:index="{{index}}">查看退货进度</van-button>
+                  </block>
+                  <block wx:if="{{item.orderState === 4 && item.applyReturnStatus === 2}}">
+                    <van-button type="primary" size="small" mark:index="{{index}}"catchtap="confirmRfund">确认收货(退款)</van-button>
+                  </block>
+                  <block wx:if="{{item.orderState === 4 &&  item.applyReturnStatus=== 5}}">
+                    <van-button type="primary" size="small" mark:index="{{index}}"catchtap="confirmReturnGoods">确认收货(返换货)</van-button>
+                  </block>
+                  <block wx:if="{{item.orderState === 5}}">
+                    <van-button disabled plain type="primary" size="small" color="{{themeColor}}">订单已取消</van-button>
+                  </block>
+                  <block wx:if="{{item.refund}}">
+                    <van-button plain type="primary" size="small" color="{{themeColor}}" data-order="{{item}}" catchtap="checkRefund">已退款(点击检测)</van-button>
+                  </block>
+                  <!-- 已完成的订单 -->
+                  <!-- applyReturnStatus: 0,//售后状态, 0未申 1已申请退货 2已同意申请退货 3已拒绝退货 4已申请换货 5已同意换货 6已拒绝换货 -->
+                  <block wx:if="{{item.orderState === 3 && (item.applyReturnStatus === 1 || item.applyReturnStatus === 4)}}">
+                    <van-button type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="lookAfterSale">查看顾客申请售后</van-button>
+                  </block>
+                  <block wx:if="{{item.applyReturnStatus === 3 || item.applyReturnStatus === 6}}">
+                    <van-button type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="lookAfterSale">已拒绝售后</van-button>
+                  </block>
+                  <block wx:if="{{item.orderState === 3}}">
+                    <van-button plain type="primary" size="small" color="{{themeColor}}" bindtap="queryExpress" mark:index="{{index}}">查看物流</van-button>
+                  </block>
+                </view>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </van-tab>
+    </van-tabs>
+  </view>
+  <van-divider color="{{themeColor}}" borderColor="#0094ff" textColor="#0094ff" content-position="center" dashed="{{true}}" size="24px">{{salesRecordList.length < recordTotal ? '上划加载更多...' : '无更多数据'}}</van-divider>
+  <view style="height: 200rpx; width: 100%;"></view>
+</view>
+
+<van-tabbar active="{{ tabbaractive }}" bind:change="tabbarOnChange">
+  <van-tabbar-item icon="home-o">商品列表</van-tabbar-item>
+  <van-tabbar-item icon="search">销售记录</van-tabbar-item>
+  <van-tabbar-item icon="orders-o">营业统计</van-tabbar-item>
+  <van-tabbar-item icon="setting-o">商城设置</van-tabbar-item>
+</van-tabbar>

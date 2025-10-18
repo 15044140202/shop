@@ -1,44 +1,97 @@
-<!--pages/set/set.wxml-->
+<!-- pages/set/set.wxml   -->
 <import src="/template/SetMenu/SetMenu" />
-
-<view class="border">
-  <!-- 店铺LOGO  以及店铺名称信息设置 -->
-  <navigator class="logo" url='./shopSet/shopSet'>
-    <image src="{{shopLogo}}" mode="scaleToFill" />
-    <view class="logo_name">
-      <text style="font-size: 40rpx;">{{shop_account.shopInfo.shopName}}</text>
-      <text style="font-size: 25rpx; color: #6d6969; margin-top: 10rpx;">店铺设置</text>
+<view class="page-header">
+  <!-- 商户信息卡片 -->
+  <view class="card shop-card" bind:tap="goto" mark:to="./shopSet/shopSet">
+    <image class="shop-logo" src="{{shopLogo}}" mode="aspectFill" />
+    <view class="shop-info">
+      <text class="shop-name">{{shop_account.shopInfo.shopName}}</text>
+      <view class="flex-center">
+        <vant-icon name="setting" color="#fff" size="14" />
+        <text class="setting-label">店铺信息设置</text>
+      </view>
     </view>
-  </navigator>
-  <!-- 系统设置 -->
-  <template is="Menu" data="{{...MenuData.set}}" />
-  <!-- 公告管理 -->
-  <template is="Menu" data="{{...MenuData.notice}}" />
-  <!-- 区域  分割线 -->
-  <view style="height: 50rpx; width: 100%; background-color: #efefef;"></view>
-  <!-- 公告管理 -->
-  <template is="Menu" data="{{...MenuData.charging}}" />
-  <!-- 会员级别设置 -->
-  <template is="Menu" data="{{...MenuData.vipset}}" />
-  <!-- 商品管理 -->
-  <template is="Menu" data="{{...MenuData.commodity}}" />
-  <!-- 区域  分割线----------------------------------- -->
-  <view style="height: 50rpx; width: 100%; background-color: #efefef;"></view>
-  <!-- 商品管理 -->
-  <template is="Menu" data="{{...MenuData.vipmanagement}}" />
-  <!-- 短信群发 -->
-  <template is="Menu" data="{{...MenuData.masstexting}}" />
-  <!-- 区域  分割线----------------------------------- -->
-  <view style="height: 50rpx; width: 100%; background-color: #efefef;"></view>
-  <!-- 优惠券/团购券管理 -->
-  <template is="Menu" data="{{...MenuData.coupon}}" />
-  <!-- 套餐/包场管理 -->
-  <template is="Menu" data="{{...MenuData.setmeal}}" />
-  <!-- 预定管理 -->
-  <template is="Menu" data="{{...MenuData.reserve}}" />
-  <!-- 区域  分割线----------------------------------- -->
-  <view style="height: 50rpx; width: 100%; background-color: #efefef;"></view>
-  <!-- 系统只用指南 -->
-  <template is="Menu" data="{{...MenuData.handbook}}" />
+    <van-icon name="arrow" color="#ffffff" size="45rpx" />
+  </view>
+</view>
 
+<!-- 主容器 -->
+<view class="container">
+
+  <!-- 模块堆叠 -->
+  <view class="module-stack">
+    <!-- 系统设置 -->
+    <view class="card module-group">
+      <view class="group-header">系统设置</view>
+      <block wx:for="{{[MenuData.operateSet,MenuData.waiter,MenuData.deviceManage]}}" wx:key="index">
+        <view class="module-item" bind:tap="goto" mark:to="{{item.to}}">
+          <view class="item-icon">
+            <van-icon name="{{item.logo1}}" color="#409EFF" size="50rpx" />
+          </view>
+          <text class="item-title">{{item.name}}</text>
+          <van-icon name="arrow" size="50rpx" color="#409EFF" />
+        </view>
+        <view class="divider-line"></view>
+      </block>
+    </view>
+
+    <!-- 收费管理 -->
+    <view class="card module-group">
+      <view class="group-header">收费管理</view>
+      <block wx:for="{{[MenuData.wxAccount,MenuData.charging,MenuData.commodity]}}" wx:key="index">
+        <view class="module-item" bind:tap="goto" mark:to="{{item.to}}">
+          <view class="item-icon">
+            <van-icon name="{{item.logo1}}" color="#409EFF" size="50rpx" />
+          </view>
+          <text class="item-title">{{item.name}}</text>
+          <van-icon name="arrow" size="50rpx" color="#409EFF" />
+        </view>
+        <view class="divider-line"></view>
+      </block>
+    </view>
+
+    <!-- 会员服务 -->
+    <view class="card module-group">
+      <view class="group-header">会员服务</view>
+      <block wx:for="{{[MenuData.vipset,MenuData.integralSet]}}" wx:key="index">
+        <view class="module-item" bind:tap="goto" mark:to="{{item.to}}">
+          <view class="item-icon">
+            <van-icon name="{{item.logo1}}" color="#409EFF" size="50rpx" />
+          </view>
+          <text class="item-title">{{item.name}}</text>
+          <van-icon name="arrow" size="50rpx" color="#409EFF" />
+        </view>
+        <view class="divider-line"></view>
+      </block>
+    </view>
+
+    <!-- 营销工具 -->
+    <view class="card module-group">
+      <view class="group-header">营销工具</view>
+      <block wx:for="{{[MenuData.coupon,MenuData.groupBuying,MenuData.setmeal,MenuData.notice]}}" wx:key="index">
+        <view class="module-item" bind:tap="goto" mark:to="{{item.to}}">
+          <view class="item-icon">
+            <van-icon name="{{item.logo1}}" color="#409EFF" size="50rpx" />
+          </view>
+          <text class="item-title">{{item.name}}</text>
+          <van-icon name="arrow" size="50rpx" color="#409EFF" />
+        </view>
+        <view class="divider-line"></view>
+      </block>
+    </view>
+    <!-- 使用反馈 -->
+    <view class="card module-group">
+      <view class="group-header">使用帮助</view>
+      <block wx:for="{{[MenuData.shopTransfer,MenuData.handbook,MenuData.suggest]}}" wx:key="index">
+        <view class="module-item" bind:tap="goto" mark:to="{{item.to}}">
+          <view class="item-icon">
+            <van-icon name="{{item.logo1}}" color="#409EFF" size="50rpx" />
+          </view>
+          <text class="item-title">{{item.name}}</text>
+          <van-icon name="arrow" size="50rpx" color="#409EFF" />
+        </view>
+        <view class="divider-line"></view>
+      </block>
+    </view>
+  </view>
 </view>

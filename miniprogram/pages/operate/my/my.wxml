@@ -1,2 +1,32 @@
-<!--pages/operate/my/my.wxml-->
-<text>pages/operate/my/my.wxml</text>
+<view class="page-header">
+  <text class="header-title">员工上下班打卡</text>
+  <text class="header-intro">在线打卡,方便快捷</text>
+</view>
+<view class="member-status">
+  <view class="member-name">
+    <text>车佳华</text>
+  </view>
+  <view class="post">
+    <text>职位 : </text>
+    <text>{{post}}</text>
+  </view>
+  <view class="status">
+    <text>在岗状态 : </text>
+    <text style="color: red;">{{status || '未在岗'}}</text>
+  </view>
+
+</view>
+<view class="menu-container">
+  <view class="menu-card"  hover-class="card-hover" bind:tap="tap" mark:item="onDuty" >
+    <van-icon class="card-icon" name="clock-o" size="58rpx" color="#0094ff"></van-icon>
+    <view class="card-title">上班打卡</view>
+  </view>
+  <view class="menu-card" hover-class="card-hover" bind:tap="tap" mark:item="outDuty">
+    <van-icon class="card-icon" name="stop-circle-o" size="58rpx" color="#0094ff"></van-icon>
+    <view class="card-title">下班打卡</view>
+  </view>
+  <view class="menu-card" hover-class="card-hover" bind:tap="tap" mark:item="attendance_record">
+    <van-icon class="card-icon" name="notes-o" size="58rpx" color="#0094ff"></van-icon>
+    <view class="card-title">我的考勤记录</view>
+  </view>
+</view>

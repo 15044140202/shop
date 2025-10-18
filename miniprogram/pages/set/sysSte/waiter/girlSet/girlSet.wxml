@@ -1,0 +1,48 @@
+<!--pages/set/sysSte/waiter/girlSet/girlSet.wxml-->
+<view class="container">
+  <block wx:for="{{shop_member}}" wx:key="index" wx:if="{{item.position === 'girl'}}">
+    <view style="margin-top: 15rpx;">
+      <view class="form-item form-item-top-radius">
+        <text class="label" style="font-weight:600;width: 100%; ">助教--{{item.userName}}</text>
+      </view>
+      <view class="form-item">
+        <text class="label">助教名称</text>
+        <input type="text" placeholder="请输入昵称" value="{{item.nickname}}" bindinput="onNameChange" class="input"  mark:index="{{index}}" mark:item="nickname"/>
+      </view>
+      <view class="form-item">
+        <text class="label">年龄</text>
+        <input type="text" placeholder="请输入年龄" value="{{item.age}}" bindinput="input" class="input"  mark:index="{{index}}" mark:item="age"/>
+      </view> 
+      <view class="form-item">
+        <text class="label">身高</text>
+        <input type="text" placeholder="请输入身高cm" value="{{item.height}}" bindinput="input" class="input"  mark:index="{{index}}" mark:item="height"/>
+      </view> 
+      <view class="form-item">
+        <text class="label">体重</text>
+        <input type="text" placeholder="请输入体重kg" value="{{item.weight}}" bindinput="input" class="input"  mark:index="{{index}}" mark:item="weight"/>
+      </view> 
+      <view class="form-item">
+        <text class="label">性格</text>
+        <input type="text" placeholder="请输入性格" value="{{item.personality}}" bindinput="input" class="input"  mark:index="{{index}}" mark:item="personality"/>
+      </view>
+      <view class="form-item">
+        <text class="label">助教单价</text>
+        <input type="digit" placeholder="请输入单价(元/小时)" value="{{item.price /100}}" bindinput="onPriceChange" class="input"  mark:index="{{index}}" />
+        <text class="unit">元/小时</text>
+      </view>
+      <view class="form-item form-item-bottom-radius">
+        <text class="label">助教性别</text>
+        <picker mode="selector" range="{{genderOptions}}" value="{{item.gender}}" bindchange="onGenderChange" class="picker" mark:index="{{index}}">
+          <view class="picker-text">{{item.gender}}</view>
+        </picker>
+      </view>
+      <view class="form-item">
+        <text class="label">简介</text>
+        <input type="text" placeholder="请输入简介" value="{{item.description}}" bindinput="input" class="input"  mark:index="{{index}}" mark:item="description"/>
+      </view>
+    </view>
+  </block>
+
+
+  <button type="primary" bindtap="onSubmit" class="submit-btn">保存修改</button>
+</view>

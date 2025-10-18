@@ -1,10 +1,7 @@
 <!--pages/statement/cash/cash.wxml-->
-
 <view class="pie">
-  <view class="charts">
-    <canvas canvas-id="NvEQKyCeVTorlEmrKznhGMuBrZPTQxwH" id="NvEQKyCeVTorlEmrKznhGMuBrZPTQxwH" class="charts" bindtouchend="tap" />
-  </view>
-  <text style="font-size: 30rpx; margin-left: 20rpx; color: #999999;">{{name === 'wx' ? '微信收款列表' : name === 'cash' ? '现金收款列表' : name === 'vip' ? '会员扣款列表' : name === 'cashCoupon' ? '代金券扣款列表' :name === 'mtCoupon' ? '美团券扣款列表' :name === 'dyCoupon' ? '抖音券扣款列表' : name === 'tableCost' ? '桌台费列表': name === 'commotidyCost' ? '商品费列表' : name === 'top_up' ? '会员储值列表' : name === 'couponCost' ? '优惠券列表' : name === 'sportShowCost' ? '精彩秀列表':'' }}</text>
+  <pie-chart chartData="{{chartData}}"></pie-chart>
+  <text style="font-size: 30rpx; margin-left: 20rpx; color: #999999;">{{name === 'wx' ? '微信收款列表' : name === 'cash' ? '现金收款列表' : name === 'vip' ? '会员扣款列表' : name === 'cashCoupon' ? '代金券扣款列表' :name === 'mtCoupon' ? '美团券扣款列表' :name === 'dyCoupon' ? '抖音券扣款列表' :name === 'ksCoupon' ? '快手券扣款列表' : name === 'tableCost' ? '桌台费列表': name === 'commotidyCost' ? '商品费列表' : name === 'top_up' ? '会员储值列表' : name === 'couponCost' ? '优惠券列表' : name === 'sportShowCost' ? '精彩秀列表': name === 'girlCost' ? '助教订单列表':'' }}</text>
 </view>
 <!-- 下面是 分类账单明细 -->
 <view wx:for="{{disPlayOrderForm}}" wx:key="index" bind:tap="goto" mark:index="{{index}}">
@@ -25,6 +22,7 @@
         <text style="color:#999999; font-size: 30rpx;margin-left: 25rpx;">{{item.time}}</text>
       </view>
       <view class="border3">
+        <text wx:if="{{!item.payState || (item.payState && item.payState!== 1 )}}" style="font-size: 20rpx;color: red;">未支付</text>
         <text style="font-size: 35rpx;">￥{{item.commotidyCost}}</text>
         <van-icon name="arrow" color="#999" />
       </view>
@@ -45,7 +43,7 @@
         <text style="color:#999999; font-size: 30rpx;margin-left: 25rpx;">{{item.time}}</text>
       </view>
       <view class="border3">
-        <text style="font-size: 35rpx;">￥{{item.cost}}</text>
+        <text style="font-size: 35rpx;">￥{{item.amount}}</text>
         <van-icon name="arrow" color="#999" />
       </view>
     </view>
@@ -56,6 +54,17 @@
       </view>
       <view class="border3">
         <text style="font-size: 35rpx;">￥{{item.amount}}</text>
+        <van-icon name="arrow" color="#999" />
+      </view>
+    </view>
+    <view class="border1" wx:if="{{item.orderName === '助教订单'}}">
+      <view class="border2">
+        <text style="font-size:32rpx;margin-left: 25rpx;">助教订单-{{item.userName}}</text>
+        <text style="color:#999999; font-size: 30rpx;margin-left: 25rpx;">{{item.time}}</text>
+      </view>
+      <view class="border3">
+        <text wx:if="{{!item.payState}}" style="font-size: 20rpx;color: red;">未支付</text>
+        <text style="font-size: 35rpx;">￥{{item.amount / 100}}</text>
         <van-icon name="arrow" color="#999" />
       </view>
     </view>

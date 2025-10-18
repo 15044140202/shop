@@ -1,0 +1,198 @@
+<!--pages/tools/mall/goodsInfo/goodsInfo.wxml-->
+<!-- pages/goods/detail.wxml -->
+<view class="container">
+  <!-- 商品轮播图 -->
+  <swiper class="goods-swiper" indicator-dots="{{true}}" indicator-color="rgba(0,0,0,.3)" indicator-active-color="#0094ff" autoplay="{{false}}">
+    <swiper-item>
+      <image src="{{showCommotydiList[index].headPic}}" mode="aspectFit" class="swiper-image"></image>
+    </swiper-item>
+  </swiper>
+
+  <!-- 商品基本信息 -->
+  <view class="goods-base-info">
+    <view class="goods-price">
+      <text class="current-price">特价¥{{showCommotydiList[index].lowMerchantPrice / 100}}</text>
+      <text class="original-price">原价¥{{showCommotydiList[index].lowOutPrice / 100}}</text>
+      <text class="discount-tag">省{{(showCommotydiList[index].lowOutPrice - showCommotydiList[index].lowMerchantPrice)/100}}元</text>
+    </view>
+    <view class="goods-title">{{showCommotydiList[index].commotydiName}}</view>
+    <view class="goods-desc">{{showCommotydiList[index].description || '暂无描述'}}</view>
+
+    <view class="info-row">
+      <text class="info-label">品牌：</text>
+      <text class="info-value">{{showCommotydiList[index].brand}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">类别：</text>
+      <text class="info-value">{{showCommotydiList[index].sort}}</text>
+      <!-- 顾客取货按钮 -->
+      <button size="mini" type="primary" bind:tap="resell" >一键代售</button>
+    </view>
+  </view>
+
+  <!-- 颜色分类选择 -->
+  <view class="section-title">颜色分类</view>
+  <view class="color-selector">
+    <block wx:for="{{showCommotydiList[index].color}}" wx:key="color">
+      <view class="color-item {{selectedColor === item.color ? 'selected' : ''}}" bindtap="selectColor" data-color="{{index}}">
+        {{item.color}}
+      </view>
+    </block>
+  </view>
+
+  <!-- 商品详情 -->
+  <view class="section-title">商品详情</view>
+  <view class="goods-detail">
+    <block wx:for="{{showCommotydiList[index].picArr}}" wx:key="*this">
+      <image src="{{item}}" mode="widthFix" class="detail-image"></image>
+    </block>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="footer">
+    <view class="footer-btn add-cart" bindtap="showAddCartModal">加入购物车</view>
+    <view class="footer-btn buy-now" bindtap="showBuyModal">立即购买</view>
+  </view>
+  <!-- 加入购物车弹窗 -->
+  <van-popup show="{{showCartModal}}" position="bottom" custom-style="height: 60%;" bind:close="hideAddCartModal">
+    <view class="popup-header">
+      <view class="popup-title">选择规格</view>
+      <van-icon name="close" size="20px" bindtap="hideAddCartModal" />
+    </view>
+    <scroll-view scroll-y class="popup-content">
+      <!-- 颜色选择 -->
+      <view class="popup-section">
+        <view class="section-title">颜色分类</view>
+        <view class="color-selector">
+          <block wx:for="{{showCommotydiList[index].color}}" wx:key="color">
+            <view class="color-item {{cartSelectedColor === index ? 'selected' : ''}}" bindtap="selectCartColor" data-color="{{index}}">
+              {{item.color}}
+            </view>
+          </block>
+        </view>
+      </view>
+
+      <!-- 数量选择 -->
+      <view class="popup-section">
+        <view class="section-title">购买数量</view>
+        <van-stepper value="{{cartQuantity}}" min="0" max="99" bind:change="onCartQuantityChange" />
+      </view>
+    </scroll-view>
+    <view class="popup-footer">
+      <view class="price-summary">
+        合计：<text class="total-price">¥{{(showCommotydiList[index].color[cartSelectedColor].merchantPrice * cartQuantity / 100)}}</text>
+      </view>
+      <view class="popup-btn confirm-btn" bindtap="confirmAddCart">加入购物车</view>
+    </view>
+  </van-popup>
+
+  <!-- 购买弹窗 -->
+  <van-popup show="{{showBuyModal}}" position="bottom" custom-style="height: 80%;" bind:close="hideBuyModal">
+    <view class="popup-header">
+      <view class="popup-title">确认订单</view>
+      <van-icon name="close" size="20px" bindtap="hideBuyModal" />
+    </view>
+    <scroll-view scroll-y class="popup-content">
+      <!-- 收货地址 -->
+      <view class="popup-section">
+        <view class="add-board">
+          <view class="section-title">选择交付方式 : </view>
+          <picker class="distributionMode-board" mode="selector" value="{{distributionMode}}" range="{{distributionModeArr}}" bindchange="distributionModeChange">
+            <text class="section-title">{{distributionMode === 0?'快递配送':'门店自提'}}</text>
+            <van-icon name="arrow-down"></van-icon>
+          </picker>
+        </view>
+        <!-- 顾客收货地址 -->
+        <view wx:if="{{!distributionMode}}" class="address-card" bindtap="selectAddress">
+          <view wx:if="{{shoppingAdd.length}}">
+            <view class="address-row">
+              <text class="name">{{shoppingAdd[shoppingAddSelected].name}}</text>
+              <text class="phone">{{shoppingAdd[shoppingAddSelected].phone}}</text>
+            </view>
+            <view class="address-detail">{{shoppingAdd[shoppingAddSelected].address}}{{shoppingAdd[shoppingAddSelected].detail}}</view>
+          </view>
+          <view wx:else class="add-address" bind:tap="selectAddress">
+            <van-icon name="add" size="20px" color="#999" />
+            <text>添加收货地址</text>
+          </view>
+          <van-icon name="arrow" size="40px" color="#999" />
+        </view>
+        <!-- 提货地址 -->
+        <view wx:else class="address-card" bind:tap="openLocation" mark:latitude="{{merchantAdd.latitude}}" mark:longitude="{{merchantAdd.longitude}}">
+          <view style="display: flex; flex-direction: column;">
+            <text class="name">提货地址 : {{merchantAdd.shopName}}</text>
+            <view class="address-detail">{{merchantAdd.address}}</view>
+          </view>
+          <van-icon name="map-marked" size="40px" color="#999" />
+        </view>
+      </view>
+
+      <!-- 商品信息 -->
+      <view class="popup-section">
+        <view class="section-title">商品信息</view>
+        <view class="order-goods">
+          <image class="goods-image" src="{{showCommotydiList[index].headPic}}" mode="aspectFill"></image>
+          <view class="goods-info">
+            <view class="goods-name">{{showCommotydiList[index].commotydiName}}</view>
+            <view class="goods-spec">规格：{{showCommotydiList[index].unit}}</view>
+            <view class="goods-price">
+              <text class="current-price">¥{{showCommotydiList[index].color[buySelectedColor].merchantPrice / 100}}</text>
+              <text class="quantity">x{{buyQuantity}}</text>
+            </view>
+            <view class="goods-spec">快递费：{{expressFee || 0}} 元</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 颜色选择 -->
+      <view class="popup-section">
+        <view class="buy-sum-select">
+          <view class="section-title" style="border-top: 0rpx">颜色分类</view>
+          <view class="color-selector">
+            <block wx:for="{{showCommotydiList[index].color}}" wx:key="color">
+              <view class="color-item {{buySelectedColor === index ? 'selected' : ''}}" bindtap="selectBuyColor" data-color="{{index}}">
+                {{item.color}}
+              </view>
+            </block>
+          </view>
+        </view>
+      </view>
+
+      <!-- 数量选择 -->
+      <view class="popup-section">
+        <view class="buy-sum-select">
+          <view class="section-title" style="border-top:0rpx;">购买数量</view>
+          <van-stepper value="{{buyQuantity}}" min="0" max="999" bind:change="onBuyQuantityChange" />
+        </view>
+      </view>
+
+      <!-- 支付方式 -->
+      <view class="popup-section">
+        <view class="section-title">支付方式</view>
+        <view style="margin-left: 30rpx;color:yellowgreen;font-size: 25rpx;">官方商城为薄利批发模式运营,所有商品价格均不含运费,默认为到付运费</view>
+        <van-radio-group disabled="{{distributionMode}}" value="{{paymentMethod}}" bind:change="onPaymentChange">
+          <van-cell-group>
+            <van-cell title="微信支付" clickable data-name="wx" bind:click="onPaymentChange">
+              <van-radio name="wx" checked-color="#0094ff" />
+            </van-cell>
+            <van-cell title="快递代收货款" clickable data-name="cod" bind:click="onPaymentChange">
+              <van-radio name="cod" checked-color="#0094ff" />
+            </van-cell>
+          </van-cell-group>
+        </van-radio-group>
+      </view>
+
+      <!-- 备注信息 -->
+      <view class="popup-section">
+        <view class="section-title">备注信息</view>
+        <van-field value="{{remarks}}" placeholder="选填：填写备注信息" border="{{false}}" bind:change="onRemarksChange" />
+      </view>
+    </scroll-view>
+    <view class="popup-footer">
+      <view class="price-summary">
+        <text class="total-price">{{paymentMethod === 'cod' ? '物流代收金额 :¥'+ ((showCommotydiList[index].color[buySelectedColor].merchantPrice * buyQuantity / 100) + (expressFee || 0)) + '元': '合计：¥'+ ((showCommotydiList[index].color[buySelectedColor].merchantPrice * buyQuantity / 100) + (expressFee || 0)) + '元'}}</text>
+      </view>
+      <view class="popup-btn confirm-btn" bindtap="confirmOrder">立即支付</view>
+    </view>
+  </van-popup>
+</view>

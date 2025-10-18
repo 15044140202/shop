@@ -24,11 +24,11 @@
       <view>折</view>
     </view>
   </view>
+  <!-- 是否允许卡口台费 -->
   <view class="titel" hidden="{{getIndex > 0}}">
     <text style="font-size: 35rpx;">允许卡扣台费</text>
     <switch checked="{{vipSet[getIndex].tableCardDeduct}}" bindchange="change" mark:name='tableCardDeduct' />
   </view>
-
 </view>
 <view style="height: 30rpx;"></view>
 <!-- 商品费设置 -->
@@ -56,12 +56,13 @@
   </view>
   <view wx:for="{{vipSet[getIndex].saveMoney}}" wx:key="index" class="saveMoney" bind:longpress="longpress" mark:index='{{index}}' mark:item="deletaSaveMoney">
     <text>{{item.name}}</text>
-    <view class="saveInput" style="height: 100%;">
-      <input style="height: 100%;" type="text" value="{{item.amount}}" bindinput="input" mark:name1='saveMoney' mark:name2='[{{index}}]..amount' />
-      <text>元, 送</text>
-      <input style="height: 100%;" type="text" value="{{item.give}}" bindinput="input" mark:name1='saveMoney' mark:name2='[{{index}}].give' />
-      <text>元</text>
-    </view>
+    <input style="height: 100%; width: 100rpx;border-bottom: solid 1rpx black;" type="number" value="{{item.amount}}" bindinput="input" mark:name1='saveMoney' mark:name2='[{{index}}]..amount' />
+    <text>元, 送</text>
+    <input style="height: 100%; width: 100rpx;border-bottom: solid 1rpx black;" type="number" value="{{item.give}}" bindinput="input" mark:name1='saveMoney' mark:name2='[{{index}}].give' />
+    <text>元</text>
+    <text>,首存再送</text>
+    <input style="height: 100%; width: 100rpx;border-bottom: solid 1rpx black;" type="number" value="{{item.firstStorage?item.firstStorage:0}}" bindinput="input" mark:name1='saveMoney' mark:name2='[{{index}}].firstStorage' />
+    <text>元</text>
   </view>
   <view class="titel">
     <van-tag round type="success" size='medium' bind:tap="addNewSave">添加新的存款方式</van-tag>
@@ -83,7 +84,7 @@
     </view>
   </view>
   <view class="titel" hidden='{{getIndex > 0}}'>
-    <text style="font-size: 35rpx;">余额不足时不享受折扣</text>
+    <text style="font-size: 35rpx;">余额不足时是否享受折扣</text>
     <switch checked="{{vipSet[getIndex].noBalanceDiscount}}" bindchange="change" mark:name='noBalanceDiscount' />
   </view>
   <view class="titel" hidden='{{getIndex > -1}}'>

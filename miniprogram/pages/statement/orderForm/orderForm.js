@@ -9,7 +9,7 @@ Page({
    */
   data: {
     newVipData: [],
-    newVipDataHeadImage:[],
+    newVipDataHeadImage: [],
     orderForm: [],
     get_item: ''
   },
@@ -43,9 +43,30 @@ Page({
       this.getNewVipData()
     } else {
       for (let index = 0; index < appData.disPlayOrderForm.length; index++) {
-        const element = JSON.parse(appData.disPlayOrderForm[index]);
+        const element = appData.disPlayOrderForm[index];
         element.time = app.getNowTime(new Date(element.time))
         this.data.orderForm.push(element)
+      }
+      if (options.item === '微信退款明细') {//微信退款
+        const newOrder = this.data.orderForm.reduce((acc, order) => {
+          if ((order?.log || []).some(item => item.includes('退款'))) {
+            acc.push({ ...order, disPlay: true })
+          } else {
+            acc.push(order)
+          }
+          return acc
+        }, [])
+        this.data.orderForm = newOrder
+      }else if (options.item === '微信收支明细') {//微信退款
+        const newOrder = this.data.orderForm.reduce((acc, order) => {
+          if (['微信','微信&代金券'].includes(order.payMode) ) {
+            acc.push({ ...order, disPlay: true })
+          } else {
+            acc.push(order)
+          }
+          return acc
+        }, [])
+        this.data.orderForm = newOrder
       }
       this.setData({
         orderForm: this.data.orderForm,
@@ -84,21 +105,21 @@ Page({
         const element = newVipData[index];
         task.push(
           app.getHeadImage(element.headImage === '' ? 'cloud://billiards-0g53628z5ae826bc.6269-billiards-0g53628z5ae826bc-1326882458/image/没有图片.png' : element.headImage)
-        ) 
+        )
         if (index !== 0 && index % 100 === 0) {
           const res = await Promise.all(task)
           console.log(res)
-          Object.assign(this.data.newVipDataHeadImage,res)
+          Object.assign(this.data.newVipDataHeadImage, res)
           task.length = 0
         }
       }
       if (task.length > 0) {
         const res = await Promise.all(task)
         console.log(res)
-        Object.assign(this.data.newVipDataHeadImage,res)
+        Object.assign(this.data.newVipDataHeadImage, res)
       }
       this.setData({
-        newVipDataHeadImage:this.data.newVipDataHeadImage
+        newVipDataHeadImage: this.data.newVipDataHeadImage
       })
     }
   },

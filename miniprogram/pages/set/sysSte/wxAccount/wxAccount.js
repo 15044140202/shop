@@ -15,7 +15,7 @@ Page({
     console.log(e.mark)
     //检测权限
     if (e.mark.item === 'rePay') {
-      if (await app.power('systemSet', '7', '退款/部分退款')) {
+      if (await app.power('systemSet', '退款/部分退款')) {
         console.log('有权限');
       } else {
         app.showToast('没有权限', 'error');
@@ -54,7 +54,11 @@ Page({
     }
   },
   async save() {
-    if (this.data.proceedsAccount === '') {
+    if (!await app.power('dd','dd')) {
+      app.showModal('提示','只有老板可以设置收款账号!')
+      return
+    }
+    if (!this.data.proceedsAccount) {
       wx.showToast({
         title: '请正确输入商户号',
         icon: 'error'

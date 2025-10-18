@@ -21,18 +21,6 @@ Page({
         name: "微信收款账号",
         to: './wxAccount/wxAccount'
       },
-      lightSet: {
-        name: '灯控器设置',
-        to: './lightSet/lightSet'
-      },
-      printerSet: {
-        name: '打印机设置',
-        to: './printerSet/printerSet'
-      },
-      doorSet: {
-        name: '门禁设置',
-        to: './doorSet/doorSet'
-      },
       deviceManage: {
         name: '设备管理',
         to: './deviceManage/deviceManage'
@@ -49,69 +37,54 @@ Page({
         name: '店铺转让',
         to: './shopTransfer/shopTransfer'
       }
+    },
+    iconMap: {
+      '营业参数设置': 'setting',
+      '员工及权限': 'friends',
+      '微信收款账号': 'wechat-pay',
+      '设备管理': 'cluster',
+      '积分规则设置': 'gold-coin',
+      '建议/意见': 'comment',
+      '店铺转让': 'exchange'
     }
   },
   async goto(e) {
+    console.log(e)
     var itemName = '';
-    var itemNum = 0;
     var itemType = "set";
     switch (e.mark.to) {
       case './operateSet/operateSet':
         itemType = 'systemSet';
-        itemNum = 3;
         itemName = '营业参数设置';
         break;
       case './waiter/waiter':
         itemName = '员工及权限';
-        itemNum = 1;
         break;
       case './wxAccount/wxAccount':
         itemType = 'systemSet';
-        itemNum = 0;
         itemName = '微信收款账号设置';
-        break;
-      case './lightSet/lightSet':
-        itemType = 'systemSet';
-        itemNum = 1;
-        itemName = '灯控器设置';
-        break;
-      case './printerSet/printerSet':
-        itemType = 'systemSet';
-        itemNum = 2;
-        itemName = '打印机设置';
-        break;
-      case './doorSet/doorSet':
-        itemType = 'systemSet';
-        itemNum = 6;
-        itemName = '门禁设置';
         break;
       case './deviceManage/deviceManage':
         itemType = 'systemSet';
-        itemNum = 6;
-        itemName = '门禁设置';
+        itemName = '设备管理';
         break;
       case './integralSet/integralSet':
-        itemNum = 5;
         itemName = '积分规则设置';
         break;
       case './shopTransfer/shopTransfer':
-        itemNum = 999;
         itemName = '店铺转让';
         break;
       case './suggest/suggest':
-        itemNum = 9;
-        itemName = '建议和评价';
+        itemName = '建议/意见';
         break;
       default:
         app.showToast('权限获取错误!', 'error')
     }
-    if (!appData.status === 'boss') {//老板不需要验证权限
-      if (await app.power(itemType, itemNum, itemName) === false) {
-        app.showToast('没有权限', 'error');
-        return;
-      }
+    console.log({ [itemType]: itemName })
+    if (!await app.power(itemType, itemName)) {
+      app.showToast('没有权限', 'error');
+      return;
     }
-
     wx.navigateTo({
       url: e.mark.to,
     })

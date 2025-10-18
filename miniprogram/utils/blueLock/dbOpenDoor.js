@@ -501,7 +501,7 @@ async function delay(time) {
   return;
 }
 export async function openLock(deviceId) {
-  if (!(deviceId === '' || deviceId === undefined)) {
+  if (!deviceId) {
     blue_data.device_id = deviceId
   }
   console.log(blue_data.device_id)

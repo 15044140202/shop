@@ -1,0 +1,75 @@
+<!--pages/tools/mallManage/mallSet/shoppingTemplate/shoppingTemplate.wxml-->
+<view class="container">
+  <!-- 添加模板按钮 -->
+  <view class="add-btn">
+    <van-button type="primary" block bind:tap="showAddPopup">+ 添加运费模板</van-button>
+  </view>
+
+  <!-- 模板列表 -->
+  <view class="template-list" wx:if="{{shoppingTemplate.length > 0}}">
+    <van-cell-group>
+      <block wx:for="{{shoppingTemplate}}" wx:key="_id">
+        <van-cell title="{{item.name}}" value="{{item.isDefault ? '默认' : ''}}" label="{{getTemplateDesc(item)}}" is-link bind:tap="editTemplate" data-index="{{index}}">
+          <van-tag type="primary" wx:if="{{item.isDefault}}">默认</van-tag>
+        </van-cell>
+      </block>
+    </van-cell-group>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:else>
+    <van-icon name="logistics" size="60px" color="#ebedf0" />
+    <view class="empty-text">暂无运费模板</view>
+  </view>
+
+  <!-- 添加/编辑模板弹窗 -->
+  <van-popup show="{{showPopup}}" position="bottom" round bind:close="hidePopup">
+    <view class="popup-header">
+      <view class="popup-title">{{isEdit ? '编辑' : '添加'}}运费模板</view>
+      <van-icon name="cross" size="20px" bind:tap="hidePopup" />
+    </view>
+
+    <view class="popup-content">
+      <van-cell-group>
+        <van-field label="模板名称" placeholder="请输入模板名称" value="{{currentTemplate.name}}" bind:change="onFieldChange" data-field="name" />
+
+        <van-cell title="默认模板">
+          <van-switch size="24px" checked="{{currentTemplate.isDefault}}" bind:change="onDefaultChange" />
+        </van-cell>
+
+        <van-cell title="计费方式">
+          <van-radio-group value="{{currentTemplate.type}}" bind:change="onTypeChange">
+            <van-radio name="fixed">固定运费</van-radio>
+            <van-radio name="byWeight">按重量计费</van-radio>
+            <van-radio name="byPiece">按件数计费</van-radio>
+          </van-radio-group>
+        </van-cell>
+
+        <van-field label="首费" placeholder="请输入首费金额" type="digit" value="{{currentTemplate.firstFee}}" bind:change="onFieldChange" data-field="firstFee" wx:if="{{currentTemplate.type !== 'fixed'}}">
+          <view slot="right-icon">元</view>
+        </van-field>
+
+        <van-field label="首{{currentTemplate.type === 'byWeight' ? '重' : '件'}}" placeholder="{{currentTemplate.type === 'byWeight' ? '请输入首重(kg)' : '请输入首件数'}}" type="digit" value="{{currentTemplate.firstAmount}}" bind:change="onFieldChange" data-field="firstAmount" wx:if="{{currentTemplate.type !== 'fixed'}}">
+          <view slot="right-icon">{{currentTemplate.type === 'byWeight' ? 'kg' : '件'}}</view>
+        </van-field>
+
+        <van-field label="续费" placeholder="请输入续费金额" type="digit" value="{{currentTemplate.additionalFee}}" bind:change="onFieldChange" data-field="additionalFee" wx:if="{{currentTemplate.type !== 'fixed'}}">
+          <view slot="right-icon">元</view>
+        </van-field>
+
+        <van-field label="续{{currentTemplate.type === 'byWeight' ? '重' : '件'}}" placeholder="{{currentTemplate.type === 'byWeight' ? '请输入续重(kg)' : '请输入续件数'}}" type="digit" value="{{currentTemplate.additionalAmount}}" bind:change="onFieldChange" data-field="additionalAmount" wx:if="{{currentTemplate.type !== 'fixed'}}">
+          <view slot="right-icon">{{currentTemplate.type === 'byWeight' ? 'kg' : '件'}}</view>
+        </van-field>
+
+        <van-field label="固定运费" placeholder="请输入固定运费金额" type="digit" value="{{currentTemplate.fixedFee}}" bind:change="onFieldChange" data-field="fixedFee" wx:if="{{currentTemplate.type === 'fixed'}}">
+          <view slot="right-icon">元</view>
+        </van-field>
+      </van-cell-group>
+    </view>
+
+    <view class="popup-footer">
+      <van-button type="default" block bind:tap="hidePopup">取消</van-button>
+      <van-button type="primary" block bind:tap="saveTemplate">保存</van-button>
+    </view>
+  </van-popup>
+</view>

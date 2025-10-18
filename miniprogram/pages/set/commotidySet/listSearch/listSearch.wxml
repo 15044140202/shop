@@ -1,28 +1,43 @@
-<!--pages/set/commotidySet/listSearch/listSearch.wxml-->
-<view style="height:10rpx;"></view>
-<view class="listInfo" wx:for="{{list}}" wx:key="index">
-  <view class="border">
-    <view class="titel" style="background-color: #0097ff;  border-top-left-radius: 15rpx;  border-top-right-radius: 15rpx;">
-      <text class="one" style="color: #fff; width: 40%;">操作人:{{item.status}}</text>
-      <text class="one" style="color: #fff; width: 60%;">时间 : {{item.time}}</text>
+<wxs src="../../../../utils/tool.wxs" module="tool"/>
+<view class="container">
+  <!-- 间距调整 -->
+  <view style="height: 20rpx;"></view>
+
+  <!-- 入库记录列表 -->
+  <view class="record-card" wx:for="{{list}}" wx:key="index">
+    <!-- 记录头部信息 -->
+    <view class="record-header">
+      <text class="operator">操作人: {{item.status}}</text>
+      <text class="time">时间: {{tool.timeStampToStr(item.time)}}</text>
+    </view>
+    
+    <!-- 商品列表表格 -->
+    <view class="goods-table">
+      <!-- 表头 -->
+      <view class="table-row header-row">
+        <view class="table-cell">商品名称</view>
+        <view class="table-cell">入库数量</view>
+        <view class="table-cell">单价</view>
+      </view>
+      
+      <!-- 商品数据行 -->
+      <view class="table-row" wx:for="{{item.commotidyList}}" wx:for-index='index_1' wx:for-item='item_1' wx:key="index_1">
+        <view class="table-cell">{{item_1.name}}</view>
+        <view class="table-cell">{{item_1.sum}}</view>
+        <view class="table-cell">{{item_1.price / 100}}</view>
+      </view>
+      
+      <!-- 合计行 -->
+      <view class="table-row total-row" wx:if="{{item.commotidyList.length > 0}}">
+        <view class="table-cell"></view>
+        <view class="table-cell total-label">合计金额:</view>
+        <view class="table-cell total-value">{{item.amount /100}}</view>
+      </view>
     </view>
   </view>
-  <view class="info" wx:for="{{item.commotidyList}}" wx:for-index='index_1' wx:for-item='item_1' wx:key="index_1">
-    <view class="titel" wx:if="{{index_1 === 0}}">
-      <view class="one">商品名称</view>
-      <view class="one">入库数量</view>
-      <view class="one">单价</view>
-    </view>
-    <view class="titel">
-      <view class="one">{{item_1.name}}</view>
-      <view class="one">{{item_1.sum}}</view>
-      <view class="one">{{item_1.price}}</view>
-    </view>
-    <view class="titel" wx:if="{{index_1 === item.commotidyList.length - 1}}">
-      <view class="one"></view>
-      <view class="one">合计金额:</view>
-      <view class="one">{{item.amount}}</view>
-    </view>
+  
+  <!-- 无更多数据提示 -->
+  <view class="no-more" hidden="{{count !== list.length}}">
+    没有更多数据!
   </view>
 </view>
-<view hidden="{{count !== list.length}}" style=" margin-top: 80rpx; text-align: center; width: 100%; height: 200rpx; border-top:dotted #ccc 5rpx;">没有更多数据!</view>

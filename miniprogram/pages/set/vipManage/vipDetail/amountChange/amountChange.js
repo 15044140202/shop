@@ -38,8 +38,15 @@ Page({
       }
     })
     console.log(res)
+    const rr = res.data.reduce((acc,item)=>{
+      if (typeof item.time === 'number') {
+        item.time = app.getNowTime(new Date(item.time))
+      }
+      acc.push(item)
+      return acc
+    },[])
     this.setData({
-      amountChange:res.data
+      amountChange:rr.reverse()
     })
   },
   /**

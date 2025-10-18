@@ -1,97 +1,94 @@
-// 云函数入口文件
 const cloud = require('wx-server-sdk')
-
+function validateInput(event) {
+  if (!event.orderNum) {
+    const error = 'Invalid input: orderNum 无效'
+    throw error
+  }
+}
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
-}) // 使用当前云环境
-const db = cloud.database();
-const _ = db.command;
-// 云函数入口函数
-exports.main = async (event) => {
-  const {
-    firstStorage,
-    shopFlag,
-    orderForm
-  } = event;
-  //获取现在 北京时间*******************
-  // 设置时区为亚洲/上海
-  process.env.TZ = 'Asia/Shanghai';
-  // 获取当前的北京时间
-  const now = new Date();
-  // 格式化时间为 "YYYY/MM/DD-HH:mm:ss"
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const seconds = String(now.getSeconds()).padStart(2, '0');
-  const nowTime = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
-  //增加订单
-  const date = nowTime.split(' ')[0].split('/')[0] + '年' + nowTime.split(' ')[0].split('/')[1] + '月' + nowTime.split(' ')[0].split('/')[2] + '日';
-  const result = await db.collection('orderForm').where({
-    shopFlag: shopFlag,
-  }).update({
-    data: {
-      [date]: _.push({
-        ...orderForm,
-        time: nowTime
-      })
-    }
-  })
-  if (result.stats.updated === 1) {
-    const tasks =[];
-    //修改支付检测订单  为payEnd
-    const res_1 = db.collection('payOrderList').where({
-      orderList: {
-        payOrderNum: orderForm.orderNum,
-      }
-    }).update({
-      data: {
-        [`orderList.$.payState`]: 'payEnd'
-      }
-    })
-    tasks.push(res_1);
-    //修改会员余额  积分 余额变动记录
-    const res_2 = db.collection('vipList').where({
-      shopFlag: shopFlag,
-      vipList: {
-        userOpenid: orderForm.person.openid
-      }
-    }).update({
-      data: {
-        'vipList.$.integral': _.inc(orderForm.integral),
-        'vipList.$.amountChange': _.push({
-          'amount': orderForm.amount + orderForm.giveAmount,
-          'reason': '储值',
-          'status': '自助充值',
-          'time': nowTime
-        }),
-        'vipList.$.amount': _.inc(orderForm.amount + orderForm.giveAmount),
-        'vipList.$.firstStorage': _.set(firstStorage),
-        'vipList.$.totalTableCost': _.inc(orderForm.amount)
-      }
-    })
-    tasks.push(res_2)
-    //向userInfo 添加账单信息
-    const res_3 = db.collection('userInfo').where({
-      _openid: orderForm.person.openid
-    }).update({
-      data: {
-        ['orderList']: _.push({
-          orderName: '储值单',
-          orderNum: orderForm.orderNum,
-          shopFlag: shopFlag,
-          time: nowTime,
-          pledgeMode: orderForm.payMode,
-          cashPledge: orderForm.amount
-        })
-      }
-    })
-    tasks.push(res_3)
-    const RES = await Promise.all(tasks)
+})
+const db = cloud.database()
+const _ = db.command
 
-    return 'ok';
-  } else { //添加订单失败  
-    return 'error';
+exports.main = async (event) => {
+  const { orderNum } = event
+  const transaction = await db.startTransaction()
+  try {
+    validateInput(event)
+    //获取订单详情
+    const res = await db.collection('table_order').where({
+      orderNum: orderNum
+    }).get()
+    if (res.data.length === 0) {
+      return {
+        success: false,
+        message: '未查询到该笔订单!',
+        data: res
+      }
+    }
+    const orderInfo = res.data[0]
+    // 修改订单为已支付
+    const updateResult = await transaction.collection('table_order').where({
+      orderNum: orderInfo.orderNum
+    }).update({
+      data: {
+        payMode: 'wx'
+      },
+      condition: _.eq('payMode', '未支付')
+    })
+    if (updateResult.stats.updated === 0) {
+      throw { Error: '订单状态不是未支付，无法更新',...orderInfo}
+    }
+    //生成会员账户余额变更记录数据
+    const vipAmountChangeOrder = {
+      shopId: orderInfo.shopId,
+      userOpenid: orderInfo.userOpenid,
+      changeName: '用户储值',
+      changeAmount: parseInt(orderInfo.amount + orderInfo.giveAmount),
+      oldAmount: orderInfo.oldAmount,
+      reason: `用户在线充值,充值:${orderInfo.amount}元,赠送:${orderInfo.giveAmount}元`,
+      status: orderInfo.userName,
+      time: orderInfo.time
+    }
+    //增加会员账户余额变更数据
+    await transaction.collection('vip_amount_change').add({
+      data: vipAmountChangeOrder
+    })
+    //修改会员账户余额 首先判断是否时首充, 首充修改会员数据首充以完成,并且修改充值积分
+    const upData = {
+      amount: _.inc(vipAmountChangeOrder.changeAmount),
+      integral: _.inc(orderInfo.integral)
+    }
+    if (orderInfo.firstStorage) {
+      upData.firstStorage = false
+    }
+    await transaction.collection('vip_list').where({
+      shopId: orderInfo.shopId,
+      userOpenid: orderInfo.userOpenid
+    }).update({
+      data: upData
+    })
+    await transaction.commit()
+    return {
+      success: true,
+      message: '用户储值事务提交成功!',
+    }
+  } catch (e) {
+    console.error('Transaction Error:', e)
+    // 显式回滚事务
+    if (transaction) {
+      try {
+        await transaction.rollback();
+        console.log('事务已回滚');
+      } catch (rollbackError) {
+        console.error('回滚失败:', rollbackError);
+      }
+    }
+    return {
+      success: false,
+      message: '用户储值事务提交失败!',
+      data: e
+    }
   }
 }

@@ -21,7 +21,7 @@ Page({
     this.deletZero();
 
 
-    console.log(this.data.commotidy)
+    console.log(this.data.addCommotidy)
     //生成入库记录
     var commotidyList = []
     for (let index = 0; index < this.data.addCommotidy.length; index++) {
@@ -37,27 +37,21 @@ Page({
       shopId: appData.shop_account._id,
       orderName: '进货单',
       status: appData.status,
-      time: app.getNowTime(),
+      time: new Date().getTime(),
       commotidyList: commotidyList,
-      amount: this.data.sum / 100,
+      amount: this.data.sum,
       payMode: payMode,
-      time: app.getNowTime(),
-      amount: this.data.sum / 100
     }
-    for (let index = 0; index < 10; index++) {
-      //云函数进货流程
-      const res = await app.callFunction({
-        name: 'commotidyPurchase',
-        data: {
-          order: order,
-        }
-      })
-      if (!res.success) {
-        app.showToast('入库失败!', 'error')
+    //云函数进货流程
+    const res = await app.callFunction({
+      name: 'commotidyPurchase',
+      data: {
+        order: order,
       }
-
+    })
+    if (!res.success) {
+      app.showToast('入库失败!', 'error')
     }
-
 
     //修改库存数量 //先处理本地商品数据
     for (let index = 0; index < this.data.addCommotidy.length; index++) {
@@ -112,7 +106,6 @@ Page({
         return;
       }
     }
-
     this.data.addCommotidy.push({
       class: e.mark.class,
       index: e.mark.index,
@@ -143,7 +136,7 @@ Page({
     }
     console.log(sum)
     this.setData({
-      sum: sum * 100
+      sum: sum
     })
   },
 

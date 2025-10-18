@@ -1,5 +1,6 @@
 <!--pages/set/commoditySet/commotidySet.wxml-->
-<view style="width: 100%; height: 10vh;"></view>
+<import src="../../../template/SetMenu/SetMenu" />
+<template is="titel_video" data="{{titelName:'商品管理',video_tap:'video_tap'}}" />
 <van-grid column-num="1" class="border">
   <van-grid-item use-slot bind:tap="goto" mark:name='commotidyNameSet'>
     <image mode="scaleToFill" style="height: 180rpx; width: 180rpx;" src="https://6269-billiards-0g53628z5ae826bc-1326882458.tcb.qcloud.la/icon/%E6%A1%A3%E6%A1%88.png?sign=579257484707ee399ff8c3452b1e0883&t=1716971880" />
@@ -14,3 +15,9 @@
     <text>查库存记录</text>
   </van-grid-item>
 </van-grid>
+<view class="qrborder" bind:tap="downPic">
+  <van-icon name="qr" size="50rpx" color="#0094ff"></van-icon>
+  <text>下载商品码</text>
+</view>
+
+<!-- 获取客户端店铺商城小程序码 -->

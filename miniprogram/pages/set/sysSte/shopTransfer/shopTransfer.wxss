@@ -1,4 +1,5 @@
 /* pages/set/sysSte/shopTransfer/shopTransfer.wxss */
+@import '../../../../template/SetMenu/SetMenu.wxss';
 .shopInfo_border {
   display: flex;
   flex-direction: column;

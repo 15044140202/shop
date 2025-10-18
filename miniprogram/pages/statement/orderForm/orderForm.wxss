@@ -1,40 +1,136 @@
-/* pages/statement/orderForm/orderForm.wxss */
-page{
-  background-color: #eee;
+/* pages/statement/orderForm/orderForm.wxss  */
+@import '../../../template/noData/noData.wxss';
+page {
+  background: #F8FAFC;
 }
-.border{
+
+/* 通用卡片样式 */
+.card-item {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: #fff;
-  margin-top: 20rpx;
-  height: 140rpx;
   width: 95%;
-  border-radius: 30rpx;
   margin-left: 2.5%;
+  margin-top: 2vh;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  width: 85%;
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.04);
 }
-.front{
-  margin-left: 30rpx;
+
+.content-left {
+  flex: 1;
+  margin-right: 32rpx;
 }
-.titel{
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.table-num {
+  font-size: 34rpx;
+  color: #1E293B;
+  font-weight: 600;
+}
+
+.divider {
+  color: #CBD5E1;
+  margin: 0 16rpx;
+}
+
+.user-name {
+  font-size: 30rpx;
+  color: #64748B;
+}
+
+.time-text {
+  font-size: 26rpx;
+  color: #94A3B8;
+}
+
+.amount-text {
+  font-size: 38rpx;
+  color: #3B82F6;
+}
+
+/* 会员样式调整 */
+.border1 {
+  border-radius: 16rpx !important;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.04) !important;
+  padding: 24rpx;
+  border: none !important;
+}
+
+.content-right {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
-.titel_1{
+/* 会员卡片容器 */
+.vip-card {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  margin: 0 3% 2.5vw;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.04);
+  position: relative;
+  width: 85%;
+}
+ 
+/* 会员头像 */
+.vip-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 16rpx;
+  margin-right: 32rpx;
+  border: 2rpx solid #F1F5F9;
+  background: #F8FAFC;
+}
+ 
+/* 会员信息容器 */
+.vip-info {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  margin-top: 20rpx;
-  margin-bottom: 20rpx;
+  justify-content: center;
 }
-.border1{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+ 
+/* 会员名称 */
+.vip-name {
+  font-size: 34rpx;
+  color: #1E293B;
+  font-weight: 500;
+  margin-bottom: 12rpx;
+  line-height: 1.4;
+}
+ 
+/* 会员积分 */
+.vip-points {
+  font-size: 28rpx;
+  color: #64748B;
+  letter-spacing: 0.5rpx;
+}
+ 
+/* 金额容器 */
+.vip-amount {
+  min-width: 80rpx;
+  text-align: right;
+  padding-left: 24rpx;
+}
+ 
+/* 金额文本适配 */
+.vip-amount .amount-text {
+  font-size: 36rpx;
+  color: #3B82F6;  /* 使用绿色区分储值金额 */
+  font-weight: 600;
+  display: inline-flex;
   align-items: center;
-  background-color: #fff;
-  border: solid 1rpx #ccc;
-  width: 100%;
-  margin-top: 10rpx;
+  height: 100%;
 }

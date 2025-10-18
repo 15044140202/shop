@@ -11,6 +11,13 @@ Page({
     shop_commotidy: []
 
   },
+  downPic() {
+    console.log('下载小程序码!')
+    wx.navigateTo({
+      url: `../../operate/tableInfo/tableQr/tableQr?optNum=${0}&item=miniMall`,
+    })
+    return;
+  },
   async goto(e) {
     var itemType = 'set';
     var itemSum = -1;
@@ -36,11 +43,11 @@ Page({
     }
     if (itemSum === -1) {//不验证全向项
     } else {
-      if (await app.power(itemType, itemSum, itemName) === false) {
+      if (await app.power(itemType, itemName) === false) {
         app.noPowerMessage();
         return;
       }
-    }
+    } 
     const that = this;
     wx.navigateTo({
       url: `./${e.mark.name}/${e.mark.name}`,

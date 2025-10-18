@@ -1,16 +1,65 @@
-<!--pages/set/sysSte/wxAccount/rePay/rePay.wxml-->
-<view class="order">
-  <text style="font-size: 38rpx;">单号:</text>
-  <input type="text" style="font-size: 28rpx; width: 350rpx;" value="{{order}}" 	placeholder="请输入订单号" bindinput="input" mark:item="order"/>
-  <van-icon name="scan" size="38px" bind:tap="scan"></van-icon>
+<!-- 增加导航栏和容器阴影 -->
+<import src="../../../../../template/SetMenu/SetMenu" />
+<template is="titel_video" data="{{titelName:'订单退款',video_tap:'video_tap'}}" />
+<view class="container">
+  <!-- 表单区域增加卡片式设计 -->
+  <view class="form-card">
+    <!-- 单号输入增加标签说明 -->
+    <view class="form-item">
+      <text class="form-label">订单编号</text>
+      <view class="input-group">
+        <input 
+          class="form-input"
+          placeholder-style="color:#999;"
+          placeholder="扫描或输入订单号"
+          value="{{order}}"
+          bindinput="inputOrder"
+        />
+        <van-icon 
+          name="scan" 
+          size="24px" 
+          color="#1989fa"
+          bind:tap="scan"
+        />
+      </view>
+    </view>
+ 
+    <!-- 金额输入增加单位提示 -->
+    <view class="form-item">
+      <text class="form-label">订单总额</text>
+      <input 
+        class="form-input money-input"
+        type="number" 
+        placeholder="请输入订单总金额"
+        value="{{orderAmount}}"
+        bindinput="inputOrderAmount"
+      />
+      <text class="unit">元</text>
+    </view>
+ 
+    <!-- 退款金额增加校验提示 -->
+    <view class="form-item">
+      <text class="form-label">退款金额</text>
+      <input 
+        class="form-input money-input {{isAmountInvalid ? 'error' : ''}}"
+        type="number" 
+        placeholder="最大可退{{tableCost}}元"
+        value="{{amount}}"
+        bindinput="inputAmount"
+      />
+      <text class="unit">元</text>
+    </view>
+    <text wx:if="{{isAmountInvalid}}" class="error-msg">金额不可超过订单总额</text>
+  </view>
+ 
+  <!-- 按钮增加动态效果 -->
+  <button 
+    class="submit-btn {{isFormValid ? 'active' : 'disabled'}}" 
+    hover-class="btn-hover"
+    bindtap="rePay"
+  >
+    立即退款 
+  </button>
 </view>
-<view class="order">
-  <text style="font-size: 38rpx;">订单总金额:</text>
-  <input  style="text-align: left; width: 300rpx;" type="number" value="{{orderAmount}}"	placeholder="请如实填写订单总金额" bindinput="input" mark:item="orderAmount" />
-</view>
-<view class="order">
-  <text style="font-size: 38rpx;">退款金额:</text>
-  <input style="text-align: left; width: 300rpx;" type="number" value="{{amount}}"	placeholder="不可大于订单金额" bindinput="input" mark:item="amount" />
-</view>
-<button style="margin: 80rpx;" type="primary" disabled="{{order === '' || amount === ''}}" bind:tap="rePay">退款</button>
+ 
 <van-dialog id="van-dialog" />

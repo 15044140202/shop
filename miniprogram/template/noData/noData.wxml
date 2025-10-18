@@ -1,0 +1,7 @@
+<!--template/noData/noData.wxml-->
+<template name="noData">
+  <view class="noData" wx:if="{{!switch}}">
+    <image src="../../../icon/没有数据.png" mode="scaleToFill" />
+    <text style="margin-top:30rpx; color: #0097ff; font-size: 35rpx;">没有更多信息</text>
+  </view>
+</template>

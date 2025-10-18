@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "van-icon": "@vant/weapp/icon/index",
+    "pie-chart": "../../../components/pie-chart/pie-chart"
+  }
 }

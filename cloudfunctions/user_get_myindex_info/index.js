@@ -1,47 +1,31 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
-let userinfoCfg = {
-  _openid:'',
-  lastShop:'',
-  taskId:'',
-  usedShopId:[],
-  userInfo:{
-    birthday:'',
-    gender:'男',
-    headImage:'',
-    name:'未修改昵称',
-    telephone:''
-  }
-}
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV }) // 使用当前云环境
-const db = cloud.databsse()
+const db = cloud.database()
 const _ = db.command
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
-  userinfoCfg._openid = wxContext.FROM_OPENID
-  //先获取用户信息或插入新用户信息
-  const userInfoRes = await cloud.callFunction({
-    name:"getOrInsertData",
-    data:{
-      collecton:'user_info',
-      query:{
-        _openid:openid
-      },
-      dataToInsert:userinfoCfg
-    }
-  })
-  if (userInfoRes.success) {
-    return {
-      success:true,
-      message:'get data ok',
-      data:userInfoRes.data
-    }
-  }
-
-  return {
-    success:false,
-    message:'get data error',
-    data:userInfoRes
-  }
+  const user_openid = wxContext.FROM_OPENID
+  const {shopId} = event
+  const task = []
+  //获取shopInfo
+  task.push(db.collection('shop_account').where({
+    _id:shopId
+  }).get())
+  //获取vipInfo
+  task.push(db.collection('vip_list').where({
+    shopId:shopId,
+    userOpenid:user_openid
+  }).get())
+  //获取所选店铺幸运九宫格数据
+  task.push(db.collection('shop_lucksudoku_set').where({
+    shopId:shopId
+  }).get())
+  //获取店铺会员级别设置信息
+  task.push(db.collection('shop_vip_set').where({
+    shopId:shopId
+  }).get())
+  const res = await Promise.all(task)
+  return res
 }

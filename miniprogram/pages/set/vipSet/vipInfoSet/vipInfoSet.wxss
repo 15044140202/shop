@@ -26,8 +26,9 @@ page{
 .saveMoney{
   display: flex;
   flex-direction: row;
-  justify-self: start;
+  justify-content: flex-start;
   align-items: center;
+  text-align: center;
   height: 80rpx;
   margin-left: 50rpx;
   border-bottom: solid #ccc 1rpx;

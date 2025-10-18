@@ -1,55 +1,65 @@
 /* pages/set/shopSet/shopSet.wxss */
+.page-header{
+  height: 8vh;
+}
 .sysset{
-  width: 100%;
+  width: 80vw;
   height: 80rpx;
+  padding: 2vw;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-left: 25rpx;
-  border-bottom: solid #bfbfbf 2rpx;
-}
-
-page{
-  background-color: #efeff4;
+  border-bottom: solid #eee 2rpx;
 }
 .inputFont{
   text-align: right;
   height: 100%;
 }
 .border{
-  position: relative;
-  z-index: 1;
-  width: 100%;
+  padding: 6vw;
+  width: 82vw;
+  margin-left: 3vw;
   overflow-x:hidden;
+  border-radius: 35rpx;
+  background-color: #fff;
+  box-shadow: 0 8rpx 24rpx rgba(0, 151, 255, 0.08);
 }
-.titel{
-  display: flex;
-  flex-direction: column;
-  justify-self: start;
-  align-items: flex-start;
-  width: 100%;
-  position: relative;
-  z-index: 2;
-}
-.logo{
-  width: 200rpx;
-  height: 200rpx;
-  position: absolute;
-  z-index: 3;
-  background: #ddd;
-  top: 35rpx;
-  right: 80rpx;
+
+.sysset .image{
+  height: 120rpx;
+  width: 120rpx;
   border-radius: 10%;
 }
-.logo .image{
-  border-radius: 10%;
+.piceker{
+  width: 50%;
 }
 .pickerFont{
-  width: 90%;
   height: 80rpx;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
+}
+.intro-title{
+  height: 80rpx;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.textarea{
+  width: 100%;
+  border-radius: 15rpx;
+  color: #999;
+  border: #eee solid 1rpx;
+}
+.localtion{
+  display: flex;
+  flex-direction: row;
+}
+.shop_tag{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 60vw;
 }

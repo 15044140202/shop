@@ -1,9 +1,9 @@
 // pages/set/commotidySet/commotidyNameSet/addNewCommotidy/addNewCommotidy.js
 const utils = require('../../../../../utils/light');
 const app = getApp();
-const appData = app.globalData;
+const appData = app.globalData
+const barCodeSearch = require('../../../../../utils/barCodeSearch')
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -23,6 +23,27 @@ Page({
     unitsSelect: 0,
     class: ['饮品', '食品', '烟酒', '台球用品', '球杆', '其他'],
     classSelect: 0
+  },
+  async scanBar(){
+    const res = await wx.scanCode({
+      scanType:'pdf417'
+    })
+    console.log(res)
+    const code = res.result
+    const goodsInfo = await barCodeSearch.queryByBarCode(code)
+    console.log(goodsInfo)
+    //解析 获取的商品数据
+    if (goodsInfo.code !== 200) {
+      app.showModal('获取商品数据错误!')
+      return
+    }
+    //商品名称
+    this.data.newCommotidy.name = goodsInfo.data.goodsName ?? ''
+    this.data.newCommotidy.units = goodsInfo.data.gpcType.includes('瓶') ? "瓶" :''
+    this.data.newCommotidy.picId = goodsInfo.data.img
+    this.setData({
+      newCommotidy:this.data.newCommotidy
+    })
   },
   async Image(e) {
     if (e.mark.name === '') {
@@ -95,13 +116,16 @@ Page({
           return;
         }
       }
+      const newCommotydi = JSON.parse(JSON.stringify(this.data.newCommotidy)) 
+      newCommotydi.sellCost *= 100
+      newCommotydi.primeCost *= 100
       //向服务器  提交新增数据
       const res = await app.callFunction({
         name: 'addRecord',
         data: {
           collection: 'shop_commotidy',
           data: {
-            ...this.data.newCommotidy,
+            ...newCommotydi,
             shopId: appData.shop_account._id,
           }
         }
@@ -109,7 +133,7 @@ Page({
       if (res.success) {
         app.showToast('修改成功!', 'success')
         this.data.shop_commotidy.push({
-          ...this.data.newCommotidy,
+          ...newCommotydi,
           shopId: appData.shop_account._id,
           _id:res.data._id
         })
@@ -123,7 +147,11 @@ Page({
       }
     } else {//修改
       //向服务器  提交修改数据
-      delete this.data.newCommotidy._id
+      
+      const newCommotydi = JSON.parse(JSON.stringify(this.data.newCommotidy)) 
+      newCommotydi.sellCost *= 100
+      newCommotydi.primeCost *= 100
+      delete newCommotydi._id
       const res = await app.callFunction({
         name: 'upDate',
         data: {
@@ -131,12 +159,12 @@ Page({
           query: {
             _id: this.data.shop_commotidy[this.data.index]._id
           },
-          upData: this.data.newCommotidy
+          upData: newCommotydi
         }
       })
       if (res.success) {
         app.showToast('修改成功!', 'success')
-        Object.assign(this.data.shop_commotidy[this.data.index],this.data.newCommotidy)
+        Object.assign(this.data.shop_commotidy[this.data.index],newCommotydi)
 
         appData.shop_commotidy = this.data.shop_commotidy
         const eventChannel = this.getOpenerEventChannel();
@@ -152,9 +180,19 @@ Page({
     if (!e.detail.value) {
       return
     }
-    this.setData({
-      [`newCommotidy.${e.mark.name}`]: e.mark.name === 'sum' || e.mark.name === 'lowSum' || e.mark.name === 'sellCost' || e.mark.name === 'primeCost' ? parseFloat(e.detail.value) : e.detail.value
-    })
+    if (e.mark.name === 'sum' || e.mark.name === 'lowSum') {//数量与最低数量
+      this.setData({
+        [`newCommotidy.${e.mark.name}`]:parseInt(e.detail.value) 
+      })
+    }else if(e.mark.name === 'sellCost' || e.mark.name === 'primeCost'){
+      this.setData({
+        [`newCommotidy.${e.mark.name}`]:parseFloat(e.detail.value)
+      })
+    }else{
+      this.setData({
+        [`newCommotidy.${e.mark.name}`]: e.detail.value
+      })
+    }
     console.log(this.data.newCommotidy[e.mark.name])
   },
   onchange(e) {
@@ -186,6 +224,8 @@ Page({
       })
       if (parseInt(options.index) !== -1) {
         const newCommotidy = JSON.parse(JSON.stringify(that.data.shop_commotidy[parseInt(options.index)]))
+        newCommotidy.primeCost /= 100
+        newCommotidy.sellCost /=100
         that.setData({
           newCommotidy:newCommotidy
         })

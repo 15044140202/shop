@@ -12,20 +12,11 @@ Page({
     member: [],
     imgBuff: ''
   },
-
   /**
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
     console.log(options.position);
-    const eventChannel = this.getOpenerEventChannel();
-    const that = this;
-    eventChannel.on('giveData', function (data) {
-      console.log(data)
-      that.setData({
-        member: data
-      })
-    })
     const _id = app.getRandomString(28)
     const now = new Date().getTime();
     //上传QR信息

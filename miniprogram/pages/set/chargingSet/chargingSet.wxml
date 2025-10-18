@@ -1,12 +1,31 @@
-<!--pages/set/chargingSet/chargingSet.wxml-->
-<view class='border'>
-  <view class="titel" wx:for="{{shop_charging}}" wx:key="index" bind:tap="goto" mark:mymark='{{index}}' bind:longpress="longPress" mark:index='{{index}}'>
-    <text style="font-size: 38rpx;">{{item.name}}</text>
-    <view style=" margin-right:35rpx">
-      <text style="color: #999;">{{bindTableCount[index]}}台</text>
-      <van-icon name="arrow" color='#999' />
+<!-- pages/set/chargingSet/chargingSet.wxml  -->
+<import src="../../../template/SetMenu/SetMenu" />
+<template is="titel_video" data="{{titelName:'计费规则设置',video_tap:'video_tap'}}" />
+<view class="charging-container">
+  <!-- 卡片式列表 -->
+  <view class="charging-card" wx:for="{{shop_charging}}" wx:key="index" bind:tap="goto" mark:mymark='{{index}}' bind:longpress="longPress" mark:index='{{index}}' hover-class="card-hover">
+    <view class="card-header">
+      <view class="card-header-1">
+        <van-icon name="balance-pay" color="#5B8FF9" size="48rpx" />
+        <text class="card-title">{{item.name}}</text>
+      </view>
+      <van-icon name="arrow" color="#C5D9E8" size="36rpx" />
+    </view>
+    <view class="card-footer">
+      <view class="tag-box">
+        <text class="tag-count">{{bindTableCount[index]}}台</text>
+      </view>
+
     </view>
   </view>
+
+  <!-- 悬浮操作按钮 -->
+  <view class="fab-container">
+    <button class="fab-button" bind:tap="gotoNew">
+      <van-icon name="plus" color="#FFF" size="44rpx" />
+      <text class="fab-text">新增计费方式</text>
+    </button>
+  </view>
 </view>
-<button type="primary" style="margin:30rpx " bind:tap="gotoNew">新增计费方式</button>
+
 <van-dialog id="van-dialog" />

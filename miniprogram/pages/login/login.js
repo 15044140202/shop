@@ -83,6 +83,19 @@ Page({
       this.login(true)
     }
   },
+  getLastShopIndex(merchant_info){
+    const lastShopId = merchant_info?.lastShopId
+    if (lastShopId) {
+      const index = merchant_info.shopId.findIndex(item => item.shopId === lastShopId)
+      if (index > -1) {
+        return index
+      }else{
+        return 0
+      }
+    }else{
+      return 0
+    }
+  },
   async login(register) {
     //注册店铺
     if (register) {
@@ -146,8 +159,8 @@ Page({
       }
     }
     //获取店铺信息
-    appData.shopSelect = 0
-    const res = await app.getLoginShopData(appData.merchant_info.shopId[0].shopId)
+    appData.shopSelect = this.getLastShopIndex(appData.merchant_info)
+    const res = await app.getLoginShopData(appData.merchant_info.shopId[appData.shopSelect].shopId)
     console.log(res)
     return res
   },

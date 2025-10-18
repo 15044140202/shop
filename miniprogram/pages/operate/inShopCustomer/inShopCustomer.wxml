@@ -1,17 +1,21 @@
 <!--pages/operate/inShopCustomer/inShopCustomer.wxml-->
-<view class="border" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName === '自助开台订单' || item.orderName === '店员开台订单'}}">
+<view class="border" wx:for="{{tableOrder}}" wx:key="index" wx:if="{{item.orderName === '自助开台订单' || item.orderName === '店员开台订单'|| item.orderName === '自助套餐订单'}}">
   <view wx:if="{{item.endTime === '未结账'}}" class="titel" bind:tap="goto" mark:index="{{index}}">
     <view style="display: flex; flex-direction: row; align-items: center;">
       <view class="openPerson">
-      <text style="font-size: 42rpx;">{{item.tableNum}}号台\n</text>
-        <text>名字 : {{item.openPerson.openPersonName}} \n</text>
-        <text>电话 : {{item.openPerson.openPersonTelephone}}</text>
-        <van-icon name="phone-o" size="45rpx" style="padding-left: 30rpx;" bind:tap="call" mark:index="{{index}}"></van-icon>
+        <text style="font-size: 42rpx;">{{item.tableNum}}号台\n</text>
+        <text>名字 : {{item.userName}} \n</text>
+        <text style="font-size: 25rpx;" >电话 : {{item.userTelephone}}</text>
+        <van-icon name="phone-o" size="30rpx" style="padding-left: 30rpx;" catch:tap="call" mark:index="{{index}}"></van-icon>
       </view>
     </view>
     <view class="openPerson">
       <text>押金 : {{item.cashPledge}}元 \n</text>
       <text>商品 : {{item.commotidyCost}}元</text>
+      <view catch:tap="d"  wx:if="{{item.groupBuyType}}">
+        <text>{{item.groupBuyType === 'mtCoupon'?'美团':item.groupBuyType === 'dyCoupon'?'抖音券码':'快手'}} : </text>
+        <text style="font-size: 25rpx;" user-select="true">{{item.groupBuyCode}}</text>
+      </view>
     </view>
     <van-icon name="arrow" size="45rpx" style="padding-right: 30rpx;"></van-icon>
   </view>

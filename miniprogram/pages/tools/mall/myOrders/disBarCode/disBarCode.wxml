@@ -1,0 +1,20 @@
+<!--pages/tools/mall/myOrders/disBarCode/disBarCode.wxml-->
+<!-- 页面容器 -->
+<view class="container">
+  <!-- 标题 -->
+  <view class="header">
+    <text class="title">取货码</text>
+  </view>
+
+  <!-- 温馨提示 -->
+  <view class="tip-card">
+    <van-icon class="tip-icon" name="info-o"></van-icon>
+    <text class="tip-text">到达取货店铺请先向工作人员展示订单详情,待工作人员清点好全商品并确认商品数量,种类正确后向工作人员展示取货二维码.</text>
+  </view>
+
+  <!-- 条形码展示区 -->
+  <view class="barcode-container">
+    <canvas class="barcode-canvas" canvas-id="barCode"></canvas>
+    <text class="code-text">{{barCode}}</text>
+  </view>
+</view>

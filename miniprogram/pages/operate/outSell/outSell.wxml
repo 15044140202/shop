@@ -1,16 +1,17 @@
 <!--pages/operate/outSell/outSell.wxml-->
-<van-tabs active="{{ active }}" wx:if="{{!hidden}}">
-  <van-tab wx:for="{{commotidy}}" wx:key="index" title="{{item.name}}">
-    <view class="border1" wx:for="{{item.commotidy}}" wx:key="index_1" wx:for-item="item_1" wx:for-index="index1" bind:tap="addCommotidy" mark:class='{{index}}' mark:index="{{index1}}">
+<van-tabs active="{{ 0 }}" wx:if="{{!hidden}}"  bind:change="onChange">
+  <van-tab wx:for="{{class}}" wx:key="index" title="{{item}}" >
+    <view class="border1" wx:for="{{commotidy}}" wx:key="index_1" wx:for-item="item_1" wx:for-index="index_1" bind:tap="addCommotidy" mark:index="{{index_1}}" wx:if="{{active === item_1.class}}"> 
       <view class='titel'>
         <image style="height: 150rpx; width: 150rpx; border-radius: 10%; border: solid 1rpx #ccc ; margin: 10rpx;" src="{{item_1.picId === '' ? 'cloud://cloud-4g9re7jfd5333736.636c-cloud-4g9re7jfd5333736-1325756030/image/没有图片.png' : item_1.picId}}" />
         <view class="titel_1">
           <text>{{item_1.name}}</text>
-          <text>售价:{{item_1.sellCost}}</text>
+          <text>售价:{{item_1.sellCost / 100}}</text>
         </view>
       </view>
       <text style="color: #aaa; margin-right: 30rpx;">库存数量: {{item_1.sum}} {{item_1.units}}</text>
     </view>
+    <view style="width: 100%; height: 300rpx;" ></view>
   </van-tab>
 </van-tabs>
 
@@ -26,10 +27,10 @@
       </view>
     </view>
     <view wx:for="{{addCommotidy}}" wx:key="index" class="list">
-      <text style="font-size: 32rpx;">{{commotidy[item.class].commotidy[item.index].name}}</text>
+      <text style="font-size: 32rpx;">{{commotidy[item.index].name}}</text>
       <view class="list_1" style="height: 100%;">
         <input style="height: 100%; width: 100rpx; text-align: center; font-size: 32rpx;" type="text" value="{{item.sum}}" bindinput="input" mark:index='{{index}}' />
-        <view style="font-size: 32rpx;">{{commotidy[item.class].commotidy[item.index].units}}</view>
+        <view style="font-size: 32rpx;">{{commotidy[index].units}}</view>
         <van-icon style="margin-left:30rpx;" size="40rpx" name='close' bind:tap="delete" mark:index='{{index}}' />
       </view>
     </view>

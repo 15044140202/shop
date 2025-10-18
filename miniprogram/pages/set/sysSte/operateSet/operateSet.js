@@ -13,6 +13,9 @@ Page({
     paker: ['20.0元500条', '40.0元1000条', '120.0元3000条', '200.0元5000条', '400.0元10000条'],
     pakerIndex: 0
   },
+  video_tap(){
+    console.log('点击播放视频')
+  },
   input(e) {
     console.log(e)
     if (parseInt(e.detail.value) > 0 && parseInt(e.detail.value) <= 15) {

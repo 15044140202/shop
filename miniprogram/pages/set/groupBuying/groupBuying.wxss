@@ -1,0 +1,97 @@
+/* pages/set/groupBuying/groupBuying.wxss */
+/* pages/set/setmeal/setmeal.wxss */
+@import '../../../template/SetMenu/SetMenu.wxss';
+
+.setmeal {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: auto;
+  border: 1rpx solid #eee;
+  width: 95%;
+  margin-left: 2.5%;
+  margin-top: 30rpx;
+  border-radius: 20rpx;
+  background-color: #ffffff;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.setmealName {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  margin-top: 15rpx;
+  font-weight: bolder;
+}
+
+.priceSet {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 80rpx;
+  width: 80%;
+  border-bottom: solid 5rpx #eee;
+
+}
+
+.save_button {
+  width: 80%;
+  height: 70rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom:30rpx;
+  margin-top: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+
+.add_button{
+  margin:30rpx
+}
+.addGroupBuyingBoard{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 85%;
+  height: auto;
+  margin-top: 30rpx;
+  margin-left: 7.5%;
+}
+.addGroupBuyingBoard image{
+  width: 15vw;
+  height: 15vw;
+}
+.groupBuyingInput{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 95%;
+  margin:2vh 2.5%;
+}
+.groupBuyingInput input{
+  width: 50%;
+  height: 30rpx;
+  text-align: center;
+}
+.logoBoard{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 95%;
+  margin-left: 2.5%;
+  height:20vw ;
+}
+.logoBoard text{
+  margin-left: 35rpx;
+  font-weight: 550;
+  font-size: 45rpx;
+}

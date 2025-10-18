@@ -1,20 +1,29 @@
 <!--pages/operate/operate.wxml-->
 <!-- 营业界面导航按钮栏 -->
-<view class="titel">
-  <view class="image_1 {{item.showRedDot ? 'red-dot' : ''}}" wx:for="{{menu_data}}" wx:key="index" bind:tap="goto" mark:path="{{item.path}}">
-    <van-icon name="{{item.iconName}}" size="70rpx" color="#ffffff" />
-    <text style="color: #ffffff; font-size: 26rpx;">{{item.titel_name}}</text>
+<view class="page-header">
+  <view style="display: flex; flex-direction: row;width: 92vw;">
+    <view class="image_1 {{item.showRedDot ? 'red-dot' : ''}}" wx:for="{{menu_data}}" wx:key="index" bind:tap="goto" mark:path="{{item.path}}">
+      <van-icon name="{{item.iconName}}" size="70rpx" color="#ffffff" />
+      <text style="color: #ffffff; font-size: 26rpx;">{{item.titel_name}}</text>
+    </view>
   </view>
-  <van-icon name="sort" color="{{sortColor}}" style="margin-top:50rpx; margin-right:20rpx" />
+  <van-icon name="sort" color="{{sortColor}}" style="margin-left: 87vw;" />
 </view>
+
 <!-- 桌台实时信息 界面-->
-<view class="table_border">
-  <view class="table" style="background-color:{{item.state === '自助开台' ? '#1aad19': item.state === '店员开台' ?'#0097ff':''}};" wx:for="{{tableState}}" wx:key="index" bind:tap="tableTap" bind:longpress="tableLongPress" mark:tableMark="{{index}}">
-    <van-icon name="volume-o" color="#fff" />
+<view class="table_border"> 
+  <view class="table" style="background-color:{{item.state === '自助开台' ? '#1aad19': item.state === '店员开台' ?'#0097ff':''}};" wx:for="{{shop_table}}" wx:key="index" bind:tap="tableTap" bind:longpress="tableLongPress" mark:tableMark="{{index}}">
+    <view class="table_icon_board">
+      <image src="{{item.icon}}" mode="scaleToFill" />
+      <van-icon wx:if="{{item.groupBuyInspection === false}}" name="warning" color="red" size="30rpx"></van-icon>
+    </view>
     <view class="table_titel">
-      <text style="font-size: 50rpx; color:{{item.state === '自助开台' || item.state === '店员开台' ? '#fff':'#999'}}; margin-bottom:{{item.state === '空闲' ? '20rpx':'0rpx'}};">{{item.tableCost === '' ? '空闲' : item.tableCost}}</text>
-      <text style="font-size: 30rpx; color: {{item.state === '自助开台' || item.state === '店员开台' ? '#fff':'#999'}};" wx:if="{{item.state !== '空闲'}}">{{item.endTime}}{{item.endTime === '非定时开台' ? '' : '止'}}</text>
-      <text style="font-size: 30rpx; color: {{item.state === '自助开台' || item.state === '店员开台' ? '#fff':'#999'}};">{{index + 1}}号台</text>
+      <!-- 桌台类型 -->
+      <text style="font-size: 50rpx; color:{{item.state === '自助开台' || item.state === '店员开台' ? '#fff':'#999'}}; margin-bottom:{{item.state === '空闲' ? '20rpx':'0rpx'}};">{{item.tableCost < 0 ? '空闲' : item.tableCost}}</text>
+      <!-- 桌台结束时间 -->
+      <text style="font-size: 30rpx; color: {{item.endTimeColor}};" wx:if="{{item.state !== '空闲'}}">{{item.endTime}}{{item.endTime === '非定时开台' || item.endTime === '支付中...'  ? '' : '止'}}</text>
+      <!--桌台台号-->
+      <text style="font-size: 30rpx; color: {{item.state === '空闲'? '#999':'#fff'}};">{{item.tableNum}}号台</text>
     </view>
   </view>
   <view class="table" style="background-color: #0097ff;" bind:tap="tableManager">
@@ -27,19 +36,21 @@
 <!-- 桌台信息弹出层 -->
 <van-popup round class="POPUP" position="bottom" show="{{tableCtrlShow}}" bind:close="tableCtrlClose">
   <text class="popupview" style="background-color:{{color1}}; color:#fff" bind:tap="open">{{closeOrOpen}}({{optNum}}号台)</text>
-  <text class="popupview" style="background-color: {{color1}};color:#fff" bind:tap="tapLight">{{switchName}}</text>
+  <text class="popupview" style="background-color: {{color1}};color:#fff" bind:tap="couponInspection">{{groupBuyMakeName}}</text>
   <text class="popupview" style="background-color: {{color1}};color:#fff" bind:tap="tapTableInfo">修改桌台信息</text>
   <text class="popupview" style="background-color: rgb(43, 42, 42); height: 10rpx;"></text>
   <text class="popupview" style="background-color: {{color1}};color:#fff" bind:tap="tableCtrlClose">取消</text>
 </van-popup>
 <!-- 桌台信息长按弹出层 -->
 <van-popup round class="POPUP" position="bottom" show="{{longPressShow }}" bind:close="longPressClose">
-  <text class="popupview" style="background-color:{{color1}}; color:#fff" bind:tap="timedOpen">押金定时开台</text>
-  <text class="popupview" style="background-color: {{color1}};color:#fff" bind:tap="couponOpen">团购券开台</text>
+  <text class="popupview" style="background-color:{{color1}}; color:#fff" bind:tap="groupBuySelectShow">团购券开台</text>
+  <text class="popupview" style="background-color: {{color1}};color:#fff" bind:tap="setmealOpen">套餐开台</text>
   <text class="popupview" style="background-color: {{color1}};color:#fff" bind:tap="sweepOpenLight">打扫开灯</text>
   <text class="popupview" style="background-color: rgb(43, 42, 42); height: 10rpx;"></text>
   <text class="popupview" style="background-color: {{color1}};color:#fff" bind:tap="longPressClose">取消</text>
 </van-popup>
+
+
 <van-dialog use-slot confirmButtonText="取消" title="功能选项" show="{{ show }}" bind:close="onClose">
   <view wx:for="{{options}}" wx:key="index" bind:tap="tap" mark:item='{{item}}'>
     <button type="primary" style="margin: 35rpx;">{{item}}</button>
@@ -81,15 +92,46 @@
 </van-dialog>
 <!-- 绑定用户手机号码 -->
 <van-dialog use-slot title="绑定手机号码" show="{{bindTelShow}}" bind:confirm="onConfirm" mark:item="bindTel">
-  <view  style="width: 90; margin-left: 5%;">
-  <text style="color: red;">为了账号安全,在正式使用前请先绑定手机号码.(后续使用中,如因店铺绑定微信无法正常使用或者店铺转让等操作,可通过绑定手机联系客服进行账号找回.)</text>
+  <view style="width: 90; margin-left: 5%;">
+    <text style="color: red;">为了账号安全,在正式使用前请先绑定手机号码.(后续使用中,如因店铺绑定微信无法正常使用或者店铺转让等操作,可通过绑定手机联系客服进行账号找回.)</text>
   </view>
-  
+
   <view style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;    width:90%; margin-left: 5%; height: 120rpx;">
     <text>手机号码:</text>
     <button style="width: 60%; height: 60rpx; margin-right: 50rpx; text-align: left; " size="mini" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">
       <text>{{shopInfo.telephone === '' || shopInfo.telephone === '1'  ? '未验证' : telephoneNum}}</text>
     </button>
   </view>
-</van-dialog>
+</van-dialog> 
 <van-dialog id="van-dialog" />
+<!-- 服务员开台显示 桌台团购列表界面 -->
+<van-dialog use-slot title="选择团购类型" show="{{ GPOshow }}" bind:confirm="" bind:close="" mark:item='GPO'>
+  <scroll-view class="scrollView" scroll-y>
+    <view style="margin-top: 30rpx;"></view>
+    <view class="GPOboard" wx:for="{{GPOdata}}" wx:key="index" bind:tap="groupBuyingOpenTable" mark:GPOdata="{{item}}">
+      <image src="{{item.groupBuyType==='mtCoupon'?'../../icon/美团.png':item.groupBuyType==='dyCoupon'?'../../icon/抖音.png':'../../icon/快手.png'}}" mode="scaleToFill" />
+      <text>{{item.name}}</text>
+    </view>
+  </scroll-view>
+</van-dialog>
+<!-- 显示团购券 -->
+<van-dialog use-slot title="验券并重新选择套餐" show="{{ couponCodeShow }}" bind:confirm="couponInspection" show-cancel-button bind:close="" mark:item='gbs'>
+  <view class="inspection_title">
+    <image src="{{gbInfo.groupBuyType==='mtCoupon'?'../../icon/美团.png':gbInfo.groupBuyType==='dyCoupon'?'../../icon/抖音.png':'../../icon/快手.png'}}" mode="scaleToFill" />
+    <text style="margin-left:30rpx;font-size:38rpx;">请核销对应团购券</text>
+  </view>
+  <view class="coupon_code_board">
+    <text>{{gbInfo.groupBuyCode}}</text>
+    <button size="mini" bind:tap="copyCode" mark:copyInfo="{{gbInfo.groupBuyCode}}">复制</button>
+  </view>
+</van-dialog>
+<!-- 重新核选 桌台团购列表界面 -->
+<van-dialog use-slot title="请重新核选团购类型" show="{{ GPSshow }}" bind:confirm="" bind:close="" mark:item='GPO'>
+  <scroll-view class="scrollView" scroll-y>
+    <view style="margin-top: 30rpx;"></view>
+    <view class="GPOboard" wx:for="{{thisTbaleGP}}" wx:key="index" bind:tap="couponInspection" mark:item="gbSelect" mark:thisTbaleGP="{{item}}">
+      <image src="{{item.groupBuyType==='mtCoupon'?'../../icon/美团.png':item.groupBuyType==='dyCoupon'?'../../icon/抖音.png':'../../icon/快手.png'}}" mode="scaleToFill" />
+      <text>{{item.name}}</text>
+    </view>
+  </scroll-view>
+</van-dialog>

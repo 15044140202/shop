@@ -1,0 +1,101 @@
+<view class="container">
+  <!-- 商品信息 -->
+  <view class="goods-card">
+    <view class="goods-header">
+      <text>订单号: {{orderInfo.orderNum}}</text>
+      <text class="order-time">下单时间 : {{orderInfo.placeTimeStr}}</text>
+    </view>
+    <view class="goods-item" wx:for="{{orderInfo.goodsList}}" wx:key="index">
+      <image class="goods-image" src="{{item.goodsHeadPic}}" mode="aspectFill"></image>
+      <view class="goods-info">
+        <view class="goods-name">{{item.goodsName}}</view>
+        <view class="goods-spec">
+          <text>{{item.goodsColor}}</text>
+          <text>×{{item.goodsQuantity}}</text>
+        </view>
+        <view class="goods-price">¥{{item.goodsPrice /100}}</view>
+      </view>
+    </view>
+  </view>
+  <!-- 退款金额 (仅退款时显示) -->
+  <van-cell-group wx:if="{{afterSaleType === 1}}">
+    <view class="custom-cell">
+      <text class="cell-title">实付金额 : </text>
+      <view class="cell-value">
+        <text class="refund-symbol">¥ {{orderInfo.orderAmount /100}} 元</text>
+      </view>
+    </view>
+  </van-cell-group>
+  <!-- 售后类型选择 -->
+  <van-cell-group>
+    <view class="custom-cell" bindtap="showTypePicker">
+      <text class="cell-title">售后类型</text>
+      <view class="cell-value">
+        <text>{{afterSaleTypeText}}</text>
+        <image src="/images/arrow-right.png" class="cell-arrow"></image>
+      </view>
+    </view>
+  </van-cell-group>
+
+  <!-- 售后原因选择 -->
+  <van-cell-group>
+    <view class="custom-cell" bindtap="showReasonPicker">
+      <text class="cell-title">售后原因</text>
+      <view class="cell-value">
+        <text>{{afterSaleReasonText}}</text>
+        <image src="/images/arrow-right.png" class="cell-arrow"></image>
+      </view>
+    </view>
+  </van-cell-group>
+
+  <!-- 退款金额 (仅退款时显示) -->
+  <van-cell-group wx:if="{{afterSaleType === 1}}">
+    <view class="custom-cell">
+      <text class="cell-title">退款金额</text>
+      <view class="cell-value">
+        <text class="refund-symbol">¥</text>
+        <input type="digit" value="{{refundAmount}}" placeholder="请输入退款金额" class="refund-input" bindinput="inputRefundAmount" />
+      </view>
+    </view>
+  </van-cell-group>
+
+  <!-- 问题描述 -->
+  <van-cell-group>
+    <view class="problem-description">
+      <text class="description-title">问题描述</text>
+      <textarea placeholder="请详细描述您的问题(选填)" class="description-textarea" value="{{problemDescription}}" bindinput="onProblemDescriptionChange"></textarea>
+    </view>
+  </van-cell-group>
+
+  <!-- 上传凭证 -->
+  <van-cell-group>
+    <view class="upload-title">上传凭证(选填)</view>
+    <view class="image-list">
+      <block wx:for="{{fileList}}" wx:key="index">
+        <image class="uploaded-image" src="{{item}}" mode="aspectFit" catch:tap="lookImage" bind:longpress="deleteImage" mark:index="{{index}}" />
+      </block>
+      <view class="add-image-btn" bind:tap="addImage">
+        <van-icon name="plus" size="40rpx" color="#0094ff" />
+        <text class="add-text">添加图片</text>
+      </view>
+    </view>
+    <view class="upload-tips">最多上传9张图片，单张不超过5M</view>
+  </van-cell-group>
+
+  <!-- 提交按钮 -->
+  <view class="submit-btn">
+    <van-button type="primary" block round color="#0094ff" bind:click="submitAfterSale">提交申请</van-button>
+  </view>
+
+  <!-- 售后类型选择器 -->
+  <van-popup show="{{showTypePicker}}" position="bottom" round bind:close="hideTypePicker">
+    <van-picker show-toolbar title="选择售后类型" columns="{{afterSaleTypes}}" bind:confirm="onTypeConfirm" bind:cancel="hideTypePicker" />
+  </van-popup>
+
+  <!-- 售后原因选择器 -->
+  <van-popup show="{{showReasonPicker}}" position="bottom" round bind:close="hideReasonPicker">
+    <van-picker show-toolbar title="选择售后原因" columns="{{afterSaleReasons}}" bind:confirm="onReasonConfirm" bind:cancel="hideReasonPicker" />
+  </van-popup>
+
+  <van-toast id="van-toast" />
+</view>

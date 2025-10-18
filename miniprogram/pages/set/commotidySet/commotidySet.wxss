@@ -1,4 +1,19 @@
 /* pages/set/commoditySet/commotidySet.wxss */
+@import '../../../template/SetMenu/SetMenu.wxss';
 .border{
   height: 80%;
+}
+.qrborder{
+  position: absolute;
+  bottom: 10vh;
+  right: 0vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #eee;
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 90rpx;
+  border:solid 1rpx #0094ff;
 }

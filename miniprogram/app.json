@@ -55,7 +55,46 @@
     "pages/set/setmeal/setmeal",
     "pages/set/sysSte/deviceManage/cupboard/cupboard",
     "pages/set/marketing/marketing",
-    "pages/set/sysSte/shopTransfer/shopTransfer"
+    "pages/set/sysSte/shopTransfer/shopTransfer",
+    "pages/set/amountBook/amountBook",
+    "pages/set/amountBook/editor/editor",
+    "template/noData/noData",
+    "pages/set/groupBuying/groupBuying",
+    "pages/tools/tools",
+    "pages/tools/orderList/orderList",
+    "pages/tools/recruit/recruit",
+    "pages/set/shortMassageSend/vipSelect/vipSelect",
+    "pages/tools/recruit/addNewRecuit/addNewRecuit",
+    "pages/operate/my/attendance_record/attendance_record",
+    "pages/tools/mall/mall",
+    "pages/tools/mallManage/mallManage",
+    "pages/tools/mallManage/addNewCommotidy/addNewCommotidy",
+    "pages/tools/mallManage/replenishCommotydi/replenishCommotydi",
+    "pages/tools/mall/goodsInfo/goodsInfo",
+    "pages/tools/mall/shopping_cart/shopping_cat",
+    "pages/tools/mall/shoppingAddManage/shoppingAddManage",
+    "pages/tools/mall/shoppingAddManage/addShoppingAdd/addShoppingAdd",
+    "pages/tools/mall/myOrders/myOrders",
+    "pages/tools/mall/myOrders/aftersales/aftersales",
+    "pages/tools/mallManage/transit/transit",
+    "pages/tools/mallManage/expressInfo/expressInfo",
+    "pages/tools/mallManage/aftersales/aftersales",
+    "pages/tools/mall/myOrders/aftersaleInfo/aftersaleInfo",
+    "pages/tools/mall/myOrders/aftersalesTransit/aftersalesTransit",
+    "pages/tools/mallManage/mallSet/mallSet",
+    "pages/tools/mallManage/mallStatement/mallStatement",
+    "pages/tools/mallManage/mallSet/admin/admin",
+    "pages/tools/mallManage/mallSet/shoppingTemplate/shoppingTemplate",
+    "pages/tools/mall/myOrders/disBarCode/disBarCode",
+    "pages/tools/recruit/memberMoment/memberMoment",
+    "pages/set/sysSte/waiter/girlSet/girlSet",
+    "pages/set/sysSte/waiter/girlWorkTimeSet/girlWorkTimeSet",
+    "pages/statement/openLightRecord/openLightRecord",
+    "pages/set/amountBook/statistic/statistic",
+    "pages/set/sysSte/deviceManage/shopSmartDisplay/shopSmartDisplay",
+    "pages/tools/firendCircle_manager/firendCircle_manager",
+    "pages/statement/giftCoupon/giftCoupon",
+    "components/pie-chart/pie-chart"
   ],
   "usingComponents": {
     "van-icon": "@vant/weapp/icon/index",
@@ -92,8 +131,14 @@
       {
         "pagePath": "pages/operate/operate",
         "text": "营业",
-        "iconPath": "/icon/钱钱-.png",
-        "selectedIconPath": "/icon/钱钱.png"
+        "iconPath": "/icon/营业-.png",
+        "selectedIconPath": "/icon/营业.png"
+      },
+      {
+        "pagePath": "pages/tools/tools",
+        "text": "工具",
+        "iconPath": "/icon/工具-.png",
+        "selectedIconPath": "/icon/工具.png"
       },
       {
         "pagePath": "pages/set/set",
@@ -106,9 +151,18 @@
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents",
   "plugins": {
-    "myPlugin": {
-      "version": "1.0.8",
-      "provider": "wx19793dc4c276eeba"
+    "kdPlugin": {
+      "version": "1.1.2",
+      "provider": "wx6885acbedba59c14"
     }
-  }
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "我们需要获取您的地理位置，以便为您提供更精准的服务"
+    }
+  },
+  "requiredPrivateInfos": [
+    "chooseLocation",
+    "getLocation"
+  ]
 }

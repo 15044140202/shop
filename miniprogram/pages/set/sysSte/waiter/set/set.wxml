@@ -4,29 +4,29 @@
 <van-tabs active="{{ active }}" bind:change="onChange" animated color='#0097ff'>
   <van-tab title="报表">
     <van-cell-group>
-      <van-cell  size='large' wx:for="{{power.statement}}" wx:key="index" title="{{statementKeys[index]}}" label="{{titel.statement[index]}}" border="{{ true }}" bind:tap="tap" mark:obj="statement" mark:index='{{index}}' mark:titel='{{statementKeys[index]}}' >
-        <van-icon size='70rpx' color="{{statementValues[index]===true?'green':'red'}} " slot="right-icon" name="{{statementValues[index]===true?'success':'cross'}}" class="custom-icon" />
+      <van-cell  size='large' wx:for="{{shop_member_power.statement}}" wx:key="index" title="{{index}}" label="{{item.descripsion}}" border="{{ true }}" bind:tap="tap" mark:obj="statement" mark:index='{{index}}' >
+        <van-icon size='70rpx' color="{{item.value?'green':'red'}} " slot="right-icon" name="{{item.value?'success':'cross'}}" class="custom-icon" />
       </van-cell>
     </van-cell-group>
   </van-tab>
   <van-tab title="营业">
     <van-cell-group>
-      <van-cell size='large' wx:for="{{power.operate}}" wx:key="index" title="{{operateKeys[index]}}" label="{{titel.operate[index]}}" border="{{ true }}" bind:tap="tap" mark:obj="operate" mark:index='{{index}}' mark:titel='{{operateKeys[index]}}'>
-        <van-icon size='70rpx' color="{{operateValues[index]===true?'green':'red'}} " slot="right-icon" name="{{operateValues[index]===true?'success':'cross'}}" class="custom-icon" />
+      <van-cell size='large' wx:for="{{shop_member_power.operate}}" wx:key="index" title="{{index}}" label="{{item.descripsion}}" border="{{ true }}" bind:tap="tap" mark:obj="operate" mark:index='{{index}}'>
+        <van-icon size='70rpx' color="{{item.value?'green':'red'}} " slot="right-icon" name="{{item.value?'success':'cross'}}" class="custom-icon" />
       </van-cell>
     </van-cell-group>
   </van-tab>
   <van-tab title="设置">
     <van-cell-group>
-      <van-cell size='large' wx:for="{{power.set}}" wx:key="index" title="{{setKeys[index]}}" label="{{titel.set[index]}}" border="{{ true }}" bind:tap="tap" mark:obj="set" mark:index='{{index}}' mark:titel='{{setKeys[index]}}'>
-        <van-icon size='70rpx' color="{{setValues[index]===true?'green':'red'}} " slot="right-icon" name="{{setValues[index]===true?'success':'cross'}}" class="custom-icon" />
+      <van-cell size='large' wx:for="{{shop_member_power.set}}" wx:key="index" title="{{index}}" label="{{item.descripsion}}" border="{{ true }}" bind:tap="tap" mark:obj="set" mark:index='{{index}}'>
+        <van-icon size='70rpx' color="{{item.value?'green':'red'}} " slot="right-icon" name="{{item.value?'success':'cross'}}" class="custom-icon" />
       </van-cell>
     </van-cell-group>
   </van-tab>
   <van-tab title="系统">
     <van-cell-group>
-      <van-cell size='large' wx:for="{{power.systemSet}}" wx:key="index" title="{{systemSetKeys[index]}}" label="{{titel.systemSet[index]}}" border="{{ true }}"  bind:tap="tap" mark:obj="systemSet" mark:index='{{index}}' mark:titel='{{systemSetKeys[index]}}'>
-        <van-icon size='70rpx' color="{{systemSetValues[index]===true?'green':'red'}} " slot="right-icon" name="{{systemSetValues[index]===true?'success':'cross'}}" class="custom-icon" />
+      <van-cell size='large' wx:for="{{shop_member_power.systemSet}}" wx:key="index" title="{{index}}"label="{{item.descripsion}}" border="{{ true }}"  bind:tap="tap" mark:obj="systemSet" mark:index='{{index}}'>
+        <van-icon size='70rpx' color="{{item.value?'green':'red'}} " slot="right-icon" name="{{item.value?'success':'cross'}}" class="custom-icon" />
       </van-cell>
     </van-cell-group>
   </van-tab>

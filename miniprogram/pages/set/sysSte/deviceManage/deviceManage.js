@@ -1,5 +1,4 @@
 // pages/set/sysSte/deviceManage/deviceManage.js
-const imou = require('../../../../utils/imou');
 const app = getApp();
 const appData = app.globalData;
 Page({
@@ -10,12 +9,17 @@ Page({
   data: {
     device:appData.shop_device
   },
-  goto(e) {
+  async goto(e) {
     console.log(e)
+    if (e.mark.item === 'doorLock') {//权限检测
+      if (!await app.power('systemSet','门禁设置')) {
+        app.noPowerMessage()
+        return
+      }
+    }
     wx.navigateTo({
       url: `./${e.mark.item}/${e.mark.item}`
     })
-
   },
   /**
    * @description //新加设备种类时 用这个函数检测 数据库中是否有 新加的这个设备种类  没有会自动添加并刷新本地数据
@@ -27,8 +31,13 @@ Page({
       {
         name:'printer',
         data:''
+      },
+      {
+        name:'shopSmartDisplay',
+        data:[]
       }
     ]//新设备应以obj格式出现在数组中
+
     for (let index = 0; index < newKind.length; index++) {
       const element = newKind[index];
       if (!(element.name in nowDevice)) {//数据库中没有这个设备种类

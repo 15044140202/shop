@@ -1,0 +1,85 @@
+/* pages/billList/billList.wxss  */
+/* 页面容器 */
+.bill-page {
+  background-color: #f5f7fa; /* 背景颜色 */
+  min-height: 100vh;
+}
+ 
+/* 页面头部 */
+.page-header {
+  height: 8vh;
+}
+ 
+.header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+ 
+.header-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #fff; /* 白色文字 */
+  margin-bottom: 10rpx;
+}
+ 
+.header-date {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8); /* 半透明白色 */
+}
+ 
+/* 账单列表 */
+.bill-list {
+  background-color: #fff;
+  border-radius: 16rpx;
+  margin: 20rpx;
+  padding: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+ 
+/* 单个账单项 */
+.bill-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #ebeef5; /* 边框颜色 */
+}
+ 
+.bill-item:last-child {
+  border-bottom: none;
+}
+ 
+/* 账单信息 */
+.bill-info {
+  display: flex;
+  flex-direction: column;
+}
+ 
+.bill-name {
+  font-size: 28rpx;
+  color: #303133; /* 主要文字颜色 */
+  margin-bottom: 10rpx;
+}
+ 
+.bill-time {
+  font-size: 24rpx;
+  color: #909399; /* 次要文字颜色 */
+}
+ 
+/* 账单详情 */
+.bill-detail {
+  display: flex;
+  align-items: center;
+}
+ 
+.bill-amount {
+  font-size: 32rpx;
+  color: #0097ff; /* 主题颜色 */
+  margin-right: 20rpx;
+}
+ 
+.bill-status {
+  font-size: 28rpx;
+  color: #0097ff; /* 常规文字颜色 */
+}

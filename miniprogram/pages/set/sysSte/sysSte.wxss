@@ -1,5 +1,49 @@
-/* pages/set/sysSte/sysSte.wxss */
-@import '/template/SetMenu/SetMenu.wxss';
-page{
-  background-color: #efeff4;
+/* pages/set/sysSte/sysSte.wxss  */
+
+.settings-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240rpx, 1fr));
+  gap: 32rpx;
+  padding: 40rpx;
+  background: #f5f7fa;
+}
+
+.setting-card {
+  position: relative;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 48rpx 32rpx;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8rpx 24rpx rgba(0, 151, 255, 0.08);
+}
+ 
+.card-hover {
+  transform: translateY(-8rpx);
+  box-shadow: 0 12rpx 32rpx rgba(0, 151, 255, 0.15);
+}
+ 
+.card-icon {
+  margin-bottom: 32rpx;
+  filter: drop-shadow(0 4rpx 8rpx rgba(0, 151, 255, 0.2));
+}
+ 
+.card-title {
+  display: block;
+  font-size: 28rpx;
+  color: #2c3542;
+  font-weight: 500;
+  line-height: 1.4;
+}
+ 
+.dynamic-badge {
+  position: absolute;
+  top: -16rpx;
+  right: -16rpx;
+  background: #ff4d4f;
+  color: #fff;
+  font-size: 20rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 100rpx;
+  box-shadow: 0 4rpx 12rpx rgba(255, 77, 79, 0.2);
 }

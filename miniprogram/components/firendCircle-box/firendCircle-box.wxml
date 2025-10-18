@@ -1,0 +1,11 @@
+<!--components/friendCircle/firendCircle.wxml-->
+<view class="comment-box {{show ? 'show' : ''}}">
+  <view class="mask" catchtap="hide"></view>
+  <view class="content">
+    <textarea class="textarea" placeholder="评论..." value="{{content}}" bindinput="handleInput" focus="{{focus}}" fixed="true"></textarea>
+    <view class="actions">
+    <text style="font-size: 24rpx; color: red; width: 80%;">发言需遵守法律法规。严禁发表：侮辱/歧视性言论 虚假不实信息  广告及垃圾内容 违规内容将被删除.</text>
+      <button class="btn" bindtap="submit">发送</button>
+    </view>
+  </view>
+</view>

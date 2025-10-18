@@ -1,0 +1,13 @@
+<!--components/image-uploader/image-uploader.wxml-->
+<wxs module="tool" src="../../utils/tool.wxs"></wxs>
+<view class="image-uploader">
+  <block wx:for="{{files}}" wx:key="*this">
+    <view class="image-item">
+      <image src="{{tool.loadcos(item)}}" mode="aspectFill" class="image"></image>
+      <van-icon class="delete-btn" name="cross" color="red"  bindtap="deleteImage" ></van-icon>
+    </view>
+  </block>
+  <view class="add-btn" bindtap="chooseImage" wx:if="{{files.length < maxCount}}">
+    <van-icon class="add-icon" name="plus" size="80rpx" color="#ccc"></van-icon>
+  </view>
+</view>

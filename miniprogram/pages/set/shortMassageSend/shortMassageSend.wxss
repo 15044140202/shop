@@ -1,14 +1,80 @@
 /* pages/set/shortMassageSend/shortMassageSend.wxss */
-@import '../../../template/SetMenu/SetMenu.wxss';
-
-page{
-  background-color: #eee;
+.page-header{
+  height: 8vh;
 }
-.advancedSetTitel {
-  height: 100rpx;
+/* pages/set/shortMassageSend/shortMassageSend.wxss  */
+.page-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+/* 输入区域样式 */
+.input-section {
+  background-color: #fff;
+  margin: 20rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+ 
+.input-group {
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: solid #ccc 1rpx;
+  padding: 30rpx;
+}
+ 
+.input-label {
+  font-size: 34rpx;
+  font-weight: 500;
+  color: #333;
+}
+ 
+.input-field {
+  font-size: 34rpx;
+  color: #333;
+  text-align: center;
+  flex: 1;
+  margin-left: 20rpx;
+  padding: 20rpx;
+  border: 1rpx solid #e0e0e0;
+  border-radius: 8rpx;
+}
+ 
+.content-input {
+  width: 90%;
+  margin: 20rpx auto;
+  padding: 20rpx;
+  font-size: 34rpx;
+  color: #333;
+  border: 1rpx solid #e0e0e0;
+  border-radius: 8rpx;
+  background-color: #fff;
+  height: 450rpx;
+}
+ 
+/* 操作区域样式 */
+.action-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  background-color: #fff;
+  margin: 20rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+ 
+.sms-balance {
+  font-size: 32rpx;
+  color: #666;
+}
+ 
+.action-button {
+  background-color: #0097ff;
+  color: #fff;
+  font-size: 32rpx;
+  padding: 15rpx 30rpx;
+  border-radius: 8rpx;
+  border: none;
 }

@@ -93,7 +93,8 @@ Page({
           shopId: this.data.shopId,
           shopName: this.data.shopName,
           position: this.data.position,
-          telephone: this.data.telephone
+          telephone: this.data.telephone,
+          userName:this.data.name
         }
       })
       if (merchantUpdataRes.success) {

@@ -1,25 +1,21 @@
 @import '../../../../template/SetMenu/SetMenu.wxss';
 
 page{
-  background-color: #eee;
+  background-color: #fff;
 }
 .deviceBorder{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: flex-start;
-  width: 100%;
-  height: auto;
-  flex-wrap: wrap;
+  display: grid;                  /* 块级网格容器 */
+  grid-template-columns: 29vw 29vw 29vw; /* 三列：固定30vw */
+  grid-template-rows: 29vw 29vw 29vw;  /* 两行：自动高度 + 固定200px */
+  gap: 2.5vw;                      /* 行列间距 */
+  margin-left: 2.5vw;
 }
 .device{
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 28%;
-  height: 200rpx;
-  border: solid 5rpx #8a8a8a;
-  border-radius: 30rpx;
-  margin-top: 60rpx;
+  border-radius: 15rpx;
+  border: solid 0.5vw #0094ff;
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.3);
 }

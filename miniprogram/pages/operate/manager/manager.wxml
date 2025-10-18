@@ -1,36 +1,46 @@
-<!--pages/operate/manager/manager.wxml-->
-<view style="background-color: #0097ff; color: #fff;height: 80rpx; display: flex;flex-direction: column; align-items: center; justify-content: center;">桌台续费管理</view>
-<view style="background-color: #1aad19;color: #fff;width: 80%; margin-left:10%; border-radius: 10rpx; height: 60rpx; margin-top: 30rpx;display: flex; flex-direction: column; justify-content: center; align-items: center;" bind:tap="payTableCost" mark:index="all" >一键续费\n(剩余不足一个月的桌台)</view>
-<view wx:for="{{shop_table}}" wx:key="index" class="border">
-  <view wx:if="{{index === 0}}" class="row" style="margin-top: 30rpx;">
-    <view class="tableNum">
-      <text>桌台号码</text>
-    </view>
-    <view class="tableNum">
-      <text>桌台名称</text>
-    </view>
-    <view class="tableNum" style="width: 30%;">
-      <text>年费截止日期</text>
-    </view>
-       <view class="tableNum" style="width: 30%; ">
-      <text>{{price}}元/年/台</text>
+<!-- pages/operate/manager/manager.wxml  -->
+  <!-- 标题区 -->
+  <view class="page-header">
+    <text class="header-title">桌台续费管理</text>
+    <text class="header-intro">增删桌台、续费充值、管理使用时间，一站式便捷操作。</text>
+  </view>
+<view class="container">
+  <!-- 一键续费按钮 -->
+  <view class="renew-button card-shadow" bind:tap="payTableCost" mark:index="all">
+    <van-icon name="after-sale" color="white" size="80rpx"></van-icon>
+    <text class="button-text">一键续费\n(剩余不足一个月的桌台)</text>
+  </view>
+  <!-- 一键续费按钮 -->
+  <view class="renew-button card-shadow" bind:tap="shortMsgTopUp">
+    <van-icon name="cash-back-record-o" color="white" size="80rpx"></van-icon>
+    <text class="button-text">获取电话号短信充值--剩余{{shop_account.shortMsgDegree}}次</text>
+  </view>
+  <!-- 桌台列表 -->
+  <view class="table-container">
+    <view wx:for="{{shop_table}}" wx:key="index" class="card card-shadow" bind:longtap="deleteTable" mark:index="{{index}}">
+      <!-- 表头 -->
+      <view wx:if="{{index === 0}}" class="table-header">
+        <view class="header-item"><text>桌台号码</text></view>
+        <view class="header-item"><text>桌台名称</text></view>
+        <view class="header-item wide"><text>年费截止日期</text></view>
+        <view class="header-item wide"><text>{{price}}元/年/台</text></view>
+      </view>
+      <!-- 数据行 -->
+      <view class="table-row">
+        <view class="data-item"><text class="highlight">{{item.tableNum}}</text></view>
+        <view class="data-item"><text class="text-ellipsis">{{item.tableName}}</text></view>
+        <view class="data-item wide"><text class="date">{{item.useEndTime}}</text></view>
+        <view class="data-item wide">
+          <button class="primary-button" type="primary" size="mini" bind:tap="payTableCost" mark:index="{{index}}">
+            缴费
+          </button>
+        </view>
+      </view>
     </view>
   </view>
-  <view class="row">
-    <view class="tableNum">
-      <text>{{item.tableNum}}</text>
-    </view>
-    <view class="tableNum">
-      <text>{{item.tableName}}</text>
-    </view>
-    <view class="tableNum" style="width: 30%;">
-      <text>{{item.useEndTime}}</text>
-    </view>
-    <view class="tableNum" style="width: 30%; ">
-      <button type="primary" size="mini" bind:tap="payTableCost" mark:index="{{index}}">缴费</button>
-    </view>
+
+  <!-- 添加按钮 -->
+  <view class="floating-button" bind:tap="addNewTable">
+    <van-icon name="plus" color="white" size="80rpx"></van-icon>
   </view>
-</view>
-<button type="primary" style="margin: 80rpx;" bind:tap="addNewTable">添加新桌台</button>
-<view style="height: 150rpx;">
 </view>

@@ -1,36 +1,84 @@
-<!--pages/set/sysSte/lightSet/lightSet.wxml-->
-<view style=" height:50rpx "></view>
-<text style="margin-top:50rpx; margin-left: 50rpx; color: #999;">灯控器设置</text>
-<view style=" height:50rpx "></view>
-
-
-<view class="titel" style="background-color: white; height: 100rpx;">
-  <text style="margin-left: 30rpx;">绑定通讯模块</text>
-  <view class="titel_1">
-    <input style="width: 280rpx; margin-right: 20rpx;" type="text" value="{{shop_device.lightCtrl}}" placeholder="未绑定灯控器" focus="false" bindblur="bindKeyInput" mark:item='lightCtrl' />
-    <van-icon name='scan' size="50rpx" color="#999" bind:tap="scan"></van-icon>
+<!-- pages/set/sysSte/lightSet/lightSet.wxml  -->
+<view class="page-container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="header-title">店铺电源管理</text>
+    <text class="header-intro">店铺电源如棚顶灯、牌匾灯、氛围灯、换风机等可以绑定灯控器上进行定时智能管理.</text>
   </view>
-</view>
-<view class="lightBorder" wx:for="{{5}}" wx:key="index">
-  <view style="background-color:#0097ff;color: #fff; width: 90%; height: 60rpx; margin-top:{{index === 0 ? '30rpx' : '0rpx'}}; font-size: 38rpx;display: flex; justify-content: center; align-items: center;">{{index === 0 ? '店内牌匾设置' : '店铺内电器'}}{{index === 0 ? '' : index}}</view>
-  <view class="light">
-    <view class="switch">
-      <picker mode="time" value="{{shop_device.shopLightSet[index].openTime}}" bindchange="timeChange" mark:item="open" mark:index="{{index}}">
-        <text>每天--{{shop_device.shopLightSet[index].openTime === undefined ? '00:00' :shop_device.shopLightSet[index].openTime}} 开</text>
-      </picker>
-      <view style="display: flex; flex-direction: row; width: 200rpx;">
-        <text>通道 : </text>
-        <input style="width: 80rpx; height: 100%; text-align: center;" type="number" value="{{shop_device.shopLightSet[index].lightId}}" placeholder="0" bindinput="bindKeyInput" mark:item="lightId" mark:index="{{index}}" />
+ 
+  <!-- 绑定通讯模块 -->
+  <view class="bind-module">
+    <text class="bind-title">绑定通讯模块</text>
+    <view class="bind-input">
+      <input 
+        class="input-box"
+        type="text"
+        value="{{shop_device.lightCtrl}}" 
+        placeholder="未绑定灯控器"
+        focus="false"
+        bindblur="bindKeyInput"
+        mark:item="lightCtrl"
+      />
+      <van-icon name="scan" size="40rpx" color="#999" bind:tap="scan" />
+    </view>
+  </view>
+ 
+  <!-- 灯控设置列表 -->
+  <view class="light-list">
+    <block wx:for="{{5}}" wx:key="index">
+      <view class="light-item">
+        <view class="light-title" style="margin-top: {{index === 0 ? '30rpx' : '0rpx'}};">
+          {{index === 0 ? '店内牌匾设置' : '店铺内电器'}}{{index === 0 ? '' : index}}
+        </view>
+        <view class="light-control">
+          <view class="control-left">
+            <picker 
+              mode="time"
+              value="{{shop_device.shopLightSet[index].openTime}}" 
+              bindchange="timeChange"
+              mark:item="open"
+              mark:index="{{index}}"
+            >
+              <text class="time-text">每天--{{shop_device.shopLightSet[index].openTime  === undefined ? '00:00' : shop_device.shopLightSet[index].openTime}}  开</text>
+            </picker>
+            <view class="channel-input">
+              <text>通道 : </text>
+              <input 
+                class="input-number"
+                type="number"
+                value="{{shop_device.shopLightSet[index].lightId}}" 
+                placeholder="0"
+                bindinput="bindKeyInput"
+                mark:item="lightId"
+                mark:index="{{index}}"
+              />
+            </view>
+          </view>
+          <view class="control-right">
+            <picker 
+              mode="time"
+              value="{{shop_device.shopLightSet[index].closeTime}}" 
+              bindchange="timeChange"
+              mark:item="close"
+              mark:index="{{index}}"
+            >
+              <text class="time-text">每天--{{shop_device.shopLightSet[index].closeTime  === undefined ? '00:00' : shop_device.shopLightSet[index].closeTime}}  关</text>
+            </picker>
+            <switch 
+              checked="{{switchStatus[index]}}"
+              bindchange="switchChange"
+              mark:item="lightChange"
+              mark:index="{{index}}"
+            />
+          </view>
+        </view>
       </view>
-    </view>
-    <view style="width: 50%;">
-      <picker style="width: 100%; text-align: right;" mode="time" value="{{shop_device.shopLightSet[index].closeTime}}" bindchange="timeChange" mark:item="close" mark:index="{{index}}">
-        <text>每天--{{shop_device.shopLightSet[index].closeTime === undefined ? '00:00' :shop_device.shopLightSet[index].closeTime}} 关</text>
-      </picker>
-      <switch style="width: 100%; text-align: right;" checked="{{switchStatus[index]}}" bindchange="switchChange" mark:item="lightChange"  mark:index="{{index}}" />
-    </view>
+    </block>
+  </view>
+ 
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button class="primary-button" bind:tap="save">保存</button>
+    <button class="secondary-button" bind:tap="lightTest">模块联网测试</button>
   </view>
 </view>
-
-<button type="primary" style="margin: 40rpx 40rpx 0rpx 40rpx ;" bind:tap="save">保存</button>
-<button style="margin: 40rpx 40rpx 0rpx 40rpx ;" bind:tap="lightTest">模块联网测试</button>

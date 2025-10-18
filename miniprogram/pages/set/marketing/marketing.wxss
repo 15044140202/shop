@@ -1,4 +1,5 @@
 /* pages/set/marketing/marketing.wxss */
+@import '../../../template/SetMenu/SetMenu.wxss';
 .luckSudoku{
 	display: flex;
 	flex-direction: column;

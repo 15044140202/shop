@@ -1,0 +1,52 @@
+<!--pages/set/amountBook/editor/editor.wxml-->
+<!-- 页面容器 -->
+<view class="add-page">
+  <!-- 头部导航 -->
+  <view class="header">
+    <text class="title">新增收支记录</text>
+    <view class="type-switch">
+      <text class="switch-item {{orderType === 'income' ? 'active' : ''}}" bind:tap="switchType" data-type="income">收入</text>
+      <text class="switch-item {{orderType === 'expense' ? 'active' : ''}}" bind:tap="switchType" data-type="expense">支出</text>
+    </view>
+  </view>
+
+  <!-- 表单主体 -->
+  <scroll-view class="form-body" scroll-y enhanced>
+    <!-- 金额输入 -->
+    <view class="form-item">
+      <text class="item-label">金额</text>
+      <input class="amount-input" type="digit" placeholder="0.00" placeholder-class="placeholder" bind:input="bindAmount" value="{{amount}}" />
+    </view>
+
+    <!-- 类别选择 -->
+    <view class="form-item">
+      <text class="item-label">收支项目名称</text>
+      <input type="text" value="{{category}}" bindinput="input" mark:item="category" placeholder="请输入项目名" />
+    </view>
+
+    <!-- 经办人 -->
+    <view class="form-item">
+      <text class="item-label">经办人 : {{operater}}</text>
+    </view>
+
+    <!-- 时间选择 -->
+    <view class="form-item">
+      <text class="item-label">时间 : {{date}}</text>
+    </view>
+
+    <!-- 凭证上传 -->
+    <view class="form-item upload-area">
+      <text class="item-label">凭证照片</text>
+      <view class="upload-box" bind:tap="chooseImage">
+        <image wx:if="{{receiptPath}}" src="{{receiptPath}}" class="preview-image" mode="aspectFill" />
+        <view wx:else class="upload-button">
+          <van-icon name="photograph" size="48rpx" color="#666" />
+          <text class="upload-tip">点击上传</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+  <view style="width: 100; height: 150rpx;"></view>
+  <!-- 提交按钮 -->
+  <view class="submit-btn" bind:tap="save">提交</view>
+</view>

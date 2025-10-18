@@ -1,4 +1,5 @@
 /* pages/set/sysSte/suggest/suggest.wxss */
+@import '../../../../template/SetMenu/SetMenu.wxss';
 page{
   background-color: #eee;
 }

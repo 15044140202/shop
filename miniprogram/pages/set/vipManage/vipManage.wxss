@@ -1,25 +1,116 @@
-/* pages/set/vipManage/vipManage.wxss */
-page{
-  background-color: #eee;
+/* pages/set/vipManage/vipManage.wxss  */
+/* 页面容器 */
+.page-container {
+  background-color: #f5f7fa;
+  min-height: 100vh;
+  padding: 0;
 }
-.border1{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #fff;
-  border: solid 1rpx #ccc;
-  width: 100%;
+ 
+/* 页面头部 */
+ .page-header{
+   height: 8vh;
+ }
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+}
+ 
+.header-intro {
+  font-size: 24rpx;
+  color: #e0f7ff;
+  text-align: center;
+  display: block;
   margin-top: 10rpx;
 }
-.titel{
+ 
+/* 自定义搜索框 */
+.custom-search {
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 8rpx;
+  padding: 10rpx;
+  width: 92%;
+  margin-left: 3%;
 }
-.titel_1{
+ 
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #303133;
+  padding: 10rpx;
+}
+ 
+.search-button {
+  background-color: #0097ff;
+  border-radius: 8rpx;
+  padding: 10rpx 20rpx;
+  margin-left: 10rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+ 
+/* 会员列表 */
+.vip-list {
+  background-color: #fff;
+  margin: 20rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+ 
+.vip-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #ebeef5;
+}
+ 
+.vip-item:last-child {
+  border-bottom: none;
+}
+ 
+.vip-avatar {
+  height: 150rpx;
+  width: 150rpx;
+  border-radius: 10%;
+  border: 1rpx solid #ccc;
+  margin-right: 20rpx;
+}
+ 
+.vip-info {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-top: 20rpx;
-  margin-bottom: 20rpx;
+}
+ 
+.vip-name {
+  font-size: 32rpx;
+  color: #303133;
+}
+ 
+.vip-integral {
+  font-size: 28rpx;
+  color: #909399;
+}
+ 
+.vip-amount {
+  font-size: 32rpx;
+  color: #0097ff;
+}
+ 
+/* 没有更多数据提示 */
+.no-more-data {
+  margin-top: 80rpx;
+  text-align: center;
+  width: 100%;
+  height: 200rpx;
+  border-top: 1rpx dotted #ccc;
+  padding-top: 40rpx;
+  color: #909399;
+  font-size: 28rpx;
 }

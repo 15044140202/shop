@@ -1,3 +1,5 @@
+<import src="../../../../template/SetMenu/SetMenu" />
+<template is="titel_video" data="{{titelName:'店铺转让',video_tap:'video_tap'}}" />
 <view style="width: 100%; height: 100rpx; display: flex; flex-direction: column;justify-content: center;align-items: center; color: red; font-size: 50rpx;">转让详情</view>
 <view class="shopInfo_border">
   <view class="viewLine">店铺名称 : {{shop_account.shopInfo.shopName}}</view>

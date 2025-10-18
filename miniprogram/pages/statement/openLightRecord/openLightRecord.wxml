@@ -1,0 +1,43 @@
+<!--pages/statement/openLightRecord/openLightRecord.wxml-->
+<view class="page-header" style="height: 8vh;">
+  <view class="header-title">灯控操作记录</view>
+  <view class="header-intro">查看开灯/关灯历史记录</view>
+  <view class="filterButton_box">
+    <view class="filterButton" bind:tap="filter" mark:item="全部">全部</view>
+    <view class="filterButton" bind:tap="filter" mark:item="后台操作">后台</view>
+    <view class="filterButton" bind:tap="filter" mark:item="打扫开灯">打扫</view>
+    <view class="filterButton" bind:tap="filter" mark:item="开台">开台</view>
+  </view>
+</view>
+<view class="container">
+  <!-- 记录列表 -->
+  <scroll-view scroll-y class="record-list">
+    <block wx:for="{{disPlayList}}" wx:key="_id">
+      <view class="record-card {{item.metadata.ONOFF ? 'on' : 'off'}}">
+        <view class="card-header">
+          <view class="light-name">{{item.message}}</view>
+          <view class="time">{{formatTime(item.time)}}</view>
+        </view>
+        <view class="card-body">
+          <view class="info-item">
+            <text class="label">操作人:</text>
+            <text class="value">{{item.source}}</text>
+            <text class="value">{{item.time}}</text>
+          </view>
+          <view class="info-item">
+            <text class="label">状态:</text>
+            <text class="value status {{item.metadata.ONOFF ? 'on' : 'off'}}">
+              {{item.metadata.ONOFF ? '开灯' : '关灯'}}
+            </text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <view wx:if="{{disPlayList.length === 0}}" class="empty-tips">
+      <van-divider contentPosition="center" customStyle="color: #1989fa; border-color: #1989fa; font-size: 18px;">
+        暂无灯孔记录
+      </van-divider>
+    </view>
+  </scroll-view>
+</view>

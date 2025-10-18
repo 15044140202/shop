@@ -27,10 +27,15 @@
   height: 120rpx; 
 }
 .border3{
-  width: 150rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  width: 200rpx;
 }
 .border3 van-icon{
  height: 30rpx;
  width: 30rpx;
- margin-left: 20rpx;
+ padding-right: 20rpx;
+ margin-left: 15rpx;
 }

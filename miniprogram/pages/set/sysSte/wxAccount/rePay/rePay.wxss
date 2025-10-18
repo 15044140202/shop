@@ -1,14 +1,116 @@
-/* pages/set/sysSte/wxAccount/rePay/rePay.wxss */
-page{
-  background-color: #eee;
+/* 基础样式 */
+@import '../../../../../template//SetMenu/SetMenu.wxss';
+page {
+  background-color: #f5f6f8;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
 }
-.order{
+ 
+.container {
+  padding: 32rpx;
+}
+ 
+/* 头部样式 */
+.header {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  text-align: center;
-  margin-left: 80rpx;
-  margin-right: 80rpx;
-  margin-top: 50rpx;
+  margin-bottom: 48rpx;
+}
+ 
+.title {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+ 
+/* 表单卡片 */
+.form-card {
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.04);
+  padding: 32rpx;
+  margin-bottom: 48rpx;
+}
+ 
+.form-item {
+  margin-bottom: 40rpx;
+  position: relative;
+}
+ 
+.form-label {
+  display: block;
+  font-size: 32rpx;
+  color: #4d4d4d;
+  margin-bottom: 16rpx;
+}
+ 
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+ 
+.form-input {
+  flex: 1;
+  height: 88rpx;
+  padding: 0 24rpx;
+  border: 2rpx solid #e6e6e6;
+  border-radius: 12rpx;
+  font-size: 30rpx;
+  transition: all 0.2s;
+}
+ 
+.form-input:focus {
+  border-color: #1989fa;
+  box-shadow: 0 0 8rpx rgba(25,137,250,0.2);
+}
+ 
+.money-input {
+  padding-right: 80rpx !important;
+}
+ 
+.unit {
+  position: absolute;
+  right: 32rpx;
+  bottom: 28rpx;
+  color: #808080;
+  font-size: 28rpx;
+}
+ 
+/* 错误状态 */
+.error {
+  border-color: #ee0a24 !important;
+}
+ 
+.error-msg {
+  color: #ee0a24;
+  font-size: 26rpx;
+  margin-top: -24rpx;
+  display: block;
+}
+ 
+/* 按钮样式 */
+.submit-btn {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 48rpx;
+  font-size: 34rpx;
+  transition: all 0.3s cubic-bezier(0.34, 0.69, 0.1, 1);
+}
+ 
+.active {
+  background: linear-gradient(135deg, #1989fa, #3296fa);
+  color: #fff;
+}
+ 
+.disabled {
+  background: #d9d9d9;
+  color: #999;
+  cursor: not-allowed;
+}
+ 
+.btn-hover {
+  opacity: 0.9;
+  transform: scale(0.98);
 }

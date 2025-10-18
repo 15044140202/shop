@@ -1,11 +1,7 @@
 <!--pages/set/sysSte/integralSet/integralSet.wxml-->
-<view style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin:50rpx; height: 80rpx;">
-  <text style="color: #888;">积分规则设置</text>
-  <view style="display: flex; flex-direction: column; justify-content: center;">
-    <van-icon name="video-o" size="60rpx" bind:tap="video" />
-    <view style="color: #999;">演示视频</view>
-  </view>
-</view>
+<import src="../../../../template/SetMenu/SetMenu" />
+<template is="titel_video" data="{{titelName:'积分规则设置',video_tap:'video_tap'}}" />
+
 <view class='outBorder' style="background-color: white;">
 <!-- 台费积分 -->
   <view class="border">

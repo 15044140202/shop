@@ -1,15 +1,9 @@
 <!--pages/set/sysSte/sysSte.wxml-->
-<import src="/template/SetMenu/SetMenu"/>
-<!-- 系统设置 -->
-<template is="sysSet" data="{{...menuData.operateSet}}" />
-<template is="sysSet" data="{{...menuData.waiter}}" />
-<view style="height: 35rpx;"></view>
-<template is="sysSet" data="{{...menuData.wxAccount}}"/>
-<template is="sysSet" data="{{...menuData.deviceManage}}"/>
-<view style="height: 35rpx;"></view>
-<template is="sysSet" data="{{...menuData.integralSet}}"/>
-<view style="height: 35rpx;"></view>
-<template is="sysSet" data="{{...menuData.shop_transfer}}"/>
-<view style="height: 35rpx;"></view>
-<template is="sysSet" data="{{...menuData.suggest}}"/>
-
+<!-- pages/set/sysSte/sysSte.wxml  -->
+<view class="settings-container">
+  <view wx:for="{{menuData}}" wx:key="index" class="setting-card" hover-class="card-hover" bind:tap="goto" mark:to="{{item.to}}">
+    <van-icon name="{{iconMap[item.name]}}" color="#0097FF" size="64rpx" custom-class="card-icon" />
+    <text class="card-title">{{item.name}}</text>
+    <view class="dynamic-badge" wx:if="{{item.name  === '设备管理'}}">New</view>
+  </view>
+</view>

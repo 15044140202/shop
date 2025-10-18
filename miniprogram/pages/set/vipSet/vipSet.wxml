@@ -1,11 +1,6 @@
 <!--pages/set/vipSet/vipSet.wxml-->
-<view style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin:50rpx; height: 80rpx;">
-  <text style="color: #888;">会员级别设置</text>
-  <view style="display: flex; flex-direction: column; justify-content: center;">
-    <van-icon name="video-o" size="60rpx" bind:tap="video" />
-    <view style="color: #999;">演示视频</view>
-  </view>
-</view>
+<import src="../../../template/SetMenu/SetMenu" />
+<template is="titel_video" data="{{titelName:'会员级别设置',video_tap:'video_tap'}}" />
 <view style="background-color: white;">
   <view wx:for="{{shop_vip_set.vipSet}}" wx:key="index">
     <van-cell size='large' title="{{item.name}}" is-link value="{{item.vipSum}}人" arrow-direction='' bind:longpress="delete" bind:tap="goto" mark:index='{{index}}' />

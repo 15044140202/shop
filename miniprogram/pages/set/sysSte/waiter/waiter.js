@@ -7,7 +7,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    member: appData.shop_member_set
+    shop_member:app.shop_member,
+    shop_member_set: appData.shop_member_set
   },
   set(e) {
     console.log(e.mark.mymark)
@@ -16,127 +17,81 @@ Page({
     })
   },
   async delete(e) {
+    const that = this
     console.log(e)
     Dialog.alert({
       title: '确认删除',
-      message: this.data.member[e.mark.index].name,
+      message: this.data.shop_member[e.mark.index]?.name,
       showCancelButton: true,
-    }).then(() => {
-      this.delete_1(e.mark.index);
+    }).then(async() => {
+      await that.deleteMerchantInfo(e.mark.index)
     }).catch(() => {
       return;
     });
   },
-  async delete_1(i) {
-    console.log('执行删除MerchantInfo')
-    const res = await this.deleteMerchantInfo(i)
-    console.log(res)
-    if (res === 'ok') {
-      console.log('执行删除shopMember')
-      const r = await this.deleteShopMember(i)
-      if (r === 'ok') {
-        app.showToast('删除成功!', 'success')
-        const newData = [];
-        for (let index = 0; index < this.data.member.length; index++) {
-          const element = this.data.member[index];
-          if (i != index) {
-            newData.push(element)
-          }
-        }
-        this.setData({
-          member: newData
-        })
-        appData.shopInfo.shop.member = newData;
-        return;
-      } else {
-        app.showToast('删除失败!', 'error')
-        return;
-      }
-    } else {
-      app.showToast('删除shopMember失败!', 'error');
-      return ('error');
+  //删除某助教
+  async deleteGril(e){
+    console.log(e)
+    const member = this.data.shop_member[e.mark.index]
+    const modalRes = await wx.showModal({
+      title: '确认',
+      content: `确认要删除该员工${member.userName}吗?`,
+    })
+    if (modalRes.cancel) {
+      throw 'error --- user cancel oprate'
     }
+    const res = await app.callFunction({
+      name:'removeRecord',
+      data:{
+        collection:'shop_member',
+        query:{
+          _id:member._id
+        }
+      }
+    })
+    if (!res.success) {
+      app.showModal('提示','删除失败!')
+      return
+    }
+    //修改本地数据
+    this.data.shop_member.splice(e.mark.index,1)
+    this.setData({
+      shop_member:this.data.shop_member
+    })
+    app.showToast('操作成功!','success')
+    return
+  },
+  //设置助教工作时间
+  setWorkTime(e){
+    console.log(e)
+    app.showToast('设置工作时间,请让员工在客户端设置','none')
+  },
+  girlSet(e){
+    wx.navigateTo({
+      url: './girlSet/girlSet',
+    })
   },
   async deleteMerchantInfo(i) {
+    console.log('开始删除店员')
     //首先 获取 店员的 merchantInfo  的 shopFlag数组
-    console.log(this.data.member[i].memberOpenid)
-    var shopFlag = [];
+    console.log(this.data.shop_member[i].memberOpenid)
     const res = await app.callFunction({
-      name: 'getDatabaseRecord_op',
+      name: 'delete_shop_member',
       data: {
-        collection: 'merchantInfo',
-        openid: this.data.member[i].memberOpenid,
-        record: 'shopFlag'
+        userOpenid: this.data.shop_member[i].memberOpenid,
+        shopId: this.data.shop_member[i].shopId,
       }
-    });
+    })
     console.log(res)
-    if (Array.isArray(res)) {
-      shopFlag = res;
-      console.log(shopFlag)
-    } else {
-      console.log('获取店员店铺数据失败!')
-      app.showToast('获取店员店铺数据失败!', 'error')
-      return ('error');
+    if(!res.success){
+      app.showModal('提示','删除失败!')
+      return
     }
-    //构造新数据
-    var newShopFlag = [];
-    for (let index = 0; index < shopFlag.length; index++) {
-      const element = shopFlag[index];
-      if (element.shopFlag === appData.shopInfo.shopFlag) {
-        //删除项目
-      } else {
-        newShopFlag.push(element)
-      }
-    }
-    console.log(newShopFlag)
-    //向服务器发送新的  店员的 merchantInfo  的 shopFlag数组
-    const r = await app.callFunction({
-      name: 'amendDatabase_fg',
-      data: {
-        collection: "merchantInfo",
-        flagName: '_openid',
-        flag: this.data.member[i].memberOpenid,
-        objName: "shopFlag",
-        data: newShopFlag
-      }
-    });
-    console.log(r)
-    if (r === 'ok') {
-      app.showToast('删除shopMember成功!', 'success');
-      return ('ok');
-    } else {
-      app.showToast('删除shopMember失败!', 'error');
-      return ('error');
-    }
-  },
-  async deleteShopMember(i) {
-    var newMember = [];
-    const member = appData.shopInfo.shop.member;
-    for (let index = 0; index < member.length; index++) {
-      const element = member[index];
-      if (i == index) {
-
-      } else {
-        newMember.push(element)
-      }
-    }
-    const res = await app.callFunction({
-      name:'amendDatabase_fg',
-      data: {
-        collection: 'shopAccount',
-        flagName: 'shopFlag',
-        flag: appData.shopInfo.shopFlag,
-        objName: 'shop.member',
-        data: newMember
-      }
-    });
-    if (res === 'ok') {
-      app.showToast('删除shopMember成功!', 'success');
-      return ('ok');
-    } else {
-      app.showToast('删除shopMember失败!', 'error');
-      return ('error');
-    }
+    app.showModal('提示','删除成功!')
+    this.data.shop_member.splice(i,1)
+    this.setData({
+      shop_member:this.data.shop_member
+    })
   },
   add(e) {
     console.log(e)
@@ -152,6 +107,27 @@ Page({
         res.eventChannel.emit('giveData', that.data.member)
       }
     })
+  },
+  //获取店铺员工数据
+  async getShopMember(){
+    const res = await app.callFunction({
+      name:'getData_where',
+      data:{
+        collection:'shop_member',
+        query:{
+          shopId:appData.shop_account._id
+        }
+      }
+    })
+    if(!res.success) {
+      app.showModal('提示','回去员工数据失败!')
+      return
+    }
+    console.log(res)
+    this.setData({
+      shop_member:res.data
+    })
+
   },
   /**
    * 生命周期函数--监听页面加载
@@ -171,7 +147,8 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow() {
+  async onShow() {
+    await this.getShopMember()
 
   },
 

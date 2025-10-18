@@ -1,4 +1,5 @@
 /* pages/set/vipSet/vipSet.wxss */
+@import '../../../template/SetMenu/SetMenu.wxss';
 page{
   background-color: #eee;
 }

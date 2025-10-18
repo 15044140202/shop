@@ -1,0 +1,31 @@
+<view class="pie-chart-container">
+  <!-- 饼图标题 -->
+  <!-- <view class="chart-title" wx:if="{{calculatedData.length > 0}}">
+    <text>费用分布图</text>
+  </view> -->
+
+  <!-- 饼图区域 -->
+  <view class="chart-area">
+    <canvas canvas-id="pieChart" class="pie-canvas" style="width: {{diameter}}px; height: {{diameter}}px;">
+    </canvas>
+  </view>
+
+  <!-- 横向紧凑图例 -->
+  <view class="horizontal-legend" wx:if="{{showLegend && calculatedData.length > 0}}">
+    <view class="legend-grid" style="grid-template-columns: repeat({{calculatedData.length > 3 ? 2 : calculatedData.length}}, 1fr);">
+      <view class="legend-item {{selectedIndex === index ? 'selected' : ''}}" wx:for="{{calculatedData}}" wx:key="index" data-index="{{index}}" bindtap="onLegendTap">
+        <view class="legend-color" style="background-color: {{item.color}};"></view>
+        <view class="legend-text">
+          <text class="legend-name">{{item.name}}</text>
+          <text class="legend-value">{{item.amount}}</text>
+          <text class="legend-percentage" wx:if="{{showPercentage}}">({{item.percentageText}})</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 无数据提示 -->
+  <view class="no-data" wx:if="{{calculatedData.length === 0}}">
+    <text>暂无数据</text>
+  </view>
+</view>

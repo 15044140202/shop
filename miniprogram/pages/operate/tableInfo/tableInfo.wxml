@@ -1,7 +1,7 @@
 <!--pages/operate/tableInfo/tableInfo.wxml-->
-<view class="titel" style="background-color: #efeff4;">
-  <text style="color: #999999;">桌台码绑定</text>
-</view>
+<import src="../../../template/SetMenu/SetMenu.wxml"/>
+<template is="titel_video" data="{{titelName:'桌台设置'}}"/>
+
 <!-- 下面是计费规则  和  灯号设置-->
 <view style="background-color: #fff;">
   <view class="costRule">

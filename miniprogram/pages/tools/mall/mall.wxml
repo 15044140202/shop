@@ -1,0 +1,70 @@
+<!-- pages/tools/mall/mall.wxml -->
+<!-- 在页面内添加对应的节点 -->
+<van-notify id="custom-selector" />
+<!-- 页面头 -->
+<view class="page-header" style="height: 15vh;padding: 5vw 5vw 5vw 5vw;">
+  <view class="header-title">官方商城</view>
+  <view class="header-intro">官方正品,品质保障.源头工厂,价格最低.</view>
+  <!-- 搜索栏 -->
+  <view class="search-board">
+    <view class="search-container">
+      <input type="text" placeholder="搜索商品类别 名称 品牌等" placeholder-class="placeholder" class="search-input" bindinput="input" mark:item="searchGoods" />
+      <van-icon class="scan-icon" size="50rpx" name="search" catch:tap="searchGoods"></van-icon>
+    </view>
+    <view class="my-orders" bind:tap="myOrders">
+      <van-icon name="orders-o" size="50rpx" color="#fff"></van-icon>
+      <text style="font-size: 18rpx; color: #fff;">我的订单</text>
+    </view>
+    <view class="my-orders">
+      <van-icon name="shopping-cart" color="#fff" size="50rpx" info="{{shoppingCart.length}}" bind:tap="gotoShoppingCart"></van-icon>
+      <text style="font-size: 18rpx; color: #fff;">购物车</text>
+    </view>
+  </view>
+
+</view>
+<view class="container">
+  <!-- 分类Tabs -->
+  <view style="margin-top:-1.5vh;"></view>
+  <van-tabs active="" color="#0094ff" bind:click="handleTabChange">
+    <block wx:for="{{categories}}" wx:key="index">
+      <van-tab title="{{item.name}}"></van-tab>
+    </block>
+  </van-tabs>
+  <!-- 商品列表 - 拼多多风格 -->
+  <view class="pdd-goods-list">
+    <block wx:for="{{showCommotydiList}}" wx:key="_id">
+      <view wx:if="{{item.sellState}}" class="pdd-goods-item" bind:tap="goodsInfo" mark:index="{{index}}">
+        <!-- 商品图片 -->
+        <image class="pdd-goods-image" src="{{item.headPic}}" mode="widthFix"></image>
+        <!-- 商品名称和标签行 -->
+        <view class="title-row">
+          <!-- 商品标签（放在名称前面） -->
+          <view class="tag-container">
+            <block wx:for="{{item.tag}}" wx:for-item="tag_item" wx:for-index="tag_index" wx:key="tag_index">
+              <!-- 限制最多显示2个标签 -->
+              <view class="tag tag-{{tag_item.type}}">
+                <view class="tag-bg"></view>
+                <text class="tag-text">{{tag_item.text}}</text>
+              </view>
+            </block>
+          </view>
+          <!-- 商品名称（自动截断） -->
+          <text class="pdd-goods-name">{{item.commotydiName}}</text>
+        </view>
+        <!-- 价格信息 -->
+        <view class="pdd-price-section">
+          <text class="pdd-current-price" wx:if="{{mall_type === 'official'}}">渠道价¥{{item.lowMerchantPrice / 100}}元</text>
+          <text class="pdd-original-price">统一零售价¥{{item.lowOutPrice / 100}}元</text>
+        </view>
+        <!-- 销量 -->
+        <view wx:if="{{false}}" class="pdd-sales">已售{{item.totalSellSum}}件</view>
+      </view>
+    </block>
+  </view>
+</view>
+<van-divider contentPosition="center" textColor="#0094ff">{{commotydiList.length < total ? '上滑加载更多' : '已无更多商品'}}</van-divider>
+<view style="height: 5vh; width: 100%;"></view>
+<!-- 购物车LOGO -->
+<button class="shoppingCar" open-type="contact" bindcontact="handleContact">
+  <van-icon name="wechat" color="#fff" size="65rpx"></van-icon>
+</button>

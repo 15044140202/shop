@@ -42,13 +42,13 @@ Page({
       var dayAmount = 0;
       for (let i = 0; i < element.length; i++) {
         const e = element[i]; //每个账单
-        if (e.orderName === '精彩秀单') {
-          dayAmount += parseInt(e.cost)
-        } else if (e.orderName === '自助开台订单' || e.orderName === '店员开台订单' || e.orderName === '店员开台订单') {
-          dayAmount += parseInt(e.tableCost)
-        } else if (e.orderName === '储值单') {
+        if (e.orderName === '精彩秀单' && e.payMode!=='未支付') {
           dayAmount += parseInt(e.amount)
-        } else if (e.orderName === '商品单') {
+        } else if ((e.orderName === '自助开台订单' || e.orderName === '店员开台订单' || e.orderName === '自助套餐订单') && e.pledgeState === 1  ) {
+          dayAmount += parseInt(e.tableCost)
+        } else if (e.orderName === '储值单' && e.payMode!=='未支付') {
+          dayAmount += parseInt(e.amount)
+        } else if (e.orderName === '商品单'  && e.payMode!=='未支付') {
           dayAmount += parseInt(e.commotidyCost)
         }
       }
@@ -132,7 +132,7 @@ Page({
     var rdata = []
     if (kind == 'date') {
       for (let index = 0; index < TurnoverList.length; index++) {
-        rdata.push(TurnoverList[index].date.slice(8));
+        rdata.push(TurnoverList[index].date.substring(5,10));
       }
       return rdata
     } else if (kind == 'turnover') {

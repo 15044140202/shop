@@ -18,19 +18,25 @@ Page({
   },
   async onSearch(e) {
     app.showLoading('加载中...', true)
-    console.log(e.detail)
-    const res = await this.getOneVipInfo(appData.shop_account._id, e.detail)
+    console.log(e.mark.info)
+    const res = await this.getOneVipInfo(appData.shop_account._id, e.mark.info)
     if (res.length === 0) { //没有此会员
       wx.hideLoading();
       app.showToast('无此会员', 'error');
       return;
     } else {
       this.setData({
-        vipList:res
+        vipList: res
       })
       await this.getImage()
       wx.hideLoading();
     }
+  },
+  // 输入框输入事件 
+  onInput(e) {
+    this.setData({
+      searchValue: e.detail.value,
+    });
   },
   async getOneVipInfo(shopId, telephone) {
     const res = await app.callFunction({
@@ -46,8 +52,8 @@ Page({
     })
     if (res.success) {
       return res.data
-    }else{
-      app.showModal('提示','error')
+    } else {
+      app.showModal('提示', 'error')
       return []
     }
   },
@@ -102,7 +108,7 @@ Page({
     //循环 下载会员头像
     await this.getImage()
   },
-  async getImage(){
+  async getImage() {
     this.data.vipHeadImage.length = 0
     const task = []
     for (let index = 0; index < this.data.vipList.length; index++) {
@@ -110,7 +116,7 @@ Page({
       task.push(app.getHeadImage(element.headImage === '' ? 'cloud://billiards-0g53628z5ae826bc.6269-billiards-0g53628z5ae826bc-1326882458/image/没有图片.png' : element.headImage))
     }
     this.setData({
-      vipHeadImage:await Promise.all(task)
+      vipHeadImage: await Promise.all(task)
     })
   },
   /**

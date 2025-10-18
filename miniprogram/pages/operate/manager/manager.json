@@ -1,4 +1,6 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "van-icon": "@vant/weapp/icon/index"
+  },
   "navigationBarTitleText": "桌台设置界面"
 }

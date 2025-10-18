@@ -1,6 +1,7 @@
 // pages/set/commotidySet/commotidyNameSet/commotidyNameSet.js
 const app = getApp();
 const appData = app.globalData;
+const barCodeSearch = require('../../../../utils/barCodeSearch')
 import Dialog from '../../../../miniprogram_npm/@vant/weapp/dialog/dialog';
 Page({
 
@@ -90,7 +91,7 @@ Page({
       })
       console.log(that.data.shop_commotidy)
       that.computeClass(that.data.shop_commotidy)
-    })
+    }) 
   },
   computeClass(shop_commotidy){
     const newClass = []

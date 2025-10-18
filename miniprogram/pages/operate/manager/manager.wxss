@@ -1,25 +1,160 @@
-/* pages/operate/manager/manager.wxss */
-.border{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  width: 95%;
-  margin-left: 2.5%;
+/* pages/operate/manager/manager.wxss  */
+.page-header{
+  height: 8vh;
 }
-.row {
-  display: flex;
-  flex-direction: row;
-  justify-self: start;
-  width: 100%;
+/* 基础样式 */
+.container {
+  background: #f5f7fa;
+  min-height: 100vh;
+  padding: 20rpx;
 }
-
-.tableNum {
+ 
+/* 标题样式 */
+.header {
+  background: #ffffff;
+  height: 100rpx;
+  border-radius: 16rpx;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
   align-items: center;
-  width: 20%;
-  height: 80rpx;
-  border: solid #0097ff 1rpx;
+  justify-content: center;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
+}
+ 
+.title-text {
+  font-size: 36rpx;
+  color: #2c3e50;
+  font-weight: 600;
+  letter-spacing: 2rpx;
+}
+ 
+/* 一键续费按钮 */
+.renew-button {
+  background: linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%);
+  width: 90%;
+  height: 100rpx;
+  border-radius: 12rpx;
+  margin: 30rpx auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 30rpx;
+}
+ 
+.icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+}
+ 
+.button-text {
+  color: #ffffff;
+  font-size: 28rpx;
+  text-align: center;
+  line-height: 1.4;
+  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1);
+}
+ 
+/* 表格容器 */
+.table-container {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-top: 20rpx;
+}
+ 
+/* 卡片样式 */
+.card {
+  margin-bottom: 20rpx;
+  background: #ffffff;
+  border-radius: 12rpx;
+  padding: 20rpx;
+}
+ 
+.table-header {
+  display: flex;
+  padding: 15rpx 0;
+  border-bottom: 2rpx solid #eee;
+  margin-bottom: 15rpx;
+}
+ 
+.header-item {
+  flex: 1;
+  text-align: center;
+  font-size: 26rpx;
+  color: #7f8c8d;
+  padding: 10rpx;
+}
+ 
+.wide {
+  flex: 1.5;
+}
+ 
+/* 数据行 */
+.table-row {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f8f9fa;
+}
+ 
+.data-item {
+  flex: 1;
+  text-align: center;
+  font-size: 28rpx;
+  color: #34495e;
+  padding: 10rpx;
+}
+ 
+.highlight {
+  color: #3498db;
+  font-weight: 500;
+}
+ 
+.text-ellipsis {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+}
+ 
+.date {
+  color: #e67e22;
+  font-size: 26rpx;
+}
+ 
+/* 按钮样式 */
+.primary-button {
+  background: linear-gradient(45deg, #6DD5FA, #2980B9) !important;
+  border-radius: 8rpx !important;
+  color: #fff !important;
+  width: 120rpx;
+  height: 50rpx;
+  line-height: 50rpx !important;
+}
+ 
+/* 悬浮按钮 */
+.floating-button {
+  position: fixed;
+  right: 40rpx;
+  bottom: 100rpx;
+  width: 100rpx;
+  height: 100rpx;
+  background: linear-gradient(135deg, #3498db, #2980B9);
+  border-radius: 50%;
+  box-shadow: 0 8rpx 24rpx rgba(52,152,219,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+ 
+.add-icon {
+  width: 50rpx;
+  height: 50rpx;
+  filter: brightness(0) invert(1);
+}
+ 
+/* 通用效果 */
+.card-shadow {
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.08);
 }

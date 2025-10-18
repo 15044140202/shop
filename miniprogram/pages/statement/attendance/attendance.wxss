@@ -1,20 +1,51 @@
-/* pages/statement/attendance/attendance.wxss */
-page{
-  background-color: #eee;
+.page-header {
+  height: 8vh;
 }
-.border{
+
+.header-title {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.attendance-container {
+  padding: 15px;
+}
+
+.date-group {
+  margin-bottom: 20px;
+}
+
+.date-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #0094ff;
+  margin-bottom: 10px;
+}
+
+.record-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.one-degree-record{
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: start;
-  background-color: #fff;
-  margin: 10rpx;
-  border-radius: 3%;
-  height: auto;
+  justify-content: flex-start;
 }
 .time{
+  margin-left: 15rpx;
+}
+.record-item text {
+  display: block;
+  margin-bottom: 5px;
+}
+.member-select{
   display: flex;
-  flex-direction: column;
-  justify-self: start;
-  margin-top:  10rpx;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 90vw;
+
 }

@@ -1,12 +1,30 @@
-<!--pages/set/vipManage/vipDetail/amountChange/amountChange.wxml-->
-<view wx:for="{{amountChange}}" wx:key="index" class="border">
-<view style="height: 50rpx; background-color:#0097ff ; text-align: center;">序号:{{index+1}}</view>
-  <view class="titel">
-    <text>操作人:{{item.status}}</text>
-    <text style="font-size: 28rpx;">时间:{{item.time}}</text>
-  </view>
-  <view class="titel">
-    <text>事由:{{item.reason}}</text>
-    <text>金额:{{item.changeAmount}}</text>
+<!-- pages/set/vipManage/vipDetail/amountChange/amountChange.wxml  -->
+<view class="container">
+  <view wx:for="{{amountChange}}" wx:key="index" class="card">
+    <!-- 序号头 -->
+    <view class="card-header">
+      <text class="serial-number">NO.{{index + 1}}</text>
+      <view class="time-tag">{{item.time}}</view> 
+    </view>
+ 
+    <!-- 主体内容 -->
+    <view class="card-body">
+      <view class="info-row">
+        <text class="label">操作人</text>
+        <text class="value operator">{{item.status}}</text> 
+      </view>
+      
+      <view class="info-row">
+        <text class="label">事由</text>
+        <text class="value reason">{{item.reason}}</text> 
+      </view>
+ 
+      <view class="amount-row">
+        <text class="label">金额变更</text>
+        <text class="amount {{item.changeAmount  > 0 ? 'positive' : 'negative'}}">
+          {{item.changeAmount  > 0 ? '+' : ''}}{{item.changeAmount}} 
+        </text>
+      </view>
+    </view>
   </view>
 </view>

@@ -1,0 +1,174 @@
+.page-header {
+  height: 8vh;
+}
+
+/* 页面容器 */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  border-radius: 35rpx;
+  padding: 2vw;
+}
+
+/* 筛选条件区域 */
+.filter-section {
+  background-color: #fff;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #e0e0e0;
+  border-top-left-radius:35rpx;
+  border-top-right-radius:35rpx;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin-right: 10rpx;
+}
+
+.filter-item:last-child {
+  margin-right: 0;
+}
+
+.filter-label {
+  font-size: 28rpx;
+  color: #333;
+  margin-right: 10rpx;
+}
+
+.filter-input {
+  font-size: 28rpx;
+  color: #666;
+  padding: 8rpx;
+  border: 1rpx solid #e0e0e0;
+  border-radius: 8rpx;
+  flex: 1;
+  text-align: center;
+}
+
+.filter-picker {
+  font-size: 28rpx;
+  color: #666;
+  padding: 8rpx;
+  border: 1rpx solid #e0e0e0;
+  border-radius: 8rpx;
+  text-align: center;
+  flex: 1;
+}
+
+.filter-button {
+  font-size: 28rpx;
+  color: #fff;
+  background-color: #007aff;
+  padding: 10rpx 20rpx;
+  border-radius: 8rpx;
+  margin-left: 10rpx;
+}
+
+/* 全选按钮区域 */
+.select-all-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #e0e0e0;
+}
+
+.select-all-label {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 会员列表区域 */
+.list-section {
+  background-color: #fff;
+  flex: 1;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #e0e0e0;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.phone {
+  font-size: 26rpx;
+  color: #666;
+  margin-top: 5rpx;
+}
+
+.detail {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 5rpx;
+}
+
+/* 分页按钮 */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 20rpx;
+  border-top: 1rpx solid #e0e0e0;
+  border-bottom-left-radius: 35rpx;
+  border-bottom-right-radius: 35rpx;
+}
+
+.pagination-button {
+  font-size: 28rpx;
+  color: #007aff;
+  background-color: transparent;
+  border: 1rpx solid #007aff;
+  padding: 10rpx 20rpx;
+  border-radius: 8rpx;
+}
+
+.pagination-button[disabled] {
+  color: #ccc;
+  border-color: #ccc;
+}
+
+.page-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 28rpx;
+  color: #666;
+}

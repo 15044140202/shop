@@ -1,0 +1,93 @@
+.pie-chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  background-color: #fff;
+  border-radius: 10rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+.chart-area{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+/* 横向图例样式 */
+.horizontal-legend {
+  width: 100%;
+  margin-top: 20rpx;
+}
+
+.legend-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 15rpx;
+}
+
+.legend-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 15rpx;
+  border-radius: 12rpx;
+  transition: all 0.3s;
+  width:  calc(25% - 12rpx); /* 4列，每列占25%宽度，减去gap */
+  min-height: 120rpx;
+  box-sizing: border-box;
+  background-color: #f9f9f9;
+  border: 1rpx solid #f0f0f0;
+}
+
+.legend-item.selected {
+  background-color: #f0f8ff;
+  border-color: #0094ff;
+  transform: scale(1.02);
+  box-shadow: 0 4rpx 12rpx rgba(0, 148, 255, 0.2);
+}
+
+.legend-color {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  margin-bottom: 12rpx;
+  flex-shrink: 0;
+  border: 2rpx solid #fff;
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.1);
+}
+
+.legend-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+}
+
+.legend-name {
+  font-size: 24rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 6rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.legend-value {
+  font-size: 29rpx;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.legend-percentage {
+  font-size: 20rpx;
+  color: #999;
+  margin-left: 5rpx;
+}

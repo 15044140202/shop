@@ -1,0 +1,74 @@
+<!-- pages/tools/tools.wxml  -->
+<!-- 页面头 -->
+<view class="page-header">
+  <view class="header-bg">
+    <van-icon name="apps-o" size="48rpx" color="#fff" />
+    <text class="header-title">常用小工具</text>
+  </view>
+  <text class="header-subtitle">高效管理，轻松操作</text>
+</view>
+
+<!-- 工具菜单 -->
+<view class="menu-container">
+  <!-- 店铺电源 -->
+  <view class="menu-card" hover-class="card-hover" bind:tap="goto" mark:item="shop_power">
+    <van-icon name="cluster-o" size="48rpx" color="#0097ff" class="card-icon" />
+    <text class="card-title">电源管理</text>
+  </view>
+  <!-- 小账本 -->
+  <view class="menu-card" hover-class="card-hover" bind:tap="goto" mark:item="amountBook">
+    <van-icon name="balance-list" size="48rpx" color="#0097ff" class="card-icon" />
+    <text class="card-title">小账本</text>
+  </view>
+
+  <!-- 会员管理 -->
+  <view class="menu-card" hover-class="card-hover" bind:tap="goto" mark:item="vipManage">
+    <van-icon name="friends" size="48rpx" color="#0097ff" class="card-icon" />
+    <text class="card-title">会员管理</text>
+  </view>
+
+  <!-- 桌台管理 -->
+  <view class="menu-card" hover-class="card-hover" bind:tap="goto" mark:item="tableManage">
+    <van-icon name="list-switch" size="48rpx" color="#0097ff" class="card-icon" />
+    <text class="card-title">桌台管理</text>
+  </view>
+
+  <!-- 历史账单 -->
+  <view class="menu-card" hover-class="card-hover" bind:tap="goto" mark:item="orderList">
+    <van-icon name="bill" size="48rpx" color="#0097ff" class="card-icon" />
+    <text class="card-title">缴费记录</text>
+  </view>
+
+  <!-- 短信群发 -->
+  <view class="menu-card" hover-class="card-hover" bind:tap="goto" mark:item="shortMassageSend">
+    <van-icon name="comment" size="48rpx" color="#0097ff" class="card-icon" />
+    <text class="card-title">短信群发</text>
+  </view>
+  <!-- 本店招聘管理 -->
+  <view class="menu-card" hover-class="card-hover" bind:tap="goto" mark:item="recuit">
+    <van-icon name="contact" size="48rpx" color="#0097ff" class="card-icon" />
+    <text class="card-title">本店招聘</text>
+  </view>
+  <!-- 本店商城管理 -->
+  <view wx:if="{{isShopMallManager}}" class="menu-card" hover-class="card-hover" bind:tap="goto" mark:item="mall">
+    <van-icon name="shop-o" size="48rpx" color="#0097ff" class="card-icon" />
+    <text class="card-title">本店商城管理</text>
+  </view>
+  <!-- 官方商城 -->
+  <view class="menu-card official-mall-card" hover-class="card-hover official-hover" bind:tap="goto" mark:item="officialMall" mark:mallType="mall">
+    <view class="festive-corner festive-corner-tl">🔥</view>
+    <view class="festive-corner festive-corner-br">🔥</view>
+    <van-icon name="shop" size="48rpx" color="#fff" class="card-icon" />
+    <text class="card-title" style="color:#fff">官方商城</text>
+  </view>
+  <!-- 官方商城管理 -->
+  <view wx:if="{{isofficialMallManager}}" class="menu-card" hover-class="card-hover" bind:tap="goto" mark:item="officialMall" mark:mallType="manager">
+    <van-icon name="shop" size="48rpx" color="#0097ff" class="card-icon" />
+    <text class="card-title">官方商城管理</text>
+  </view>
+  <!-- 球友圈管理 -->
+  <view wx:if="{{isofficialMallManager}}" class="menu-card" hover-class="card-hover" bind:tap="goto" mark:item="firendCircle_manager">
+    <van-icon name="wechat-moments" size="48rpx" color="#0097ff" class="card-icon" />
+    <text class="card-title">球友圈管理</text>
+  </view>
+</view>

@@ -1,45 +1,63 @@
-<!--pages/set/commotidySet/commotidyNameSet/addNewCommotidy/addNewCommotidy.wxml-->
-<view class="pic">
-  <van-image width="100" height="100" src="{{newCommotidy.picId}}" bind:tap="Image" mark:name='{{newCommotidy.name}}' />
-  <view class="picR">
-    <view class="titel">
-      <text>名称</text>
-      <input style="text-align: right; width: 250rpx;" type="text" value="{{newCommotidy.name === '' ? '' : newCommotidy.name}}" placeholder='请输入商品名称' bindblur="input" mark:name='name' />
+<view class="container1">
+  <!-- 商品卡片容器 -->
+  <view class="commodity-card">
+    <!-- 图片和基本信息区域 -->
+    <view class="pic-container">
+      <van-image class="commodity-image" width="120rpx" height="120rpx" src="{{newCommotidy.picId}}" bind:tap="Image" mark:name='{{newCommotidy.name}}' lazy-load />
+      <view class="basic-info">
+        <view class="form-item">
+          <text class="label">名称</text>
+          <input class="input-field" type="text" value="{{newCommotidy.name === '' ? '' : newCommotidy.name}}" placeholder='请输入商品名称' bindblur="input" mark:name='name' />
+          <van-icon name="scan" size="45rpx" color="#0094ff" style="width: 80rpx;" bind:tap="scanBar"></van-icon>
+        </view>
+        <view class="form-item">
+          <text class="label">单位</text>
+          <picker class="picker-field" mode="selector" value="{{unitsSelect}}" range="{{units}}" bindchange='onchange' mark:name='units'>
+            <text>{{newCommotidy.units === '' ? '请选择单位' : newCommotidy.units}}</text>
+          </picker>
+        </view>
+        <view class="form-item">
+          <text class="label">分类</text>
+          <picker class="picker-field" mode="selector" value="{{classSelect}}" range="{{class}}" bindchange='onchange' mark:name='class'>
+            <text>{{newCommotidy.class === '' ? '请选择分类' : newCommotidy.class}}</text>
+          </picker>
+        </view>
+      </view>
     </view>
-    <view class="titel">
-      <text>单位</text>
-      <picker mode="selector" value="{{unitsSelect}}" range="{{units}}" bindchange='onchange' mark:name='units'>
-        <text>{{newCommotidy.units === '' ? '请选择单位' : newCommotidy.units}}</text>
-      </picker>
+
+    <!-- 价格信息区域 -->
+    <view class="form-item">
+      <text class="label">进货价格</text>
+      <input class="input-field price-input" type="text" value="{{newCommotidy.primeCost === 0 ? '' : newCommotidy.primeCost}}" placeholder='请输入进货价格' bindblur="input" mark:name='primeCost' />
     </view>
-    <view class="titel">
-      <text>分类</text>
-      <picker mode="selector" value="{{classSelect}}" range="{{class}}" bindchange='onchange' mark:name='class'>
-        <text>{{newCommotidy.class === '' ? '请选择分类' : newCommotidy.class}}</text>
-      </picker>
+
+    <view class="form-item">
+      <text class="label">售卖价格</text>
+      <input class="input-field price-input" type="text" value="{{newCommotidy.sellCost === 0 ? '': newCommotidy.sellCost}}" placeholder='请输入售卖价格' bindblur="input" mark:name='sellCost' />
+    </view>
+
+    <!-- 库存信息区域 -->
+    <view class="form-item">
+      <view class="label-wrapper">
+        <text class="label">库存数量</text>
+        <text hidden="{{index == '-1' ? true :false}}" class="hint-text">
+          修改数量请到商品入库
+        </text>
+      </view>
+      <input class="input-field" type="text" value="{{newCommotidy.sum === 0 ? '' : newCommotidy.sum}}" disabled="{{index == '-1'? false : true }}" placeholder='请输入库存数量' bindblur="input" mark:name='sum' />
+    </view>
+
+    <view class="form-item">
+      <view class="label-wrapper">
+        <text class="label">最低数量</text>
+        <text class="hint-text">提示补货的数量</text>
+      </view>
+      <input class="input-field" type="text" value="{{newCommotidy.lowSum === 0 ? '' : newCommotidy.lowSum}}" placeholder='请输入最低数量' bindblur="input" mark:name='lowSum' />
     </view>
   </view>
+
+  <!-- 保存按钮 -->
+  <button type="primary" class="save-btn" bind:tap="save">
+    保存
+  </button>
 </view>
-<view class="titel">
-  <text>进货价格</text>
-  <input style="text-align: center; height: 100%; width: 150rpx; " type="text" value="{{newCommotidy.primeCost === 0 ? '' : newCommotidy.primeCost}}" placeholder='请输入进货价格' bindblur="input" mark:name='primeCost' />
-</view>
-<view class="titel">
-  <text>售卖价格</text>
-  <input style="text-align: center; height: 100%; width: 150rpx;" type="text" value="{{newCommotidy.sellCost === 0 ? '': newCommotidy.sellCost}}" placeholder='请输入售卖价格' bindblur="input" mark:name='sellCost' />
-</view>
-<view class="titel">
-  <view>
-  <text>库存数量</text>
-  <text hidden="{{index == '-1' ? true :false}}" style="font-size: 28rpx;color: #ccc;">修改数量请到商品入库</text>
-</view>
-  <input style="text-align: center; height: 100%; width: 150rpx;" type="text" value="{{newCommotidy.sum === 0 ? '' : newCommotidy.sum}}" disabled="{{index == '-1'? false : true }}" placeholder='请输入库存数量' bindblur="input" mark:name='sum' />
-</view>
-<view class="titel">
-<view>
-  <text>最低数量</text>
-  <text style="font-size: 28rpx;color: #ccc;">提示补货的数量</text>
-</view>
-  <input style="text-align: center; height: 100%; width: 150rpx;" type="text" value="{{newCommotidy.lowSum === 0 ? '' : newCommotidy.lowSum}}" placeholder='请输入最低数量' bindblur="input" mark:name='lowSum' />
-</view>
-<button type="primary" style="margin: 50rpx;" bind:tap="save">保存</button>

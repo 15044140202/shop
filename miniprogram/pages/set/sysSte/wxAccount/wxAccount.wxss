@@ -1,23 +1,45 @@
 /* pages/set/sysSte/wxAccount/wxAccount.wxss */
-page{
-  background: #eee;
+@import '../../../../template/SetMenu/SetMenu.wxss';
+.settings-container {
+  padding: 2.5vw;
 }
-.titel{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  height: 120rpx;
+.setting-card {
+  background: #fff;
+  border-radius: 24rpx;
+  margin-bottom: 32rpx;
+  width: 95%;
+  box-shadow: 0 8rpx 24rpx rgba(0, 151, 255, 0.08);
 }
-.titel_1{
+.card-header {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: #fff;
-  height: 80rpx;
+  padding: 32rpx;
+  border-bottom: 1rpx solid #eee;
 }
-.button{
+.option-label-group {
+  display: flex;
+  flex-direction: column;
+}
+.tip-text {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
+.button-save {
+  display: flex;
+  flex-direction: row;
+  width: 60%;
+}
+.button_save{
+  width: 40%
+}
+
+.submit-btn {
   width: 80%;
-  margin-top: 35rpx;
+  height: 96rpx;
+  border-radius: 64rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 151, 255, 0.3);
+  margin: 8vw;
+  font-size: 34rpx;
 }

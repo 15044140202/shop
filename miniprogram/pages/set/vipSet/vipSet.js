@@ -61,19 +61,19 @@ Page({
     }
   },
   async deleteVipLevl(i) {
-    this.data.shop_vip_set.vipSet.splice(i,1)
+    this.data.shop_vip_set.vipSet.splice(i, 1)
     this.setData({
-      shop_vip_set:this.data.shop_vip_set
+      shop_vip_set: this.data.shop_vip_set
     })
     const res = await app.callFunction({
       name: 'upDate',
       data: {
         collection: 'shop_vip_set',
-        query:{
-          shopId:appData.shop_account._id
+        query: {
+          shopId: appData.shop_account._id
         },
-        upData:{
-          vipSet:this.data.shop_vip_set.vipSet
+        upData: {
+          vipSet: this.data.shop_vip_set.vipSet
         }
       }
     })
@@ -85,18 +85,18 @@ Page({
 
   },
   async newVipLevel() {
-    let newVip =JSON.parse(JSON.stringify(this.data.shop_vip_set.vipSet[0])) ;
+    let newVip = JSON.parse(JSON.stringify(this.data.shop_vip_set.vipSet[0]));
     newVip.name = '未定义'
     newVip.vipSum = 0;
     const res = await app.callFunction({
       name: 'record_push',
       data: {
         collection: 'shop_vip_set',
-        query:{
-          shopId:appData.shop_account._id
+        query: {
+          shopId: appData.shop_account._id
         },
-        record:'vipSet',
-        data:newVip
+        record: 'vipSet',
+        data: newVip
       }
     })
     if (res.success) {
@@ -130,53 +130,31 @@ Page({
     const vipInfo = this.data.shop_vip_set.vipSet;
     const charging = this.data.shop_charging;
     var change = false;
-
-    for (let vipInfoi = 0; vipInfoi < vipInfo.length; vipInfoi++) { //此循环 是检测 vip数据里面 是否有 已经被删除的  计费规则
-      var newArray = []
-      const vipInfoElement = vipInfo[vipInfoi];
-      for (let chargingDiscounti = 0; chargingDiscounti < vipInfoElement.chargingDiscount.length; chargingDiscounti++) {
-        const chargingDiscountElement = vipInfoElement.chargingDiscount[chargingDiscounti]; //每个vip数据 里面的绑定的 每个计费规则
-        for (let chargingi = 0; chargingi < charging.length; chargingi++) {
-          const chargingId = charging[chargingi]._id; //每个计费规则的 flag
-          if (chargingId === chargingDiscountElement.chagingId) {
-            //成立  则此计费规则存在  向新数组里面添加此项
-            newArray.push(chargingDiscountElement)
-            break
-          } else if (chargingi === charging.length - 1) { //舍弃此项  计费规则  标记数据有修改 返回真 更新数据库
-            change = true
+    //检测 vip数据里面 是否有 已经被删除的  计费规则
+    vipInfo.forEach((vp, index) => {
+      vp.chargingDiscount = vp.chargingDiscount.filter(element => {
+        const findI = charging.findIndex(cg => cg._id === element.chargingId);
+        if (findI === -1) {
+          change = true
+        }
+        return findI !== -1; // 保留找到的元素
+      });
+    });
+    //检测 VIP数据里面是否 包含全部的 计费规则 
+    vipInfo.forEach((vp, index) => {
+      charging.forEach(cg => {
+        const findI = vp.chargingDiscount.findIndex(element => element.chargingId === cg._id);
+        if (findI === -1) { // 如果计费规则不存在
+          vp.chargingDiscount.push({ chargingId: cg._id ,discount:10,name:cg.name}); // 添加缺失的计费规则
+          change = true; // 标记有变化
+        }else{//判断名称是否有变化
+          if (vp.chargingDiscount[findI].name !== cg.name) {
+            vp.chargingDiscount[findI].name = cg.name
+            change = true; // 标记有变化
           }
         }
-      }
-      vipInfo[vipInfoi].chargingDiscount = newArray //修改 遍历过的数据
-    }
-    for (let index = 0; index < vipInfo.length; index++) { //此循环 是检测 VIP数据里面是否 包含全部的 计费规则
-      const chargingDiscount = vipInfo[index].chargingDiscount; //每个会员级别的  计费规则折扣
-      for (let chargingI = 0; chargingI < charging.length; chargingI++) { //循环检测  vip数据中是否有现有计费规则
-        const element = charging[chargingI];
-        if (chargingDiscount.length === 0) { //vip 数据中 没有任何计费规则的情况
-          vipInfo[index].chargingDiscount.push({
-            name: element.name,
-            chargingId: element._id,
-            discount: 10
-          });
-          change = true;
-        } else { //如果vip 数据中有计费规则数据  则遍历一遍 看是否有此计费汇总       
-          for (let cdi = 0; cdi < vipInfo[index].chargingDiscount.length; cdi++) {
-            const cdelement = vipInfo[index].chargingDiscount[cdi];
-            if (cdelement.chargingId === element._id) { //次计费规则存在  跳出此循环
-              break
-            } else if (cdi === vipInfo[index].chargingDiscount.length - 1) { //此计费规则不存在  添加
-              vipInfo[index].chargingDiscount.push({
-                name: element.name,
-                chargingId: element._id,
-                discount: 10
-              });
-              change = true;
-            }
-          }
-        }
-      }
-    }
+      });
+    });
     console.log(this.data.shop_vip_set)
     return change;
   },
@@ -191,18 +169,16 @@ Page({
     })
     console.log(this.data.shop_charging);
     //再次检测 会员信息里面是否存在 全部的 charging 如果确定 后期添加了 新的计费规则 返回true
-    if (this.settleCharing() === true) { //修改过数据 向服务器发送修改后的数据
-      const newData = this.data.shop_vip_set
-      const _id = newData._id
-      delete newData._id
+    if (this.settleCharing()) { //修改过数据 向服务器发送修改后的数据
+      delete this.data.shop_vip_set._id
       const r = await app.callFunction({
         name: 'upDate',
         data: {
           collection: 'shop_vip_set',
           query: {
-            _id: _id
+            shopId: appData.shop_account._id
           },
-          upData: newData
+          upData: this.data.shop_vip_set
         }
       })
       console.log(r)
@@ -212,9 +188,27 @@ Page({
       }
       appData.shop_vip_set = this.data.shop_vip_set
     }
+    //检测每个级别的会员人数
+    this.getVipSum(this.data.shop_vip_set.vipSet)
     wx.hideLoading()
   },
-
+  getVipSum(vip_set) {
+    const db = wx.cloud.database()
+    const _ = db.command
+    const that = this
+    for (let index = 0; index < vip_set.length; index++) {
+      const element = vip_set[index];
+      db.collection('vip_list').where({
+        shopId: appData.shop_account._id,
+        integral: _.gte(index === 0 ? 0 : element.needIntegral).and(_.lt(index === vip_set.length - 1 ? 9999999 : vip_set[index + 1].needIntegral))
+      }).count().then(res => {
+        console.log(res)
+        that.setData({
+          [`shop_vip_set.vipSet[${index}].vipSum`]: res.total
+        })
+      })
+    }
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

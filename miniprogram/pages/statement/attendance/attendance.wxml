@@ -1,12 +1,27 @@
-<!--pages/statement/attendance/attendance.wxml-->
-<view class="border" wx:for="{{memberData}}" wx:key="index">
-  <view style="margin-top: 10rpx;">
-  <text style="font-size: 32rpx;">员工名字:{{item.name}}\n</text>
-  <text style="margin-top: 10rpx;">电话:{{item.telephone}}</text>
-  </view>
-  <view class="time">
-   <view wx:for="{{item.attendance}}" wx:key="*this" >
-  <text>{{item.state}} : {{item.time}}</text>
-  </view>
-  </view>
+<!--pages/operate/my/attendance_record/attendance_record.wxml-->
+<view class="page-header">
+  <text class="header-title">当月考勤记录查询</text>
+  <picker mode="selector" value="{{memberSelect}}" range="{{memberArray}}" range-key="userName" bindchange="memberSelect">
+    <view class="member-select">
+      <view style="color: #fff;">员工 : {{memberArray[memberSelect].userName}}</view>
+      <van-icon color="#fff" size="48rpx" name="arrow-down"></van-icon>
+    </view>
+  </picker>
+</view>
+<view class="attendance-container">
+  <block wx:for="{{memberData}}" wx:for-item="attendance" wx:for-index="memberDataIndex" wx:key="memberDataIndex">
+    <view class="date-group" wx:for="{{attendance}}" wx:key="date" wx:if="{{memberDataIndex === memberArray[memberSelect].userName}}">
+      <view class="date-title">{{memberDataIndex + "--" +index}}</view>
+      <view class="record-item">
+        <block wx:for="{{item}}" wx:key="index" wx:for-index="INDEX" wx:for-item="ITEM">
+          <view class="one-degree-record">
+            <van-tag size="mini" color="{{INDEX % 2 === 0 ? '#07C160' : '#ccc'}}">{{INDEX % 2 === 0 ? '上班' : '下班'}}</van-tag>
+            <text class="time" wx:if="{{INDEX % 2 === 0}}">上岗时间: {{ITEM.time}}</text>
+            <text class="time" wx:if="{{INDEX % 2 !== 0}}">离岗时间: {{ITEM.time}}</text>
+          </view>
+        </block>
+      </view>
+    </view>
+  </block>
+
 </view>

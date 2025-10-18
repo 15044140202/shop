@@ -1,0 +1,92 @@
+<!--pages/tools/firendCircle_manager/firendCircle_manager.wxml-->
+<!--pages/firendCircle/firendCircle.wxml-->
+<view class="page-header" style="height: 8vh;">
+  <view class="header-title">球友圈审查页面</view>
+  <view class="header-intro">球友圈内容审查,删除页面</view>
+  <view class="filterButton_box">
+    <view class="filterButton" bind:tap="itemChaneg" mark:item="全部">切换至{{item}}</view>
+  </view>
+</view>
+<view class="container1">
+  <!-- 朋友圈内容列表 -->
+  <scroll-view class="moments-list" scroll-y>
+    <view class="moment-item" wx:for="{{moments}}" wx:key="id">
+      <!-- 用户头像和昵称 -->
+      <view class="moment-user" catch:tap="gotoFirendFirendCircle" mark:index="{{index}}" >
+        <image class="moment-avatar" src="{{item.avatar ?item.avatar  : 'cloud://billiards-0g53628z5ae826bc.6269-billiards-0g53628z5ae826bc-1326882458/image/userboy.png'}}"></image>
+        <text class="moment-nickname">{{item.nickName}}</text>
+        <van-icon name="passed" size="50rpx" color="green" style="margin-left: 50rpx;" catchtap="check" mark:item="passed" mark:index="{{index}}"  ></van-icon>
+        <van-icon name="close" size="50rpx" color="orange" style="margin-left: 50rpx;"   catchtap="check" mark:item="close" mark:index="{{index}}"  ></van-icon>
+        <van-icon name="delete" size="50rpx" color="red" style="margin-left: 50rpx;" catchtap="check" mark:item="delete"  mark:index="{{index}}"  ></van-icon>
+      </view>
+
+      <!-- 朋友圈内容 -->
+      <view class="moment-content">
+        <text class="moment-text">{{item.content}}</text>
+        <!-- 图片列表 -->
+        <view class="moment-images" wx:if="{{item.images.length > 0}}">
+          <block wx:if="{{item.images.length === 1}}">
+            <image class="single-image" src="{{ item.images[0]}}" mode="aspectFill" catch:tap="previewImage" mark:index="{{index}}"></image>
+          </block>
+          <block wx:else>
+            <view class="multi-images">
+              <image wx:for="{{item.images}}" wx:key="*this" wx:for-item="pic_item" wx:for-index="pic_index" src="{{pic_item}}" mode="aspectFill" class="{{item.images.length === 4 ? 'image-4' : ''}}" catch:tap="previewImage" mark:index="{{index}}"></image>
+            </view>
+          </block>
+        </view>
+        <!-- 视频列表 -->
+        <view class="moment-images" wx:if="{{item.images== 0 && item.video}}">
+          <video class="single-image" src="{{item.video}}" />
+        </view>
+
+        <!-- 位置信息 -->
+        <view class="moment-location" wx:if="{{item.location}}">
+          <van-icon name="location" class="location-icon"></van-icon>
+          <text>{{item.location}}</text>
+        </view>
+      </view>
+
+      <!-- 底部操作栏 -->
+      <view class="moment-footer">
+        <text class="moment-time">{{item.timeStr}}</text>
+        <view class="moment-actions">
+          <text style="font-size: 28rpx; margin-right: 20rpx;color:#576b95 ;">{{item.likes.length}}</text>
+          <van-icon class="action-icon" name="{{item.isLike ? 'like' : 'like-o' }}" bindtap="handleLike" data-_id="{{item._id}}"></van-icon>
+          <van-icon class="action-icon" name="ellipsis" bindtap="showCommentBox" data-_id="{{item._id}}"></van-icon>
+        </view>
+      </view>
+
+      <!-- 点赞和评论区域 -->
+      <view class="moment-interaction" wx:if="{{item.likes.length > 0 || item.comments.length > 0}}">
+        <!-- 点赞列表 -->
+        <scroll-view scroll-y class="likes" wx:if="{{item.likes.length > 0}}">
+          <van-icon class="like-icon" name="like-o"></van-icon>
+          <block wx:for="{{item.likes}}" wx:for-item="likes_item" wx:for-index="likes_index" wx:key="likes_index">
+            <text wx:key="*this">{{likes_item.userName}}</text>
+          </block>
+        </scroll-view>
+
+        <!-- 评论列表 -->
+        <view class="comments" wx:if="{{item.comments.length > 0}}">
+          <view class="comment-item" wx:for="{{item.comments}}" wx:key="id" wx:if="{{comments_index < 5 || item.showAllComments}}" wx:for-item="comments_item" wx:for-index="comments_index">
+            <text class="comment-user">{{comments_item.userName}}</text>
+            <text class="comment-reply" wx:if="{{comments_item.replyTo}}">{{comments_item.replyTo}}</text>
+            <text>：{{comments_item.content}}</text>
+            <!-- 展开回复栏 查看更多 -->
+            <view wx:if="{{comments_index === 4 && !item.showAllComments}}" class="showMoreComments" catch:tap="showMoreComments" mark:index="{{index}}">
+              <van-icon size="35rpx" color="#576b95" name="arrow-down"></van-icon>
+            </view>
+            <!-- 收起回复栏 只显示最多五条 -->
+            <view wx:if="{{item.showAllComments &&  item.comments.length -1 === comments_index}}" class="showMoreComments" catch:tap="concealComments" mark:index="{{index}}">
+              <van-icon size="35rpx" color="#576b95" name="arrow-up"></van-icon>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <van-divider contentPosition="center" textColor="#0094ff">{{moments.length < total ? '上滑加载更多' : '当前城市已无更多内容'}}</van-divider>
+  </scroll-view>
+
+  <!-- 评论输入框 -->
+  <comment-box id="commentBox" bindsubmit="handleCommentSubmit"></comment-box>
+</view>

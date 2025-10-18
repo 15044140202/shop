@@ -1,0 +1,41 @@
+/* components/image-uploader/image-uploader.wxss */
+.image-uploader {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -10rpx;
+}
+
+.image-item, .add-btn {
+  width: 210rpx;
+  height: 210rpx;
+  margin: 10rpx;
+  position: relative;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  border-radius: 8rpx;
+}
+
+.delete-btn {
+  position: absolute;
+  right: 10rpx;
+  top: 10rpx;
+  width: 40rpx;
+  height: 40rpx;
+  z-index: 1;
+}
+
+.add-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2rpx dashed #ccc;
+  border-radius: 8rpx;
+}
+
+.add-icon {
+  width: 60rpx;
+  height: 60rpx;
+}

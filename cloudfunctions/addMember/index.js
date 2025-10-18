@@ -13,7 +13,7 @@ exports.main = async (event, context) => {
     // // 验证输入
     // validateInput(event);
     // 获取事务中的集合引用
-    const { shopId, shopName, position, telephone } = event
+    const { shopId, shopName, position, telephone,userName } = event
     // 向merchant_info 里添加店铺信息
     await transaction.collection('merchant_info').where({
       _openid: wxContext.OPENID
@@ -28,7 +28,8 @@ exports.main = async (event, context) => {
         shopId: shopId,
         memberOpenid: wxContext.OPENID,
         position: position,
-        telephone: telephone
+        telephone: telephone,
+        userName:userName
       }
     })
 

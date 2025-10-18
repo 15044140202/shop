@@ -1,15 +1,213 @@
-/* pages/set/sysSte/deviceManage/camera/camera.wxss */
-@import '../../../../../template/SetMenu/SetMenu.wxss';
-.cameraList{
+/* pages/set/sysSte/deviceManage/camera/camera.wxss  */
+@import '../../../../../template/SetMenu/SetMenu.wxss'; 
+ 
+/* 全局样式 */
+.dashboard-container {
+  padding: 30rpx;
+  background: #f5f7fa;
+}
+ 
+/* 卡片通用样式 */
+.dashboard-card {
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 6rpx 24rpx rgba(0,0,0,0.04);
+  margin-bottom: 32rpx;
+  padding: 32rpx;
+}
+ 
+.card-header {
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  padding-bottom: 24rpx;
+  border-bottom: 1rpx solid #eee;
+  margin-bottom: 24rpx;
+}
+ 
+.card-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #1f1f1f;
+  margin-left: 16rpx;
+}
+ 
+/* 余额卡片 */
+.balance-card {
+  background: linear-gradient(135deg, #f0f8ff, #e6f7ff);
+}
+ 
+.balance-number {
+  font-size: 48rpx;
+  color: #1890ff;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+}
+ 
+.operation-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24rpx;
+}
+ 
+.cost-tip {
+  color: #8c8c8c;
+  font-size: 26rpx;
+}
+ 
+.recharge-btn {
+  width: 180rpx;
+  border-radius: 8rpx;
+  background: #1890ff;
+  box-shadow: 0 4rpx 12rpx rgba(24,144,255,0.3);
+}
+ 
+/* 价格设置卡片 */
+.price-input-group {
+  display: flex;
+  align-items: center;
+}
+ 
+.price-input {
+  width: 200rpx;
+  border-bottom: 2rpx solid #13c2c2;
+  padding: 12rpx;
+  font-size: 32rpx;
+  text-align: center;
+}
+ 
+.price-unit {
+  margin: 0 24rpx;
+  color: #595959;
+}
+ 
+.save-btn {
+  width: 180rpx;
+  border-color: #13c2c2;
+  color: #13c2c2;
+}
+ 
+/* 设备列表 */
+.device-list-card {
+  min-height: 150rpx;
+}
+ 
+.device-item {
+  padding: 24rpx;
+  background: #fafafa;
+  border-radius: 12rpx;
+  margin-bottom: 24rpx;
+  border: 1rpx solid #eee;
+}
+ 
+.device-header {
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 80%;
-  height: 80rpx;
-  margin-left: 10%;
+  margin-bottom: 16rpx;
 }
-.scan{
+ 
+.device-id {
+  font-size: 28rpx;
+  color: #595959;
+}
+ 
+.device-status {
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+ 
+.status-time {
+  margin-left: 24rpx;
+  color: #8c8c8c;
+  font-size: 26rpx;
+}
+ 
+.channel-list {
+  border-top: 1rpx dashed #eee;
+  padding-top: 16rpx;
+}
+ 
+.channel-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+ 
+.channel-info {
+  display: flex;
+  align-items: center;
+}
+ 
+.channel-name {
+  margin-left: 12rpx;
+  color: #595959;
+}
+ 
+.table-picker {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 120rpx;
+  width: 40%;
+  border-radius: 8rpx;
+  background: #f5f5f5;
+}
+ 
+.bind-info {
+  color: #1890ff;
+  font-size: 28rpx;
+}
+ 
+/* 添加设备表单 */
+.add-device-card {
+  background: linear-gradient(135deg, #f6ffed, #f0ffe6);
+}
+ 
+.device-form {
+  padding: 24rpx 0;
+}
+ 
+.form-item {
+  margin-bottom: 32rpx;
+}
+ 
+.form-label {
+  display: block;
+  color: #595959;
+  font-size: 28rpx;
+  margin-bottom: 16rpx;
+}
+ 
+.form-input {
+  width: 75%;
+  height: 80rpx;
+  padding: 0 24rpx;
+  border: 1rpx solid #d9d9d9;
+  border-radius: 8rpx;
+  background: #fff;
+}
+ 
+.input-group {
+  display: flex;
+  align-items: center;
+}
+ 
+.scan-icon {
+  margin-left: 24rpx;
+  padding: 12rpx;
+  background: #e6f7ff;
+  border-radius: 50%;
+}
+ 
+.submit-btn {
+  width: 100%;
+  border-radius: 8rpx;
+  background: linear-gradient(135deg, #36cfc9, #08979c);
+  height: 88rpx;
+  line-height: 88rpx;
+  font-size: 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(8,151,156,0.3);
 }

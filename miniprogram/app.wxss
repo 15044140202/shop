@@ -1,5 +1,83 @@
+/* 基础变量 */
 :root {
-  --color-1: #3498db;
-  --color-2: #2ecc71;
-  --color-3: #ecf0f1;
+  --primary-color: #409EFF;
+  --success-color: #67C23A;
+  --warning-color: #E6A23C;
+  --danger-color: #F56C6C;
+  --text-primary: #303133;
+  --text-regular: #606266;
+  --text-secondary: #909399;
+  --border-color: #ebeef5;
+  --bg-color: #f5f7fa;
+}
+page{
+  background-color: #f5f7fa;
+}
+/* 对于所有卡片式菜单的定义 */
+.menu-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240rpx, 1fr));
+  gap: 32rpx;
+  padding: 40rpx;
+  background: var(--bg-color);
+}
+.menu-card {
+  position: relative;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 48rpx 32rpx;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8rpx 24rpx rgba(0, 151, 255, 0.08);
+}
+.card-hover {
+  transform: translateY(-8rpx);
+  box-shadow: 0 12rpx 32rpx rgba(0, 151, 255, 0.15);
+}
+.card-icon {
+  margin-bottom: 32rpx;
+  filter: drop-shadow(0 4rpx 8rpx rgba(0, 151, 255, 0.2));
+}
+.card-title {
+  display: block;
+  font-size: 28rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.4;
+}
+.dynamic-badge {
+  position: absolute;
+  top: -16rpx;
+  right: -16rpx;
+  background: var(--danger-color);
+  color: #fff;
+  font-size: 20rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 100rpx;
+  box-shadow: 0 4rpx 12rpx rgba(255, 77, 79, 0.2);
+}
+/* 所有tabar 的页面头 */
+/* 页面头样式 */
+.page-header {
+  display: flex;
+  flex-direction: column; /* 垂直排列 */
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 5vw 5vw ;
+  background: linear-gradient(to bottom, #0097ff, #007acc); /* 改为自上而下 */
+  border-radius: 0 0 0rpx 66rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 151, 255, 0.2);
+  margin-bottom: 24rpx;
+  height: 15vh;
+  width:90vw;
+}
+.header-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+}
+.header-intro {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8); /* 半透明白色 */
 }

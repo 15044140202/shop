@@ -1,36 +1,139 @@
-page{
-  background-color: #efeff4;
+/* pages/set/sysSte/lightSet/lightSet.wxss  */
+@import '../../../../../app.wxss';
+/* 页面容器 */
+.page-container {
+  background-color: #f5f7fa;
+  min-height: 100vh;
+  padding: 0;
 }
-.titel{
+
+/* 页面头部 */
+.page-header {
+  height: 8vh;
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+}
+.header-intro {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8); /* 半透明白色 */
+}
+
+/* 绑定通讯模块 */
+.bind-module {
+  background-color: #fff;
+  padding: 30rpx 20rpx;
+  margin: 20rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.bind-title {
+  font-size: 28rpx;
+  color: #303133;
+  margin-bottom: 20rpx;
+}
+
+.bind-input {
   display: flex;
-  flex-direction: row;
+  align-items: center;
+}
+
+.input-box {
+  flex: 1;
+  font-size: 28rpx;
+  color: #303133;
+  padding: 10rpx;
+  border: 1rpx solid #ebeef5;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+}
+
+/* 灯控设置列表 */
+.light-list {
+  background-color: #fff;
+  margin: 20rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.light-item {
+  padding: 20rpx;
+  border-bottom: 1rpx solid #ebeef5;
+}
+
+.light-item:last-child {
+  border-bottom: none;
+}
+
+.light-title {
+  font-size: 32rpx;
+  color: #0097ff;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.light-control {
+  display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.titel_1{
-  width: 350rpx;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-right: 50rpx;
-}
-.lightBorder{
+
+.control-left {
   display: flex;
   flex-direction: column;
-  justify-content: start;
-  align-items: center;
+  gap: 10rpx;
 }
-.light{
+
+.time-text {
+  font-size: 28rpx;
+  color: #606266;
+}
+
+.channel-input {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-  width: 80%;
-  height: 120rpx;
 }
-.switch{
+
+.input-number {
+  width: 80rpx;
+  height: 100%;
+  text-align: center;
+  font-size: 28rpx;
+  color: #303133;
+  border: 1rpx solid #ebeef5;
+  border-radius: 8rpx;
+  padding: 5rpx;
+}
+
+.control-right {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-end;
+  gap: 10rpx;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  padding: 40rpx 20rpx;
+}
+
+.primary-button {
+  background-color: #0097ff;
+  color: #fff;
+  font-size: 32rpx;
+  border-radius: 8rpx;
+  margin-bottom: 20rpx;
+}
+
+.secondary-button {
+  background-color: #fff;
+  color: #0097ff;
+  font-size: 32rpx;
+  border: 1rpx solid #0097ff;
+  border-radius: 8rpx;
 }

@@ -1,0 +1,35 @@
+<!--pages/statement/giftCoupon/giftCoupon.wxml-->
+<wxs src="../../../utils/tool.wxs" module="tool"/>
+<view class="container">
+  <view wx:for="{{recordList}}" wx:key="index" class="card">
+    <!-- 序号头 -->
+    <view class="card-header">
+      <text class="serial-number">NO.{{index + 1}}</text>
+      <view class="time-tag">{{tool.timeStampToStr(item.timestamp)}}</view> 
+    </view>
+ 
+    <!-- 主体内容 -->
+    <view class="card-body">
+      <view class="info-row">
+        <text class="label">操作人</text>
+        <text class="value operator">{{item.operater}}</text> 
+      </view>
+      
+      <view class="info-row" bind:tap="gotoVipInfo" mark:index="{{index}}">
+        <text class="label">会员</text>
+        <text class="value reason">{{item.vipInfo.name}}</text> 
+      </view>
+      <view class="info-row" bind:tap="gotoVipInfo" mark:index="{{index}}">
+        <text class="label">电话号:</text>
+        <text class="value reason">{{item.vipInfo.telephone}}</text> 
+      </view>
+ 
+      <view class="amount-row">
+        <text class="label">代金券金额</text>
+        <text class="amount {{item.amount  > 0 ? 'positive' : 'negative'}}">
+          {{item.amount}} 元 
+        </text>
+      </view>
+    </view>
+  </view>
+</view>

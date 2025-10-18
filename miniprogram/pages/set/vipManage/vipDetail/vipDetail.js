@@ -19,7 +19,30 @@ Page({
 
     buttonText: '返回'
   },
+  async addLog(memberName, amount, vipInfo) {
+    const addData = {
+      level: 'info',
+      message: '赠送优惠券',
+      amount: amount,
+      shopId: appData.shop_account._id,
+      operater: memberName,
+      vipInfo: vipInfo,
+      timestamp: new Date().getTime(),
+      source: `送券`
+    }
+    return await app.callFunction({
+      name: 'addRecord',
+      data: {
+        collection:'server_logs',
+        data:addData
+      }
+    })
+  },
   async giveCoupon() {
+    if (! await app.power('operate', '赠送优惠券')) {
+      app.showModal('提示', '没有权限')
+      return
+    }
     var amount = 0;
     const res = await wx.showModal({
       title: '输入金额',
@@ -39,22 +62,29 @@ Page({
       return;
     }
     const cancellation = new Date().getTime() + 30 * 24 * 60 * 60 * 1000
-    const addRes = await app.callFunction({
-      name: 'record_push',
-      data: {
-        collection: 'vip_list',
-        query:{
-          userOpenid:this.data.vipList[this.data.index].userOpenid,
-          shopId:appData.shop_account._id
-        },
-        record:'coupon',
+    const task = []
+    task.push(
+      app.callFunction({
+        name: 'record_push',
         data: {
-          amount: amount,
-          cancellation: app.getNowTime(new Date(cancellation))
+          collection: 'vip_list',
+          query: {
+            userOpenid: this.data.vipList[this.data.index].userOpenid,
+            shopId: appData.shop_account._id
+          },
+          record: 'coupon',
+          data: {
+            amount: amount,
+            cancellation: app.getNowTime(new Date(cancellation))
+          }
         }
-      }
-    })
-    if (addRes.success) {
+      })
+    )
+    task.push(
+      this.addLog(app.getMemberName(),amount,this.data.vipList[this.data.index])
+    )  
+    const addRes = await Promise.all(task)
+    if (addRes[0].success) {
       await wx.showModal({
         title: '提示',
         content: '送券成功!有限期30天.',
@@ -76,7 +106,7 @@ Page({
 
       },
       success: function (res) {
-        res.eventChannel.emit('giveData',{shopId:that.data.vipList[that.data.index].shopId,userOpenid:that.data.vipList[that.data.index].userOpenid})
+        res.eventChannel.emit('giveData', { shopId: that.data.vipList[that.data.index].shopId, userOpenid: that.data.vipList[that.data.index].userOpenid })
       }
     })
   },
@@ -86,6 +116,10 @@ Page({
     })
   },
   async save() {
+    if (!await app.power('set', '修改会员敏感信息')) {
+      app.noPowerMessage()
+      return
+    }
     if (this.data.buttonText === '返回') {
       wx.navigateBack();
     } else {
@@ -93,13 +127,13 @@ Page({
       const res = await app.callFunction({
         name: 'vip_amount_change',
         data: {
-          shopId:appData.shop_account._id,
-          userOpenid:this.data.vipList[this.data.index].userOpenid,
-          oldAmount:this.data.vipList[this.data.index].amount - this.data.amount ,
+          shopId: appData.shop_account._id,
+          userOpenid: this.data.vipList[this.data.index].userOpenid,
+          oldAmount: this.data.vipList[this.data.index].amount - this.data.amount,
           value: this.data.amount,
           reason: this.data.reason,
           status: appData.status,
-          time:app.getNowTime()
+          time: app.getNowTime()
         }
       })
       console.log(res);
@@ -171,11 +205,17 @@ Page({
     const that = this;
     // 监听acceptDataFromOpenerPage事件，获取上一页面通过eventChannel传送到当前页面的数据
     eventChannel.on('giveData', async function (data) {
-      for (let index = 0; index < data.length; index++) {
-        const element = data[index];
-        element.startTime = app.getNowTime(new Date(element.startTime))
-        that.data.vipList.push(element)
-      }
+      console.log(data)
+      that.data.vipList = data.reduce((acc, item) => {
+        if (typeof (item.startTime) === 'number') {
+          const now = new Date(item.startTime)
+          console.log(item.startTime)
+          console.log(now)
+          item.startTime = app.getNowTime(now)
+        }
+        acc.push(item)
+        return acc
+      }, [])
       that.setData({
         vipList: that.data.vipList
       })
@@ -251,18 +291,18 @@ Page({
     //   task.length = 0
     // }
   },
-  async getImage(){
+  async getImage() {
     this.data.vipHeadImage.length = 0
     for (let index = 0; index < this.data.vipList.length; index++) {
       const element = this.data.vipList[index];
       if (this.data.index == index) {//所选用户下载头像
         this.data.vipHeadImage.push(await app.getHeadImage(element.headImage === '' ? 'cloud://billiards-0g53628z5ae826bc.6269-billiards-0g53628z5ae826bc-1326882458/image/没有图片.png' : element.headImage))
-      }else{//非所选用户 不下载头像
+      } else {//非所选用户 不下载头像
         this.data.vipHeadImage.push('')
       }
     }
     this.setData({
-      vipHeadImage:this.data.vipHeadImage
+      vipHeadImage: this.data.vipHeadImage
     })
   },
   /**
@@ -270,40 +310,40 @@ Page({
    */
   onReady() {
 
-},
+  },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow() {
 
-},
+  },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide() {
 
-},
+  },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
 
-},
+  },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
 
-},
+  },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
 
-}
+  }
 })

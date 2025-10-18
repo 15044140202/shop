@@ -1,0 +1,58 @@
+<!--pages/set/amountBook/amountBook.wxml-->
+<!-- 页面标题 -->
+<view class="page-header">
+  <text class="header-title">店铺小账本</text>
+  <text class="header-intro">记录日常收支流水，轻松管理店铺账务。</text>
+</view>
+<!-- 账目列表容器 -->
+<scroll-view class="container" scroll-y enhanced show-scrollbar="{{false}}">
+  <!-- 月份分隔 & 账目卡片 -->
+  <block wx:for="{{allOrder}}" wx:key="index">
+    <!-- 月份分隔符 -->
+    <view wx:if="{{item.type  === 'month'}}" class="month-divider">
+      <view>
+        <text class="month-text">{{item.month}} 月</text>
+        <text class="year-text">{{item.year}}</text>
+      </view>
+      <view style="border:solid 1rpx #0094ff;border-radius: 10rpx;display: flex; flex-direction: row; justify-content: center; align-items: center;" bind:tap="statistic" mark:month="{{item.month}}">
+        <text class="month-text" style="margin-left:15rpx;">支出统计</text>
+      </view>
+    </view>
+    <!-- 账目卡片 -->
+    <view wx:else class="account-card">
+      <!-- 类型标识 -->
+      <view class="type-indicator {{item.amount  > 0 ? 'income' : 'expense'}}"></view>
+
+      <!-- 主体内容 -->
+      <view class="card-body">
+        <view style="display: flex; flex-direction: row; justify-content: flex-start; width:auto; height: auto;">
+          <view class="header-line">
+            <text class="category">{{item.category}}</text>
+            <text class="amount {{item.amount  > 0 ? 'income' : 'expense'}}">
+              {{item.amount > 0 ? '+' : ''}}{{item.amount}} 元
+            </text>
+          </view>
+          <image wx:if="{{item.receip}}" src="{{item.receip}}" class="receipt-thumb" mode="aspectFill" bind:tap="previewImage" data-src="{{item.receip}}" mark:index="{{index}}" />
+        </view>
+
+        <!-- 详情区域 -->
+        <view class="detail-area">
+          <view class="meta-info">
+            <text class="operator">{{item.operater}}</text>
+            <text class="time">{{item.date}}</text>
+            <text class="totalAmount_text">总余额 : </text>
+            <text class="amount {{item.totalAmount  > 0 ? 'income' : 'expense'}}">{{item.totalAmount}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+  <view style="width: 100%; height: 300rpx;"></view>
+</scroll-view>
+
+<!-- 悬浮操作按钮 -->
+<view class="fab-container" bind:tap="showEditor">
+  <view class="fab-button">
+    <van-icon name="plus" size="50rpx" color="#fff" />
+  </view>
+</view>

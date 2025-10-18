@@ -1,13 +1,34 @@
-<!--pages/set/vipManage/vipManage.wxml-->
-<van-search placeholder="请输入会员账号或者手机号" show-action bind:search="onSearch" bind:cancel="onCancel" />
-<view class="border1" wx:for="{{vipList}}" wx:key="index" bind:tap="goto" mark:index='{{index}}'>
-  <view class='titel'>
-    <image style="height: 150rpx; width: 150rpx; border-radius: 10%; border: solid 1rpx #ccc ; margin: 10rpx;" src="{{vipHeadImage[index]}}" />
-    <view class="titel_1">
-      <text>{{item.name}}</text>
-      <text>积分:{{item.integral}}</text>
+<!-- pages/set/vipManage/vipManage.wxml  -->
+<view class="page-container">
+  <!-- 页面头部（集成搜索框） -->
+  <view class="page-header">
+    <view class="header-content">
+      <text class="header-title">会员管理</text>
+      <text class="header-intro">通过手机号快速搜索会员，查看详细信息，轻松管理会员资料。</text>
     </view>
   </view>
-  <text style="color: #aaa; margin-right: 30rpx;">{{item.amount}} 元</text>
+  <view class="custom-search">
+    <input class="search-input" placeholder="请输入会员账号或手机号" bindinput="onInput" bindconfirm="onSearch" />
+    <button class="search-button" bind:tap="onSearch" mark:info="{{searchValue}}">
+      <van-icon name="search" size="40rpx" color="#fff" />
+    </button>
+  </view>
+  <!-- 会员列表 -->
+  <view class="vip-list">
+    <block wx:for="{{vipList}}" wx:key="index">
+      <view class="vip-item" bind:tap="goto" mark:index="{{index}}">
+        <image class="vip-avatar" src="{{vipHeadImage[index]}}" />
+        <view class="vip-info">
+          <text class="vip-name">{{item.name}}</text>
+          <text class="vip-integral">积分: {{item.integral}}</text>
+        </view>
+        <text class="vip-amount">{{item.amount}} 元</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- 没有更多数据提示 -->
+  <view hidden="{{vipList.length  === count}}" class="no-more-data">
+    没有更多数据!
+  </view>
 </view>
-<view hidden="{{vipList.length === count}}" style=" margin-top: 80rpx; text-align: center; width: 100%; height: 200rpx; border-top:dotted #ccc 5rpx;">没有更多数据!</view>

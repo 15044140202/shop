@@ -1,7 +1,6 @@
 <!--pages/set/marketing/marketing.wxml-->
 <import src="../../../template/SetMenu/SetMenu" />
 <template is="titel_video" data="{{titelName:'营销活动设置',video_tap:'video_tap'}}" />
-<view style="width: 100%; height: 50rpx; background-color: #0097ff;"></view>
 <view class="luckSudoku">
 	<!-- 项目名称 -->
 	<view class="item" bind:tap="tap" mark:item="luckSudoku">

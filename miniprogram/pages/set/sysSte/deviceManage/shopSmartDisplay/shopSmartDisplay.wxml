@@ -1,0 +1,79 @@
+<!--pages/set/sysSte/deviceManage/shopSmartDisplay/shopSmartDisplay.wxml-->
+<wxs src="../../../../../utils/tool.wxs" module="tool" />
+<view class="page-header" style="height: 8vh;">
+  <view class="header-title">智慧大屏管理</view>
+  <view class="header-intro">添加管理(吧台智慧屏,大厅公共智慧屏,桌台智慧屏,智慧广告机.)</view>
+</view>
+<!-- pages/deviceManage/deviceManage.wxml -->
+<view class="container2">
+  <!-- 设备统计卡片 --> 
+  <view class="stats-card">
+    <view class="stat-item" bind:tap="tap" mark:item="filterDevice" mark:onlineState="{{2}}">
+      <text class="stat-value">{{shopSmartDisplay.length}}</text>
+      <text class="stat-label">设备总数</text>
+    </view>
+    <view class="stat-item" bind:tap="tap" mark:item="filterDevice" mark:onlineState="{{1}}">
+      <text class="stat-value">{{onlineCount || 0}}</text>
+      <text class="stat-label online">在线设备</text>
+    </view>
+    <view class="stat-item" bind:tap="tap" mark:item="filterDevice" mark:onlineState="{{0}}">
+      <text class="stat-value">{{offlineCount || 0}}</text>
+      <text class="stat-label offline">离线设备</text>
+    </view>
+  </view>
+
+  <!-- 设备列表 -->
+  <view class="device-list">
+    <view wx:for="{{filteredDevices}}" wx:key="deviceMac" class="device-item {{selectedDevice && selectedDevice.deviceMac === item.deviceMac ? 'selected' : ''}}" bindtap="onDeviceClick" data-device="{{item}}">
+      <view class="device-info">
+        <view class="device-name">
+          {{item.name}}
+          <text class="device-status {{item.online ? 'online' : 'offline'}}">{{item.online ? '在线' : '离线'}}</text>
+        </view>
+        <view class="device-details">
+          <text wx:if="{{item.name === '桌台智慧屏'}}" class="detail-item">桌台: {{item.tableNum ? item.tableNum + '号台' : '未绑定'}}</text>
+          <text class="detail-item">最后使用: {{tool.timeStampToStr(item.lastUsedTime)}}</text>
+        </view>
+      </view>
+      <view class="device-actions">
+        <van-icon name="ellipsis" size="22rpx" color="#888" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 设备详情弹窗 -->
+  <van-popup show="{{showDeviceDetail}}" position="bottom" round custom-style="height: 850vh; max-height: 700rpx;" bind:close="onCloseDetail">
+    <view class="detail-header">
+      <text class="detail-title">{{selectedDevice.name || '设备详情'}}</text>
+      <van-icon name="delete" size="45rpx" color="#f5222d" bind:click="onDeleteDevice" class="delete-icon" />
+    </view>
+
+    <view class="detail-content">
+      <view class="detail-row">
+        <text class="row-label">授权码:</text>
+        <canvas class="barcode-canvas" canvas-id="barCode"></canvas>
+      </view>
+      <view wx:if="{{selectedDevice.name === '桌台智慧屏'}}" class="detail-row">
+        <text class="row-label">绑定桌台:</text>
+        <picker mode="selector" range="{{shop_table}}" range-key="tableNum" bindchange="bindtablechange" >
+          <text class="row-value">{{selectedDevice.tableNum ? selectedDevice.tableNum + '号台' : '未绑定'}}</text>
+        </picker>
+      </view>
+      <view style="width: 100%; height: 200rpx;"></view>
+    </view>
+  </van-popup>
+
+  <!-- 添加设备按钮 -->
+  <view class="add-device-btn">
+    <view class="main-btn" bindtap="showAddMenu">
+      <text class="btn-text">+</text>
+    </view>
+
+    <view wx:if="{{showAddMenu}}" class="add-menu">
+      <view class="menu-item" bindtap="onScanAdd">
+        <text class="item-icon">🔍</text>
+        <text class="item-text">扫码添加</text>
+      </view>
+    </view>
+  </view>
+</view>

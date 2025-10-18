@@ -1,0 +1,65 @@
+<view class="page-header">
+  <text class="header-title">会员列表</text>
+  <text class="header-intro">选择要发送短信的会员</text>
+</view>
+<view class="page-container">
+  <!-- 筛选条件区域 -->
+  <view class="filter-section">
+    <view class="filter-row">
+      <view class="filter-item">
+        <text class="filter-label">积分 > </text>
+        <input class="filter-input" type="number" value="{{filterIntegralValue}}" placeholder="输入积分" bindinput="filterIntegral" />
+      </view>
+      <view class="filter-item">
+        <text class="filter-label">余额 > </text>
+        <input class="filter-input" type="number" value="{{filterAmountValue}}" placeholder="输入余额" bindinput="filterAmount" />
+      </view>
+    </view>
+    <view class="filter-row">
+      <view class="filter-item">
+        <text class="filter-label">最后消费</text>
+        <picker mode="date" bindchange="filterLastTime">
+          <view class="filter-picker">{{filterLastTimeValue || '选择日期'}}</view>
+        </picker>
+      </view>
+      <button class="filter-button" bindtap="filter">筛选</button>
+      <button class="filter-button" type="warn" bindtap="resetFilter">重置</button>
+      <button class="filter-button" type="primary" bindtap="confirm">选择</button>
+    </view>
+  </view>
+
+  <!-- 全选按钮 -->
+  <view class="select-all-section">
+    <text>会员列表</text>
+    <checkbox-group bindchange="handleSelectAll">
+      <label class="select-all-label">
+        <checkbox value="all" checked="{{isAllSelected}}" />全选
+      </label>
+    </checkbox-group>
+  </view>
+
+  <!-- 会员列表区域 -->
+  <scroll-view class="list-section" scroll-y>
+    <checkbox-group bindchange="handleCheckboxChange" >
+      <view class="list-item" wx:for="{{currentPageData}}" wx:key="telephone">
+        <image class="avatar" src="{{item.headImage}}" />
+        <view class="info">
+          <text class="name">{{item.name}}</text>
+          <text class="phone">{{item.telephone}}</text>
+          <text class="detail">积分: {{item.integral}} | 余额: {{item.amount}} | 最后消费: {{item.lastTime}}</text>
+        </view>
+        <checkbox value="{{index}}" checked="{{item.checked}}" />
+      </view>
+    </checkbox-group>
+  </scroll-view>
+
+  <!-- 分页按钮 -->
+  <view class="pagination">
+    <button class="pagination-button" bindtap="loadPrevPage" disabled="{{currentPage === 1}}">上一页</button>
+    <view class="page-info">
+      <text>第 {{currentPage}} 页</text>
+      <text>共 {{totalPages}} 页</text>
+    </view>
+    <button class="pagination-button" bindtap="loadNextPage" disabled="{{currentPage === totalPages}}">下一页</button>
+  </view>
+</view>

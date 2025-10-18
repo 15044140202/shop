@@ -1,0 +1,219 @@
+/* pages/set/sysSte/deviceManage/shopSmartDisplay/shopSmartDisplay.wxss */
+/* pages/deviceManage/deviceManage.wxss */
+.container2 {
+  background-color: #f7f8fa;
+  width: 93vw;
+  margin-left: 2.5vw;
+}
+
+.stats-card {
+  display: flex;
+  justify-content: space-around;
+  padding: 25rpx 0;
+  background-color: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 148, 255, 0.1);
+  margin-bottom: 30rpx;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #0094ff;
+  margin-bottom: 8rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.stat-label.online {
+  color: #52c41a;
+}
+
+.stat-label.offline {
+  color: #f5222d;
+}
+
+.device-list {
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 12rpx rgba(0, 148, 255, 0.1);
+}
+
+.device-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 25rpx 20rpx;
+  border-bottom: 1rpx solid #f2f3f5;
+  transition: all 0.3s ease;
+}
+
+.device-item:last-child {
+  border-bottom: none;
+}
+
+.device-item.selected {
+  background-color: rgba(0, 148, 255, 0.05);
+}
+
+.device-name {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 10rpx;
+  display: flex;
+  align-items: center;
+}
+
+.device-status {
+  font-size: 22rpx;
+  padding: 4rpx 10rpx;
+  border-radius: 12rpx;
+  margin-left: 15rpx;
+}
+
+.device-status.online {
+  background-color: rgba(82, 196, 26, 0.1);
+  color: #52c41a;
+}
+
+.device-status.offline {
+  background-color: rgba(245, 34, 45, 0.1);
+  color: #f5222d;
+}
+
+.device-details {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 10rpx 15rpx;
+}
+
+.detail-item {
+  font-size: 30rpx;
+  color: #888;
+}
+
+.device-actions {
+  display: flex;
+  align-items: center;
+  padding-left: 20rpx;
+}
+
+/* 详情弹窗样式 */
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 25rpx;
+  border-bottom: 1rpx solid #f2f3f5;
+}
+
+.detail-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.delete-icon {
+  padding: 10rpx;
+}
+
+.detail-content {
+  padding: 25rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 25rpx;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+}
+
+.row-label {
+  font-size: 28rpx;
+  color: #666;
+  width: 18vw;
+}
+
+.row-value {
+  font-size: 28rpx;
+  color: #333;
+  flex: 1;
+}
+
+.row-value.online {
+  color: #52c41a;
+}
+
+.row-value.offline {
+  color: #f5222d;
+}
+
+/* 添加设备按钮 */
+.add-device-btn {
+  position: fixed;
+  right: 30rpx;
+  bottom: 50rpx;
+  z-index: 999;
+}
+
+.main-btn {
+  width: 90rpx;
+  height: 90rpx;
+  background-color: #0094ff;
+  border-radius: 50%;
+  box-shadow: 0 6rpx 16rpx rgba(0, 148, 255, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 48rpx;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.main-btn:active {
+  transform: scale(0.95);
+}
+.barcode-canvas {
+  width: 70vw;
+  height: 70vw;
+}
+
+.add-menu {
+  position: absolute;
+  bottom: 110rpx;
+  right: 0;
+  background-color: white;
+  border-radius: 12rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.15);
+  padding: 10rpx 0;
+  width: 220rpx;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 25rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.menu-item:active {
+  background-color: #f5f7fa;
+}
+
+.item-icon {
+  margin-right: 15rpx;
+  font-size: 32rpx;
+}

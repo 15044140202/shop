@@ -1,0 +1,45 @@
+/* pages/tools/mall/shoppingAddManage/addShoppingAdd/addShoppingAdd.wxss */
+.edit-container {
+  padding: 30rpx;
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.label {
+  width: 160rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.input {
+  flex: 1;
+  font-size: 28rpx;
+}
+
+.region {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.placeholder {
+  color: #999;
+}
+
+.default-item {
+  justify-content: space-between;
+  margin-top: 40rpx;
+  border-bottom: none;
+}
+
+.save-btn {
+  margin-top: 80rpx;
+  background-color: #0094ff;
+  color: #fff;
+  border-radius: 40rpx;
+}

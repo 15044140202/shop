@@ -1,133 +1,113 @@
-<!--pages/satement/statement.wxml-->
-<!-- 店铺选择  营业额查询  -->
-<view class="titel">
-  <picker class="name" bindchange="bindPickerChange" mark:item="shopSelect" value="{{merchant_info.shopId[shopName_seletNum].shopName}}" range="{{merchant_info.shopId}}" range-key="shopName">
-    <text style="font-size: 36rpx;">{{merchant_info.shopId[shopName_seletNum].shopName}}</text>
-    <van-icon name="arrow-down" size="40rpx" color="#a7c0d1" />
-  </picker>
-  <view class="amount">
-    <view class="left_botton">
-      <van-icon name="arrow-left" size="100rpx" color="#a7c0d1" bind:tap="tap" mark:item='left' />
+<!-- pages/satement/statement.wxml  -->
+<!-- 头部操作区 -->
+<view class="page-header">
+  <view class="header-top">
+      <picker class="shop-picker" bindchange="bindPickerChange" range="{{merchant_info.shopId}}" range-key="shopName" mark:item="shopSelect" value="{{shopName_seletNum}}">
+        <view class="picker-content">
+          <text class="shop-name">{{merchant_info.shopId[shopName_seletNum].shopName}}</text>
+          <van-icon name="arrow-down" size="32rpx" color="rgba(255,255,255,0.8)" />
+        </view>
+      </picker>
+      <picker class="date-picker" bindchange="bindPickerChange" mark:item="monthSearch" mode="date" fields="month">
+        <van-icon name="search" size="44rpx" color="rgba(255,255,255,0.9)" />
+      </picker>
     </view>
-    <view class="sum" bind:tap="goto" mark:item='turnover' mark:path="/pages/statement/turnover/turnover">
-      <text style="font-size: 80rpx; color: #ffffff;">{{AccountsTotal}}</text>
-      <text style="font-size: 25rpx;">{{disPlayDate === nowDate ? '今日营业额' : disPlayDate}}</text>
+ 
+    <!-- 核心数据看板 -->
+    <view class="revenue-card">
+      <view class="nav-arrows">
+        <van-icon name="arrow-left" size="56rpx" color="rgba(255,255,255,0.9)" bind:tap="tap" mark:item='left' />
+      </view>
+      <view class="revenue-main" bind:tap="goto" mark:item='查看营业额' mark:path="/pages/statement/turnover/turnover">
+        <text class="revenue-amount">{{AccountsTotal}}</text>
+        <view class="revenue-label">
+          <text>{{disPlayDate === nowDate ? '今日营业额' : disPlayDate}}</text>
+          <van-icon name="bar-chart-o" size="36rpx" color="#fff" />
+        </view>
+      </view>
+      <view class="nav-arrows">
+        <van-icon name="arrow" size="56rpx" color="rgba(255,255,255,0.9)" bind:tap="tap" mark:item='right' />
+      </view>
     </view>
-    <view class="right_bottom">
-      <van-icon name="arrow" size="100rpx" color="#a7c0d1" bind:tap="tap" mark:item='right' />
+</view>
+<view class="dashboard-container">
+  <!-- 数据分类展示 -->
+  <view class="data-modules">
+    <!-- 支付方式模块 -->
+    <view class="data-card">
+      <view class="module-header">
+        <view class="deco-line"></view>
+        <text>按支付渠道统计</text>
+      </view>
+      <view class="payment-grid">
+        <view wx:for="{{cash_data}}" wx:key="index" class="payment-item" bind:tap="goto" mark:path="{{item.url}}" mark:item='按收款方式查询'>
+          <view class="payment-value">
+            <text>{{item.sum}}</text>
+            <text class="unit">元</text>
+          </view> 
+          <text class="payment-label">{{item.name}}</text>
+        </view>
+      </view>
+      <view class="total-row">
+        <text>合计：</text>
+        <text class="highlight">{{cash_data[0].sum + cash_data[1].sum}}元</text>
+      </view>
     </view>
-  </view>
-  <picker class="search" bindchange="bindPickerChange" mark:item="monthSearch" mode="date" fields="month" >
-    <van-icon name="search" size="50rpx" color="#a7c0d1" />
-  </picker>
-</view>
-<!-- 按收款方式方式分类  标题栏 -->
-<view class="titel_2">
-  <view class="titel_2_1">
-  </view>
-  <text style="color: #cccccc; margin-left: 20rpx;">按收款方式分类</text>
-</view>
-<!-- 现金 营业额栏 -->
-<view class="titel_3">
-  <text>现金合计:</text>
-  <text style="margin-left:20rpx;">{{cash_data[0].sum + cash_data[1].sum}}</text>
-  <text>元</text>
-</view>
-<!-- 现金  和  微信 统计 -->
-<view class="title_4">
-  <view wx:for="{{cash_data}}" wx:key="index" class="cash" bind:tap="goto" mark:path="{{item.url}}" mark:item='collectionType'>
-    <view class="cash_1">
-      <text style="font-size: 40rpx;">{{item.sum}}</text>
-      <text style="color: #cccccc;font-size: 28rpx">元</text>
-    </view>
-    <text style="color: #cccccc ;font-size: 28rpx">{{item.name}}</text>
-  </view>
-</view>
-<!-- 卡券类  营业额栏 -->
-<view class="titel_3">
-  <text>卡券类合计:</text>
-  <text style="margin-left:20rpx;">{{card_data[0].sum + card_data[1].sum + card_data[2].sum + card_data[3].sum}}</text>
-  <text>元</text>
-</view>
-<!-- 会员  和  抖音美团代金券 会员欠款 统计 -->
-<view class="title_5">
-  <view class="cash" wx:for="{{card_data}}" wx:key="index" bind:tap="goto" mark:path='{{item.url}}' mark:item="collectionType">
-    <view class="cash_1" url="{{item.url}}">
-      <text wx:if="{{index==0}}" style="font-size: 40rpx;">{{item.sum}}</text>
-      <text wx:elif="{{index==1}}" style="font-size: 40rpx;">{{item.sum}}</text>
-      <text wx:elif="{{index==2}}" style="font-size: 40rpx;">{{item.sum}}</text>
-      <text wx:elif="{{index==3}}" style="font-size: 40rpx;">{{item.sum}}</text>
-      <text style="color: #cccccc;font-size: 28rpx">元</text>
-    </view>
-    <text style="color: #cccccc ;font-size: 28rpx">{{item.name}}</text>
-  </view>
-</view>
-<!-- 区域  分割线 -->
-<view style="height: 35rpx; background-color:#efefef ;"></view>
-<!-- 按收入项目分类  标题栏 -->
-<view class="titel_2">
-  <view class="titel_2_1">
-  </view>
-  <text style="color: #cccccc; margin-left: 20rpx;">按收入项目分类</text>
-</view>
-<!-- 按收入项目分类  -->
-<view class="title_5">
-  <view class="cash" wx:for="{{item_data}}" wx:key="index" bind:tap="goto" mark:path='{{item.url}}' mark:item="collectionItem">
-    <view class="cash_1">
-      <text style="font-size: 40rpx;">{{item.sum}}</text>
-      <text style="color: #cccccc;font-size: 28rpx">{{item.yuan}}</text>
-    </view>
-    <text style="color: #cccccc ;font-size: 28rpx">{{item.name}}</text>
-  </view>
-</view>
-<!-- 营业简报  标题栏 -->
-<view class="titel_2">
-  <view class="titel_2_1">
-  </view>
-  <text style="color: #cccccc; margin-left: 20rpx;">营业简报</text>
-</view>
-<!-- 营业简报  -->
-<view class="title_6">
-  <view class="cash" wx:for="{{sattement_data}}" wx:key="index" bind:tap="goto" mark:path="{{item.path}}" mark:item="{{index === 0 ? '未结账单据' : index === 1 ? '已结账单据' :index === 2 ?'新增会员':index === 3 ?'会员储值':index === 4 ?'商品入库记录':index === 5 ?'商品入库报表': index === 6 ? '商品销售报表' :index === 7 ?'员工收取现金记录':index === 8 ?'员工打卡记录':''}}">
-    <view class="cash_1">
-      <text wx:if="{{index==7||index==16}}" style="font-size: 40rpx; color:red;">{{item.sum}}</text>
-      <text wx:else="" style="font-size: 40rpx;">{{item.sum}}</text>
-      <text style="color: #cccccc;font-size: 28rpx">{{item.yuan}}</text>
-    </view>
-    <text style="color: #cccccc ;font-size: 28rpx">{{item.name}}</text>
-  </view>
-</view>
-<!-- 区域  分割线 -->
-<view style="height: 35rpx; width: 100%; background-color: #efefef;"></view>
-<!-- 今日提醒  标题栏 -->
-<view class="titel_2">
-  <view class="titel_2_1">
-  </view>
-  <text style="color: #cccccc; margin-left: 20rpx;">今日提醒</text>
-</view>
 
-<view class="title_4">
-  <view class="cash" wx:for="{{warn_data}}" wx:key="index">
-    <view class="cash_1">
-      <text style="font-size: 40rpx;">{{item.sum}}</text>
-      <text style="color: #cccccc;font-size: 28rpx">{{item.yuan}}</text>
-    </view>
-    <text style="color: #cccccc ;font-size: 28rpx">{{item.name}}</text>
-  </view>
-</view>
-<!-- 客人欠款(逃单)  标题栏 -->
-<view class="titel_2">
-  <view class="titel_2_1">
-  </view>
-  <text style="color: #cccccc; margin-left: 20rpx;">客人欠款(逃单)</text>
-</view>
+    <!-- 卡券模块  按项目统计 -->
+    <view class="data-card">
+      <view class="module-header">
+        <view style="display: flex; justify-content: right;">
+          <view class="deco-line"></view>
+          <text>{{data_card?'按项目统计' :'卡券使用统计'}}</text>
+        </view>
+        <view style="display: flex;flex-direction: row; align-items: center;" bind:tap="tap" mark:item="data_card_change">
+          <text style="font-size: 25rpx; color: #ccc;">{{data_card?'至按卡券统计' :'至按项目统计'}}</text>
+          <van-icon name="exchange" size="45rpx"></van-icon>
+        </view>
+      </view>
+      <view class="card-grid" wx:if="{{data_card}}">
+        <view wx:for="{{item_data}}" wx:key="index" class="card-item" bind:tap="goto" mark:path='{{item.url}}' mark:item="按收入项目查询"> 
+          <view style="display: flex; flex-direction: row; justify-content: space-between;">
+            <view style=" width: 220rpx;">
+              <text class="card-label">{{item.name}} : </text>
+            </view>
+            <view>
+              <text class="card-value">{{item.sum}}</text>
+              <text class="unit">{{item.yuan}}</text>
+            </view>
+          </view>
+          <view class="card-progress"></view>
+        </view>
+      </view>
+      <view class="card-grid" wx:if="{{!data_card}}">
+        <view wx:for="{{card_data}}" wx:key="index" class="card-item" bind:tap="goto" mark:path="{{item.url}}" mark:item="按收款方式查询">
+          <view style="display: flex; flex-direction: row; justify-content: space-between;">
+            <view style=" width: 220rpx;">
+              <text class="card-label">{{item.name}} : </text>
+            </view>
+            <view>
+              <text class="card-value">{{item.sum}}</text>
+              <text class="unit">元</text>
+            </view>
+          </view>
+          <view class="card-progress"></view>
+        </view>
+      </view>
+    </view> 
 
-<view class="title_4">
-  <view class="cash" wx:for="{{debt_data}}" wx:key="index">
-    <view class="cash_1">
-      <text style="font-size: 40rpx;">{{item.sum}}</text>
-      <text style="color: #cccccc;font-size: 28rpx">{{item.yuan}}</text>
+    <!-- 智能简报模块 -->
+    <view class="report-container">
+      <view class="data-card" wx:for="{{sattement_data}}" wx:key="index" bind:tap="goto" mark:path="{{item.path}}" mark:item="{{item.name}}">
+        <view class="report-header">
+          <text>{{item.name}}</text>
+          <van-icon name="warning-o" size="36rpx" color="{{index==7||index==16?'#FF4D4D':'#0097ff'}}" />
+        </view>
+        <view class="report-value">
+          <text style="color:{{index==7||index==16?'#FF4D4D':'#333'}}; {{item.name === '开灯记录' ? 'font-size:32rpx;' : ''}}">{{item.sum}}</text>
+          <text class="unit">{{item.yuan}}</text>
+        </view>
+      </view>
     </view>
-    <text style="color: #cccccc ;font-size: 28rpx">{{item.name}}</text>
   </view>
 </view>

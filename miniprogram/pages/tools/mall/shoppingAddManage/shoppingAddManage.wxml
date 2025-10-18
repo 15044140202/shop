@@ -1,0 +1,38 @@
+<view class="container">
+  <!-- 地址列表 -->
+  <scroll-view scroll-y class="address-list" wx:if="{{shoppingAdd.length > 0}}">
+    <view wx:for="{{shoppingAdd}}" wx:key="index" class="address-item" bindtap="selectAdd" data-index="{{index}}">
+      <view class="address-header"> 
+        <text class="name">{{item.name}}</text>
+        <text class="phone">{{item.phone}}</text>
+        <text class="default-tag" wx:if="{{item.defaultAdd}}">默认</text>
+      </view>
+      <view class="address-content">
+        <text>{{item.address}}</text>
+        <text>{{item.detail}}</text>
+      </view>
+      <view class="address-footer">
+        <view class="set-default" catchtap="setDefault" data-index="{{index}}">
+          <icon type="{{item.defaultAdd ? 'success_circle' : 'circle'}}" size="20" color="{{item.defaultAdd ? '#0094ff' : '#999'}}"></icon>
+          <text>设为默认</text>
+        </view>
+        <view class="action-btns">
+          <view class="edit-btn" catchtap="editAddress" data-index="{{index}}">编辑</view>
+          <view class="delete-btn" catchtap="deleteAddress" data-index="{{index}}">删除</view>
+        </view>
+      </view>
+    </view>
+    <view style="height: 350rpx; width: 100%;"></view>
+  </scroll-view>
+
+  <!-- 空地址提示 -->
+  <view class="empty-address" wx:else>
+    <van-icon name="warning-o" size="80rpx" color="#999"></van-icon>
+    <text class="empty-text">暂无收货地址</text>
+  </view>
+
+  <!-- 新增地址按钮 -->
+  <view class="add-btn" bindtap="addNewAddress">
+    <text>+ 新增收货地址</text>
+  </view>
+</view>

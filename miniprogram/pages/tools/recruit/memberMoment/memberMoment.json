@@ -1,0 +1,12 @@
+{
+  "usingComponents": {
+    "comment-box": "/components/firendCircle-box/firendCircle-box",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-divider": "@vant/weapp/divider/index"
+  },
+  "navigationBarTitleText": "球友圈",
+  "navigationBarBackgroundColor": "#0094ff",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#0094ff",
+  "onReachBottomDistance": 50
+}

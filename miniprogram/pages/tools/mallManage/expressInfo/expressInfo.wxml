@@ -1,0 +1,50 @@
+<!--pages/tools/mallManage/expressInfo/expressInfo.wxml-->
+<view class="container">
+  <!-- 快递列表 -->
+  <view class="express-list" wx:for="{{expressArr}}" wx:key="_id">
+    <!-- 顶部标题 -->
+    <view class="header">
+    <view class="title">{{item.type === 0 ? '发货' : '返货'}}快递  {{index +1}}</view>
+  </view>
+    <!-- 快递公司信息 -->
+    <view class="express-info">
+      <view class="express-company">{{item.expressCompany}}</view>
+      <view class="express-num">快递单号：{{item.expressNum}}</view>
+      <view class="express-time">发货时间：{{item.timeStr}}</view>
+      <view class="express-status" wx:if="{{item.logisticsInfo}}">
+        物流状态：{{item.logisticsInfo.state}}
+      </view>
+      <view class="express-latest" wx:if="{{item.logisticsInfo && item.logisticsInfo.data && item.logisticsInfo.data[0]}}">
+        最新动态：{{item.logisticsInfo.data[0].context}}
+      </view>
+    </view>
+
+    <!-- 查询物流按钮 -->
+    <view class="button">
+    <button class="query-btn" bindtap="queryExpressStatus" mark:index="{{index}}">查询物流状态</button>
+    <button class="query-btn" wx:if="{{!client}}" bindtap="amendExpressNum" mark:index="{{index}}">修改快递单号</button>
+    </view>
+    
+
+    <!-- 商品列表 -->
+    <view class="goods-list">
+      <view class="goods-title">包含商品：</view>
+      <view class="goods-item" wx:for="{{item.goodsList}}" wx:key="goodsId">
+        <image class="goods-image" src="{{item.goodsHeadPic}}" mode="aspectFill"></image>
+        <view class="goods-info">
+          <view class="goods-name">{{item.goodsName}}</view>
+          <view class="goods-spec">
+            <text wx:if="{{item.goodsColor}}">颜色：{{item.goodsColor}}</text>
+            <text>数量：{{item.goodsQuantity}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 备注信息 -->
+    <view class="remarks" wx:if="{{item.remarks}}">
+      <view class="remarks-title">备注：</view>
+      <view class="remarks-content">{{item.remarks}}</view>
+    </view>
+  </view>
+</view>

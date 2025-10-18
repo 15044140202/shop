@@ -1,0 +1,126 @@
+/* pages/set/amountBook/statistic/statistic.wxss */
+/* pages/set/amountBook/amountBook.wxss */
+@import '../../../../template//SetMenu/SetMenu.wxss';
+/* 设计变量 */
+page{
+  --primary-color: #0097FF;
+  --income-color: #00C853;
+  --expense-color: #FF5252;
+  --text-primary: #2D3436;
+  --text-secondary: #636E72;
+}
+.page-header{
+  position: relative;
+  height: 8vh;
+}
+.typeChange{
+  position: absolute;
+  bottom: 20rpx;
+  right: 30rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 120rpx;
+}
+ 
+/* 容器层 */
+.container {
+  height: 100vh;
+  padding: 24rpx 2.5%;
+  background: #F8F9FA;
+}
+ 
+/* 月份分隔 */
+.month-divider {
+  width:90%;
+  margin: 48rpx 0 24rpx;
+  padding: 16rpx 2.5%;
+  background: rgba(0,151,255,0.1);
+  border-radius: 8rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.month-text {
+  font-size: 36rpx;
+  color: var(--primary-color);
+  font-weight: 600;
+  margin-right: 16rpx;
+}
+.year-text {
+  font-size: 28rpx;
+  color: rgba(0,151,255,0.8);
+}
+ 
+/* 账目卡片 */
+.account-card {
+  width: 90%;
+  background: #FFF;
+  border-radius: 16rpx;
+  margin-bottom: 24rpx;
+  padding: 2.5%;
+  box-shadow: 0 4rpx 12rpx rgba(45,52,54,0.03);
+  display: flex;
+}
+.type-indicator {
+  width: 8rpx;
+  border-radius: 8rpx;
+  margin-right: 24rpx;
+}
+.type-indicator.income  { background: var(--income-color); }
+.type-indicator.expense  { background: var(--expense-color); }
+ 
+/* 金额样式 */
+.amount {
+  font-family: DIN Alternate;
+  font-size: 36rpx;
+}
+.amount.income  { color: var(--income-color); }
+.amount.expense  { color: var(--expense-color); }
+/* 缩略图 */
+.receipt-thumb {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 8rpx;
+  margin-left: 30rpx;
+}
+
+ 
+/* 悬浮按钮 */
+.fab-container {
+  position: fixed;
+  right: 48rpx;
+  bottom: 96rpx;
+  z-index: 999;
+}
+.fab-button {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: var(--primary-color);
+  box-shadow: 0 12rpx 24rpx rgba(0,151,255,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fab-icon {
+  width: 48rpx;
+  height: 48rpx;
+}
+.operator{
+  font-size: 35rpx;
+}
+.time{
+  font-size: 26rpx;
+  color:var(--text-secondary) ;
+  margin-left: 15rpx;
+}
+
+.category{
+  font-size: 38rpx;
+  color: var(--primary-color);
+}
+.totalAmount_text{
+  margin-left: 15rpx;
+  color: var(--primary-color);
+}

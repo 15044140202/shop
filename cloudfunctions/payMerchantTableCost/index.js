@@ -1,38 +1,57 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
-
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV }) // 使用当前云环境
 const db = cloud.database();
 const _ = db.command;
 // 云函数入口函数
 exports.main = async (event) => {
-  const {shopFlag,tableDataArray,orderNum,amount,payTime} = event;
-  //修改桌台剩余使用时间
-  var tableData = {}
-  var totalTableNum = ''
-  for (let index = 0; index < tableDataArray.length; index++) {
-    const element = tableDataArray[index];
-    tableData = {
-      ...tableData,
-      [`shop.tableSum.${element.tableIndex}.useEndTime`]:element.useEndTime
+  const { shopId, tableDataArray, orderNum, amount, payTime } = event;
+  const task = []
+  const tableNums = []
+  const transaction = await db.startTransaction()
+  try {
+    //充值台费
+    tableDataArray.forEach(item => {
+      tableNums.push(`${item.tableNum}号台`)
+      task.push(
+        transaction.collection('shop_table').where({
+          shopId:shopId,
+          tableNum:item.tableNum
+        }).update({
+          data:{
+            useEndTime:item.useEndTime
+          }
+        })
+      )
+    })
+    //添加充值账单
+    task.push(
+      transaction.collection('shop_order').add({
+        data:{
+          orderNum:orderNum,
+          orderName:'台费充值单',
+          amount:amount,
+          time:payTime,
+          payMode:'wx',
+          tableNums:tableNums
+        }
+      })
+    )
+    const res = await Promise.all(task)
+    await transaction.commit()
+    return{
+      success: true,
+      message: `merchant tableCost pay success!`,
+      data: res,
     }
-    if (index === tableDataArray.length - 1) {
-      totalTableNum = totalTableNum +(element.tableIndex+1).toString() +"号台"
-    }else{
-      totalTableNum = totalTableNum +(element.tableIndex+1).toString() +"号台|"
+  } catch (e) {
+    // 回滚事务并返回错误信息
+    await transaction.rollback();
+    console.error('merchant tableCost pay error:', err); // 记录错误日志
+    return {
+      success: false,
+      message: `merchant tableCost pay error`,
+      data: err,
     }
-  }
-  const res = await db.collection('shopAccount').where({
-    shopFlag:shopFlag
-  }).update({
-    data:{
-      ...tableData,
-      order:_.push({orderNum:orderNum,date:payTime,amount:amount,tableNum:totalTableNum})
-    }
-  })
-  if (res.stats.updated === 1) {
-    return 'ok'
-  }else{
-    return 'error'
   }
 }

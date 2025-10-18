@@ -1,0 +1,10 @@
+<!--pages/tools/mallManage/mallSet/admin/admin.wxml-->
+<view class="admin-container">
+  <van-cell-group>
+    <van-cell wx:for="{{adminList[memberType]}}" wx:key="id" title="{{item.name}}" label="{{item.phone}}">
+      <van-icon name="manager" slot="icon" size="18px" color="#0094ff" />
+      <van-button wx:if="{{item.name!=='管理员' &&item.name!=='老板'}}" size="mini" type="danger" plain bind:click="showDeleteConfirm" mark:name="{{item.name}}">删除</van-button>
+    </van-cell>
+  </van-cell-group>
+  <van-dialog id="van-dialog" use-slot show-cancel-button confirm-button-color="#0094ff" />
+</view>

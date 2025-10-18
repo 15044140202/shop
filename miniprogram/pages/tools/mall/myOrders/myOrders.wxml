@@ -1,0 +1,102 @@
+<!--pages/tools/mall/myOrders/myOrders.wxml-->
+<view class="order-page">
+  <!-- 搜索栏 -->
+  <van-search value="{{searchValue}}" placeholder="搜索商品名称/类别名称/颜色名称" shape="round" background="{{themeColor}}" bind:change="onSearchInput" bind:cancel="onSearchCancel" />
+
+  <!-- 标签栏 -->
+  <van-tabs active="{{activeTab}}" color="{{themeColor}}" bind:change="onTabChange">
+    <van-tab wx:for="{{tabs}}" wx:key="status" title="{{item.title}}"></van-tab>
+  </van-tabs>
+
+  <!-- 订单列表 -->
+  <view wx:if="{{!pageLoading}}">
+    <view wx:if="{{filteredOrderList.length === 0}}" class="empty-tip">
+      <van-empty description="暂无相关订单" />
+    </view>
+    <view wx:else class="order-list">
+      <view wx:for="{{filteredOrderList}}" wx:key="orderNum" class="order-item" data-order="{{item}}" bindtap="goToOrderDetail">
+        <!-- 订单头部 -->
+        <view class="order-header">
+          <text selectable="1">单号:{{item.orderNum}}</text>
+          <text class="order-time">时间:{{item.placeTimeStr}}</text>
+        </view>
+        <!-- 商品列表 -->
+        <view class="goods-list">
+          <view wx:for="{{item.goodsList}}" wx:key="goodsId" wx:for-item="colorItem" wx:for-index="colorIndex" class="goods-item">
+            <image class="goods-image" src="{{colorItem.goodsHeadPic}}" mode="aspectFill" />
+            <view class="goods-info">
+              <text class="goods-name">{{colorItem.goodsName}}</text>
+              <text class="goods-spec">颜色：{{colorItem.goodsColor}}</text>
+              <view class="goods-price-line">
+                <view>
+                  <text class="goods-price">¥{{colorItem.goodsPrice / 100}}元</text>
+                  <text class="goods-quantity"> x {{colorItem.goodsQuantity}}</text>
+                </view>
+                <text wx:if="{{item.goodsList.length -1 === colorIndex }}" class="total-amount">共{{item.goodsList.length}}件商品 实付：¥ {{item.orderAmount /100}} 元</text>
+              </view>
+            </view>
+          </view>
+
+        </view>
+        <!-- 订单底部 -->
+        <view class="order-footer">
+          <view class="action-buttons">
+            <!-- 待支付 -->
+            <block wx:if="{{item.orderState === 0 }}">
+              <van-button type="primary" size="small" color="{{themeColor}}" catchtap="cancelOrder" mark:index="{{index}}">取消订单</van-button>
+              <van-button type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="payOrder">立即支付</van-button>
+            </block>
+            <!-- 待发货 -->
+            <block wx:if="{{ item.orderState === 1}}">
+              <van-button  wx:if="{{item.distributionMode}}" type="primary" size="small" color="{{themeColor}}" catch:tap="goShop" mark:index="{{index}}">查看店铺位置</van-button>
+              <van-button  wx:if="{{item.distributionMode}}" type="primary" size="small" color="{{themeColor}}" catch:tap="takeDeliveryDoods" mark:index="{{index}}">取货码</van-button>
+              <van-button plain type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="returnGoods">退货</van-button>
+            </block>
+            <!-- 待收货状态显示确认收货按钮 -->
+            <block wx:if="{{item.orderState === 2}}">
+              <van-button plain type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="confirmReceipt">确认收货</van-button>
+              <van-button plain type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="lookExpressInfo">查看物流往来</van-button>
+            </block>
+            <!-- 已完成 -->
+            <block wx:if="{{item.orderState === 3}}">
+              <van-button plain type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="lookExpressInfo">查看物流往来</van-button>
+              <van-button wx:if="{{item.applyReturnStatus === 0 || item.applyReturnStatus === 3 || item.applyReturnStatus === 6}}" plain type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="applyAfterSale">申请售后</van-button>
+              <van-button wx:if="{{item.applyReturnStatus === 3 || item.applyReturnStatus === 6}}" type="danger" size="small" mark:index="{{index}}" catchtap="aftersaleInfo">商家拒绝,点击查看详情</van-button>
+              <van-button wx:if="{{item.applyReturnStatus === 1 || item.applyReturnStatus === 4}}" plain type="danger" size="small" mark:index="{{index}}" catchtap="">等待商家处理</van-button>
+            </block>
+
+            <!-- 售后 -->
+            <block wx:if="{{item.orderState === 4}}">
+              <van-button wx:if="{{item.applyReturnStatus === 0}}" plain type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="applyAfterSale">申请售后</van-button>
+
+              <van-button wx:if="{{item.applyReturnStatus === 2 ||item.applyReturnStatus === 5}}" type="primary" disabled size="small">商家已同意售后</van-button>
+
+              <van-button wx:if="{{item.orderState === 4 && (item.applyReturnStatus === 2 || item.applyReturnStatus === 5)}}" type="primary" size="small" color="{{themeColor}}" mark:index="{{index}}" catchtap="aftersaleTransit">填单返货</van-button>
+
+              <van-button wx:if="{{item.refund}}" plain type="primary" size="small" color="{{themeColor}}" data-order="{{item}}" catchtap="checkRefund">已退款(点击检测)</van-button>
+            </block>
+            <!-- 已取消的订单 -->
+            <block wx:if="{{ item.orderState === 5 }}">
+              <van-button disabled plain type="primary" size="small" color="{{themeColor}}">订单已取消</van-button>
+              <van-button plain type="danger" size="small" catch:tap="deleteOrder" mark:index="{{index}}">删除订单</van-button>
+            </block>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{orderList.length < total}}">
+      <van-divider color="{{themeColor}}" borderColor="#0094ff" textColor="#0094ff" content-position="center" dashed="{{true}}" size="24px">上划加载更多...</van-divider>
+    </view>
+    <van-divider wx:else color="{{themeColor}}" borderColor="#0094ff" textColor="#0094ff" content-position="center" dashed="{{true}}" size="24px">已无更多数据...</van-divider>
+    <view style="width: 100%; height: 350rpx;"></view>
+  </view>
+
+  <!-- 加载中状态 -->
+  <view wx:if="{{pageLoading}}" class="loading">
+    <van-loading color="{{themeColor}}" size="24px">加载中...</van-loading>
+  </view>
+</view>
+<!-- 购物车LOGO -->
+<button class="shoppingCar" open-type="contact" bindcontact="handleContact">
+  <van-icon name="wechat" color="#fff" size="65rpx"></van-icon>
+</button>

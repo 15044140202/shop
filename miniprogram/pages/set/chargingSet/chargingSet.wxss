@@ -1,16 +1,91 @@
-/* pages/set/chargingSet/chargingSet.wxss */
-page{
-  background-color: #eee;
+/* pages/set/chargingSet/chargingSet.wxss  */
+@import '../../../template/SetMenu/SetMenu.wxss';
+/* 设计变量 */
+:root {
+  --primary-blue: #5B8FF9;
+  --hover-blue: rgba(91,143,249,0.1);
+  --text-primary: #2C3542;
+  --text-secondary: #5F6B7A;
 }
-.border{
-  background-color: #fff;
+ 
+/* 容器层 */
+.charging-container {
+  padding: 32rpx;
+  background: #F5F7FA;
+  min-height: 100vh;
 }
-.titel{
-  height: 100rpx;
+/* 卡片设计 */
+.charging-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 40rpx rgba(44,53,66,0.04);
+  transition: all 0.3s ease;
+}
+.card-header {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-bottom: solid 1rpx #999;
-  margin-left: 30rpx;
+  margin-bottom: 32rpx;
+}
+.card-header-1{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+ 
+.card-title {
+  font-size: 34rpx;
+  color: var(--text-primary);
+  margin-left: 24rpx;
+  font-weight: 500;
+}
+ 
+/* 数据标签 */
+.tag-box {
+  background: rgba(91,143,249,0.1);
+  border-radius: 8rpx;
+  padding: 8rpx 16rpx;
+}
+ 
+.tag-count {
+  font-size: 28rpx;
+  color: var(--primary-blue);
+  font-family: DIN Alternate;
+}
+ 
+/* 悬浮按钮 */
+.fab-container {
+  position: fixed;
+  right: 48rpx;
+  bottom: 96rpx;
+  z-index: 999;
+}
+ 
+.fab-button {
+  background: linear-gradient(135deg, #5B8FF9 0%, #3B6CDE 100%);
+  border-radius: 48rpx;
+  height: 96rpx;
+  padding: 0 40rpx;
+  box-shadow: 0 12rpx 24rpx rgba(91,143,249,0.3);
+  display: flex;
+  align-items: center;
+}
+ 
+.fab-text {
+  color: #FFF;
+  font-size: 32rpx;
+  margin-left: 16rpx;
+}
+ 
+/* 交互效果 */
+.card-hover {
+  transform: translateY(-4rpx);
+  background: var(--hover-blue);
+}
+ 
+.charging-card:active {
+  transform: scale(0.98);
 }
