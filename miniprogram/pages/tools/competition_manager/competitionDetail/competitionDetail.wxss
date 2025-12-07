@@ -1,0 +1,273 @@
+/* pages/tools/competition_manager/competitionDetail/competitionDetail.wxss */
+
+/* 定义主题色 */
+:root {
+  --primary-color: #0094ff;
+  --light-bg: #f5f7fa;
+  --border-color: #e4e7ed;
+  --text-color: #303133;
+  --text-light: #909399;
+}
+/* 页面容器 */
+.container {
+  padding: 20rpx;
+  background-color: var(--light-bg);
+  min-height: 100vh;
+}
+.page-header{
+  height: 8vh;
+}
+
+/* 卡片样式 */
+.card {
+  background: white;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 24rpx 0 rgba(0, 0, 0, 0.06);
+  margin-bottom: 30rpx;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 30rpx;
+  border-bottom: 1rpx solid var(--border-color);
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-title {
+  margin-left: 10rpx;
+  font-size: 28rpx;
+}
+
+.card-body {
+  padding: 30rpx;
+}
+
+/* 信息项样式 */
+.info-item {
+  display: flex;
+  margin-bottom: 30rpx;
+}
+
+.info-label {
+  width: 200rpx;
+  color: var(--text-light);
+  font-size: 26rpx;
+  flex-shrink: 0;
+}
+
+.info-content {
+  flex: 1;
+  font-weight: 500;
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+/* 赛事流程控制卡片样式 */
+.competition-ctrl-card{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 每行4列 */
+  gap: 20rpx; /* 卡片间距 */
+  width: 100%;
+  padding-bottom: 20rpx;
+}
+/* 赛事流程控制卡片样式 */
+.competition-tab-card{
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 每行4列 */
+  gap: 20rpx; /* 卡片间距 */
+  width: 100%;
+  padding-bottom: 20rpx;
+}
+/* 卡片样式 */
+.sort-item {
+  background: #0094ff;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff;
+}
+/* 卡片样式 */
+.card-item {
+  background: #fff;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+.ctrl-button-text{
+  font-size: 24rpx;
+}
+/* 费用信息样式 */
+.fee-info {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f0f7ff;
+  padding: 20rpx 30rpx;
+  border-radius: 12rpx;
+  margin-top: 10rpx;
+}
+
+.fee-item {
+  text-align: center;
+}
+
+.fee-amount {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.fee-label {
+  font-size: 22rpx;
+  color: var(--text-light);
+  margin-top: 8rpx;
+}
+.flod-board{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+/* 参赛选手列表 - 横版布局 */
+.participant-list-horizontal {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+/* 横版选手卡片 */
+.participant-card-horizontal {
+  display: flex;
+  background: white;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 16rpx 0 rgba(0, 0, 0, 0.08);
+  padding: 24rpx;
+  transition: all 0.3s;
+  border-left: 6rpx solid var(--primary-color);
+}
+
+.participant-card-horizontal:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 8rpx 0 rgba(0, 0, 0, 0.12);
+}
+
+/* 左侧头像区域 */
+.participant-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+}
+
+.participant-avatar-horizontal {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  border: 3rpx solid var(--primary-color);
+  margin-bottom: 12rpx;
+}
+
+/* 右侧信息区域 */
+.participant-info-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.participant-name-horizontal {
+  font-weight: bold;
+  font-size: 30rpx;
+  margin-bottom: 12rpx;
+  color: var(--text-color);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.competition-Num{
+  color: #03416e;
+}
+
+.participant-contact {
+  margin-bottom: 12rpx;
+}
+
+.phone-link-horizontal {
+  display: flex;
+  align-items: center;
+  color: var(--primary-color);
+  font-size: 24rpx;
+}
+
+.phone-text {
+  margin-left: 8rpx;
+}
+
+/* 状态区域 */
+.participant-status-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.registration-time {
+  font-size: 22rpx;
+  color: var(--text-light);
+}
+
+/* 性别标签 */
+.participant-gender {
+  display: inline-block;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+  font-size: 20rpx;
+}
+
+.gender-male {
+  background-color: #e6f7ff;
+  color: #1890ff;
+}
+
+.gender-female {
+  background-color: #fff0f6;
+  color: #eb2f96;
+}
+
+/* 状态徽章 */
+.status-badge {
+  display: inline-block;
+  padding: 6rpx 14rpx;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+}
+
+.status-pending {
+  background-color: #fff7e6;
+  color: #fa8c16;
+}
+
+.status-completed {
+  background-color: #f6ffed;
+  color: #52c41a;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 60rpx 30rpx;
+  color: var(--text-light);
+}
+
+.empty-text {
+  margin-top: 20rpx;
+  font-size: 26rpx;
+}

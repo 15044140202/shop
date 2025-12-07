@@ -1,0 +1,161 @@
+<wxs src="../../../../utils/tool.wxs" module="tool" />
+<!-- 页面容器 -->
+<view class="page-header">
+  <view class="header-title">{{competitionList[index].competitionName}}</view>
+  <view class="header-intro">赛事详情</view>
+</view>
+<view class="container">
+  <!-- 赛事详情卡片 -->
+  <view class="card">
+    <view class="card-header">
+      <view style="display: flex; flex-direction: row;">
+        <van-icon name="info" color="#0094ff" size="16px" />
+        <text class="card-title">赛事详情</text>
+        <text class="card-title" style="color: #0094ff;"> --- {{competitionList[index].round === 0 ? '报名阶段' :competitionList[index].round === 1 ? '预选阶段' :'双败阶段' }}</text>
+      </view>
+      <van-icon catch:tap="flod" wx:if="{{!flod}}" name="arrow-down" color="#0094ff" size="50rpx" />
+    </view>
+    <view class="card-body" wx:if="{{flod}}">
+      <view class="info-item">
+        <view class="info-label">赛事名称</view>
+        <view class="info-content">{{competitionList[index].competitionName}}</view>
+      </view>
+      <view class="info-item">
+        <view class="info-label">举办地点</view>
+        <view class="info-content">{{competitionList[index].location.address}}</view>
+      </view>
+      <view class="info-item">
+        <view class="info-label">赛事规则</view>
+        <text class="info-content">{{competitionList[index].rules}}</text>
+      </view>
+      <view class="info-item">
+        <view class="info-label">报名人数限制</view>
+        <view class="info-content">{{competitionList[index].playerMaxSum}}人</view>
+      </view>
+      <view class="info-item">
+        <view class="info-label">开始报名时间</view>
+        <view class="info-content">{{tool.timeStampToStr(competitionList[index].start_time) }}</view>
+      </view>
+      <view class="info-item">
+        <view class="info-label">开赛时间</view>
+        <view class="info-content">{{tool.timeStampToStr(competitionList[index].play_time) }}</view>
+      </view>
+      <view class="info-item">
+        <view class="info-label">奖金信息</view>
+        <text class="info-content">一等奖：¥ {{competitionList[index].prizes.first}}
+          二等奖：¥ {{competitionList[index].prizes.second}}
+          三等奖：¥ {{competitionList[index].prizes.third}}
+        </text>
+      </view>
+      <view class="info-item">
+        <view class="info-label">报名费用</view>
+        <view class="info-content">
+          <view class="fee-info">
+            <view class="fee-item">
+              <view class="fee-amount">¥{{competitionList[index].entryFee / 100}}</view>
+              <view class="fee-label">首次报名</view>
+            </view>
+            <view class="fee-item">
+              <view class="fee-amount">¥{{competitionList[index].sEntryFee / 100}}</view>
+              <view class="fee-label">二次报名</view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="flod-board">
+        <van-icon catch:tap="flod" name="arrow-up" color="#0094ff" size="50rpx"></van-icon>
+      </view>
+    </view>
+  </view>
+  <!-- 赛事流程控制卡片 -->
+  <view class="competition-ctrl-card">
+    <view class="card-item" bind:tap="start">
+      <van-icon name="share" color="green"></van-icon>
+      <text class="ctrl-button-text">开启赛事</text>
+    </view>
+    <view class="card-item" bind:tap="stop">
+      <van-icon name="{{competitionList[index].status === 0 ? 'coupon' :competitionList[index].status === 1 ? 'play' :competitionList[index].status === 2 ? 'pause' : 'stop'}}" color="{{competitionList[index].status === 2 ? 'red' : 'green'}}"></van-icon>
+      <text class="ctrl-button-text">{{competitionList[index].status === 0 ? '报名中' :competitionList[index].status === 1 ? '进行中' :competitionList[index].status === 2 ? '暂停中' : '已结束'}}</text>
+    </view>
+    <view class="card-item" bind:tap="lottery">
+      <van-icon name="weapp-nav" color="blue"></van-icon>
+      <text class="ctrl-button-text">抽签</text>
+    </view>
+    <view class="card-item" bind:tap="startTowLow">
+      <van-icon name="award" color="#FFDF00"></van-icon>
+      <text class="ctrl-button-text">开启双败</text>
+    </view>
+
+  </view>
+  <!-- 选手排列筛选框 -->
+  <view class="competition-tab-card">
+    <view class="sort-item" bind:tap="clash">
+      <text class="ctrl-button-text">对阵树图</text>
+    </view>
+    <view class="sort-item" bind:tap="list">
+      <text class="ctrl-button-text">对阵列表</text>
+    </view>
+    <view class="sort-item" bind:tap="sort">
+      <text class="ctrl-button-text">序号排列</text>
+    </view>
+
+    <view class="sort-item" bind:tap="win16">
+      <text class="ctrl-button-text">16强</text>
+    </view>
+    <view class="sort-item" bind:tap="win8">
+      <text class="ctrl-button-text">8强</text>
+    </view>
+    <view class="sort-item" bind:tap="win3">
+      <text class="ctrl-button-text">前三</text>
+    </view>
+  </view>
+  <!-- 参赛选手卡片 - 横版布局 -->
+  <view class="card">
+    <view class="card-header">
+      <van-icon name="friends" color="#0094ff" size="16px" />
+      <text class="card-title">参赛选手 ({{competitionList[index].nowPlayerSum}}人)</text>
+    </view>
+    <view class="card-body">
+      <view class="participant-list-horizontal">
+        <block wx:for="{{displayData}}" wx:if="{{item.payState !== 2}}" wx:key="id"> 
+          <view class="participant-card-horizontal"  bind:tap="tap_player" mark:index="{{index}}">
+            <!-- 左侧头像区域 -->
+            <view class="participant-avatar-section">
+              <image src="{{item.playerAvatar || 'cloud://billiards-0g53628z5ae826bc.6269-billiards-0g53628z5ae826bc-1326882458/image/没有图片.png'}}" class="participant-avatar-horizontal" mode="aspectFill">
+              </image>
+              <view class="participant-gender {{item.playerGender === '男' ? 'gender-male' : 'gender-female'}}">
+                {{item.playerGender === '男' ? '男' : '女'}}
+              </view>
+            </view>
+            <!-- 右侧信息区域 -->
+            <view class="participant-info-section">
+              <view class="participant-name-horizontal">
+                <text catch:tap="change_name" mark:index="{{index}}">{{item.playerName}}</text>
+                <text class="competition-Num" catch:tap="change_comNum" mark:index="{{index}}">签号 : {{item.competitionNum}}</text>
+              </view>
+              <view class="participant-contact">
+                <view class="phone-link-horizontal" >
+                  <van-icon catch:tap="makePhoneCall" data-phone="{{item.tel}}" name="phone" color="#0094ff" size="45rpx" />
+                  <text class="phone-text">{{item.tel}}</text>
+                </view>
+              </view>
+              <view class="participant-status-section">
+                <view>
+                  <view class="status-badge {{item.payState == '0' ? 'status-pending' : 'status-completed'}}">{{item.payState == '0' ? '未支付' : '已支付'}}</view>
+                  <van-icon wx:if="{{item.payState == '0'}}" style="margin-left: 20rpx;" name="replay" color="#0094ff" size="45rpx" bind:tap="refirshPayState" mark:index="{{index}}"></van-icon>
+                </view>
+                <view class="registration-time" wx:if="{{item.registrationTime}}">二报</view>
+              </view>
+            </view>
+          </view>
+        </block>
+
+        <!-- 空状态提示 -->
+        <view class="empty-state" wx:if="{{playerData.length === 0}}">
+          <van-icon name="friends-o" size="48px" color="#dcdee0" />
+          <view class="empty-text">暂无参赛选手</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

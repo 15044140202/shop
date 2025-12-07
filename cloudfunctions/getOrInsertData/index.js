@@ -65,7 +65,7 @@ exports.main = async (event, context) => {
 
     // 查询数据
     const queryResult = await queryData(collection, query);
-
+    
     // 处理查询结果
     if (queryResult.data.length > 0) {
       // 数据存在，返回数据

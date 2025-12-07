@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "van-icon": "@vant/weapp/icon/index"
+  },
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#f5f7fa",
+  "navigationBarTitleText": "赛事管理"
+}

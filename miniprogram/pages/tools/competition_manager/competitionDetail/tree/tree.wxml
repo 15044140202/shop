@@ -1,0 +1,84 @@
+<!-- 胜组败组选项卡 -->
+<view class="tab-container">
+  <view class="tab-buttons">
+    <view class="tab-button {{winOrLow === 'win' ? 'active' : ''}}" bindtap="switchTab" data-tab="win">
+      <text class="tab-text">胜者组</text>
+      <view class="tab-indicator"></view>
+    </view>
+    <view class="tab-button {{winOrLow === 'low' ? 'active' : ''}}" bindtap="switchTab" data-tab="low">
+      <text class="tab-text">败者组</text>
+      <view class="tab-indicator"></view>
+    </view>
+    <view class="tab-button {{winOrLow === 'final' ? 'active' : ''}}" bindtap="switchTab" data-tab="final">
+      <text class="tab-text">总决赛</text>
+      <view class="tab-indicator"></view>
+    </view>
+  </view>
+</view>
+<view class="container">
+  <!-- 双向滚动容器 -->
+  <scroll-view class="pyramid-scroll" scroll-y scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="pyramid-container">
+      <!-- 金字塔结构 -->
+      <view class="pyramid">
+        <!-- 每一层 -->
+        <view wx:for="{{pyramidLayers}}" wx:key="level" class="layer layer-{{index +1}}">
+          <view class="layer-content">
+            <!-- 横向节点容器 -->
+            <scroll-view class="nodes-scroll">
+              <view class="nodes-container" style="width: {{baseCount * 103 + (baseCount + 1) * 15}}rpx; gap:{{15 * (baseCount / item.nodes.length)}}rpx;"> 
+                <!-- 节点 -->
+                <view wx:for="{{item.nodes}}" wx:for-item="item1" wx:for-index="index1" wx:key="id" class="node" bindtap="onNodeTap" data-level="{{index}}" data-index="{{index1}}" data-node="{{item1}}" style="width:{{100 * (baseCount / item.nodes.length)}}rpx;">
+                  <view class="node-content">
+                    <text class="node-text">{{item1.playerName ? item1.playerName : '空'}}</text>
+                    <text class="node-id">比分: {{item1.score >=0 ? item1.score : '--'}}</text>
+                    <text class="node-id">桌台: {{item1.tableNum ? item1.tableNum : '未分配'}}</text>
+                  </view>
+                </view>
+              </view>
+            </scroll-view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 右下角填充 -->
+      <view class="corner-padding"></view>
+    </view>
+  </scroll-view>
+</view>
+<!-- 二报选手选择框 -->
+<view class="custom-modal" wx:if="{{showCustomModal}}">
+  <view class="modal-mask" bindtap="hideModal"></view>
+  <view class="modal-content">
+    <!-- 标题栏 -->
+    <view class="modal-header">
+      <view>
+        <text class="header-title">选择二报选手</text>
+        <van-icon name="replay" color="#fff" size="45rpx" style=" margin-left:20rpx" bind:tap="refirshSentry"></van-icon>
+      </view>
+
+      <text class="header-close" bindtap="hideModal">×</text>
+    </view>
+
+    <!-- 选项列表 -->
+    <scroll-view class="option-list" scroll-y>
+      <view wx:for="{{options}}" wx:key="index" class="option-item {{selectedIndex === index ? 'selected' : ''}}" bindtap="selectOption" data-index="{{index}}">
+        <view>
+          <van-icon name="manager" color="#0094ff" size="38rpx"></van-icon>
+          <text class="option-text">{{item.playerName}} -- {{item.tel}}</text>
+        </view>
+        <text class="check-icon" wx:if="{{selectedIndex === index}}">✓</text>
+      </view>
+
+      <!-- 空状态 -->
+      <view class="empty-state" wx:if="{{filteredOptions.length === 0}}">
+        <text class="empty-text">暂无选手数据</text>
+      </view>
+    </scroll-view>
+    <!-- 底部按钮 -->
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="hideModal">取消</button>
+      <button class="btn-confirm" bindtap="confirmSelection" wx:if="{{selectedIndex !== -1}}">确认选择</button>
+    </view>
+  </view>
+</view>

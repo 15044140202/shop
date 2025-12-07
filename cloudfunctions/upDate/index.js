@@ -7,7 +7,7 @@ const _ = db.command
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
-  const { collection, query, upData = {}, _push = {}, _pull = {} , _inc = {} } = event
+  const { collection, query, upData = {}, _push = {}, _pull = {} , _inc = {},_shift = {},_unshift = {} } = event
   const UPDATA = upData || {}
   //计算upDta
   for (let key in _push) {
@@ -18,6 +18,12 @@ exports.main = async (event, context) => {
   }
   for (let key in _pull) {
     UPDATA[key] = _.pull(_pull[key])
+  }
+  for (let key in _shift) {//数组更新操作符，对一个值为数组的字段，将数组头部元素删除
+    UPDATA[key] = _.shift()
+  }
+  for (let key in _unshift) {//数组更新操作符，对一个值为数组的字段，往数组头部添加一个或多个值。或字段原为空，则创建该字段并设数组为传入值
+    UPDATA[key] = _.unshift(_unshift[key])
   }
   try {
     const res = await db.collection(collection).where(query).update({

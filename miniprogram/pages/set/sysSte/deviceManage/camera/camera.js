@@ -2,7 +2,6 @@
 const app = getApp();
 const appData = app.globalData;
 import Dialog from '@vant/weapp/dialog/dialog';
-const imou = require('../../../../../utils/imou')
 const ys7 = require('../../../../../utils/ys7')
 Page({
   /**
@@ -22,8 +21,6 @@ Page({
     deviceState: [],
 
     cameraBrandArr: ['海康', '大华', '其他'],
-    imouAppID: "lc4bfc16daf7d8499e",
-    imouAppSecret: "45757fec5f584f60992b84489ecf54"
   },
   brandChange(e) {
     console.log(e)
@@ -141,59 +138,19 @@ Page({
     for (let index = 0; index < cameraArray.length; index++) {
       const element = cameraArray[index];
       //此处分支 大华品牌 与海康品牌
-      if (element.cameraBrand === '海康') {
-        const res = await ys7.searchDeviceInfo(app,element.cameraNum)
-        console.log(res)
-        if (res.result.code === "20020") { //操作成功
-          if (res.result.data.status === 1) { //在线
-            stateArray.push('1');
-          } else { //不在线
-            stateArray.push('0');
-          }
-        } else { //操作失败
+      const res = await ys7.searchDeviceInfo(app, element.cameraNum)
+      console.log(res)
+      if (res.result.code === "20020") { //操作成功
+        if (res.result.data.status === 1) { //在线
+          stateArray.push('1');
+        } else { //不在线
           stateArray.push('0');
         }
-      } else {//大华
-        const res = await imou.getDeviceOnline(element.cameraNum, this.data.imouAppID, this.data.imouAppSecret)
-        console.log(res)
-        if (res.result.msg === "操作成功。") { //操作成功
-          if (res.result.data.onLine === "1") { //在线
-            stateArray.push('1');
-          } else { //不在线
-            stateArray.push('0');
-          }
-        } else { //操作失败
-          stateArray.push('0');
-        }
+      } else { //操作失败
+        stateArray.push('0');
       }
     }
     return stateArray;
-  },
-  async bindDevice(deviceId, code) {
-    const res = await imou.bindDevice(deviceId, code, this.data.imouAppID, this.data.imouAppSecret)
-    if (res === 'ok') {
-      app.showToast('绑定成功!', 'success')
-    } else {
-      app.showToast('绑定失败!', 'error')
-    }
-  },
-  async unBindDevice(deviceId) {
-    const res = await imou.unBindDevice(deviceId, undefined, undefined, this.data.imouAppID, this.data.imouAppSecret)
-    if (res === 'ok') {
-      app.showToast('解绑成功!', 'success')
-      return {
-        success: true,
-        message: 'unBind success',
-        data: res
-      }
-    } else {
-      app.showToast('解绑失败!', 'error')
-      return {
-        success: false,
-        message: 'unBind failed',
-        data: res
-      }
-    }
   },
   cameraInfoToObj(cameraInfoString) {
     const cameraInfo = cameraInfoString.slice(1, -1);
@@ -244,11 +201,6 @@ Page({
     } else {
       // 用户点击了"取消"  
       return;
-    }
-    const unbindRes = await this.unBindDevice(camera[i].cameraNum); //解绑设备
-    if (!unbindRes.success) {
-      app.showToast('解绑失败!', 'error')
-      return
     }
     for (let index = 0; index < camera.length; index++) { //删除 被选中删除的设备
       const element = camera[index];
@@ -349,12 +301,7 @@ Page({
       }
     })
     if (res.success) {
-      if (this.data.cameraBrand === '大华') {
-        await this.bindDevice(this.data.cameraNum, this.data.cameraSecurityCode)
-      } else {
-        app.showModal('提示', '海康设备请联系售后人员为您向后台添加设备.')
-      }
-
+      app.showModal('提示', '海康设备请联系售后人员为您向后台添加设备.')
       appData.shop_device.camera.push(deviceData)
       this.setData({
         shop_device: appData.shop_device,

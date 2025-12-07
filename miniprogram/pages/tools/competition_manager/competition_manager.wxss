@@ -1,0 +1,224 @@
+/* pages/competition-list/competition-list.wxss */
+.container {
+  padding: 30rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding-bottom: 140rpx;
+}
+
+.header {
+  margin-bottom: 40rpx;
+  text-align: center;
+}
+
+.title {
+  display: block;
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15rpx;
+}
+
+.subtitle {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+}
+
+/* 比赛列表 */
+.competition-list {
+  height: calc(100vh - 400rpx);
+}
+
+.competition-card {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 24rpx;
+  position: relative;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 状态标签 */
+.status-badge {
+  position: absolute;
+  top: 30rpx;
+  right: 30rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+}
+
+.status-signing {
+  background: #e6f7ff;
+  color: #0094ff;
+}
+
+.status-ongoing {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.status-ended {
+  background: #f5f5f5;
+  color: #666;
+}
+
+/* 卡片头部 */
+.card-header {
+  margin-bottom: 25rpx;
+  padding-right: 120rpx;
+}
+
+.competition-name {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.competition-location {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+}
+
+
+/* 比赛详情 */
+.competition-details {
+  margin-bottom: 25rpx;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.detail-label {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.detail-value {
+  font-size: 26rpx;
+  color: #333;
+}
+
+.prize-amount {
+  font-size: 26rpx;
+  color: #ff6b35;
+  font-weight: 500;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+  border-top: 2rpx solid #f0f0f0;
+  padding-top: 25rpx;
+}
+
+.action-btn {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.view-detail {
+  background: #0094ff;
+  color: white;
+}
+
+.view-detail:active {
+  background: #0077cc;
+}
+
+.delete-btn {
+  background: #fff2f0;
+  color: #ff4d4f;
+  border: 2rpx solid #ffccc7;
+}
+
+.delete-btn:active {
+  background: #ffccc7;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 100rpx 0;
+}
+
+.empty-image {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.6;
+}
+
+.empty-text {
+  display: block;
+  font-size: 32rpx;
+  color: #999;
+  margin-bottom: 15rpx;
+}
+
+.empty-subtext {
+  display: block;
+  font-size: 26rpx;
+  color: #ccc;
+  margin-bottom: 40rpx;
+}
+
+.create-btn {
+  display: inline-block;
+  background: #0094ff;
+  color: white;
+  padding: 24rpx 60rpx;
+  border-radius: 50rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+/* 底部操作栏 */
+.bottom-actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 30rpx;
+  border-top: 2rpx solid #f0f0f0;
+}
+
+.create-competition-btn {
+  background: #0094ff;
+  color: white;
+  border-radius: 50rpx;
+  padding: 28rpx 0;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15rpx;
+  box-shadow: 0 8rpx 25rpx rgba(0, 148, 255, 0.3);
+}
+
+.create-competition-btn:active {
+  background: #0077cc;
+}
+
+.btn-icon {
+  font-size: 36rpx;
+  font-weight: bold;
+}

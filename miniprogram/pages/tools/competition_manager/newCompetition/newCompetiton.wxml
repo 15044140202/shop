@@ -1,0 +1,156 @@
+<!-- pages/create-competition/create-competition.wxml -->
+<view class="container">
+  <view class="header">
+    <text class="title">发起台球比赛</text>
+    <text class="subtitle">填写比赛信息，快速组织一场台球比赛</text>
+  </view>
+
+  <form bindsubmit="formSubmit">
+    <!-- 比赛名称 -->
+    <view class="form-item">
+      <text class="label">比赛名称</text>
+      <input class="input" name="competitionName" placeholder="请输入比赛名称" placeholder-class="placeholder" maxlength="20" />
+    </view>
+
+    <!-- 比赛地点 -->
+    <view class="form-item">
+      <view class="location_board">
+        <text class="label">比赛地点</text>
+        <van-icon name="location-o" size="50rpx" color="#0094ff" bind:tap="getLocation"></van-icon>
+      </view>
+      <input class="input" value="{{location.name}}" name="location" placeholder="请选择比赛地点" placeholder-class="placeholder" />
+    </view>
+
+    <!-- 开始时间 -->
+    <view class="form-item">
+      <text class="label">报名开始时间</text>
+      <picker class="picker" mode="date" value="{{startDate}}" name="startDate" bindchange="bindStartDateChange">
+        <view class="picker-text">{{startDate || '请选择开始日期'}}</view>
+      </picker>
+      <picker class="picker time-picker" mode="time" value="{{startTime}}" name="startTime" bindchange="bindStartTimeChange">
+        <view class="picker-text">{{startTime || '选择时间'}}</view>
+      </picker>
+    </view>
+
+    <!-- 比赛开始时间 -->
+    <view class="form-item">
+      <text class="label">比赛开始时间</text>
+      <picker class="picker" mode="date" value="{{playDate}}" name="playDate" bindchange="bindEndDateChange">
+        <view class="picker-text">{{playDate || '请选择结束日期'}}</view>
+      </picker>
+      <picker class="picker time-picker" mode="time" value="{{playTime}}" name="playTime" bindchange="bindEndTimeChange">
+        <view class="picker-text">{{playTime || '选择时间'}}</view>
+      </picker>
+    </view>
+
+    <!-- 参赛人数 -->
+    <view class="form-item">
+      <text class="label">参赛人数</text>
+      <view class="number-input">
+        <text class="number-btn" bindtap="decreasePlayer">-</text>
+        <text class="number-value">{{playerMaxSum}}</text>
+        <text class="number-btn" bindtap="increasePlayer">+</text>
+      </view>
+      <input type="number" name="playerMaxSum" value="{{playerMaxSum}}" style="display:none;" />
+    </view>
+    <!-- 双败节点 -->
+    <view class="form-item">
+      <text class="label">双败节点</text>
+      <view class="number-input">
+        <text class="number-btn" bindtap="decreasePlayer" mark:item="towLow">-</text>
+        <text class="number-value">{{towLow}}</text>
+        <text class="number-btn" bindtap="increasePlayer" mark:item="towLow">+</text>
+      </view>
+      <input type="number" name="playerMaxSum" value="{{towLow}}" style="display:none;" />
+    </view>
+    <!-- 比赛规则 -->
+    <view class="form-item">
+      <text class="label">比赛规则</text>
+      <view class="rules-selector">
+        <view class="rule-item {{selectedRule === 'standard' ? 'active' : ''}}" data-rule="standard" bindtap="selectRule">
+          标准规则
+        </view>
+        <view class="rule-item {{selectedRule === 'american' ? 'active' : ''}}" data-rule="american" bindtap="selectRule">
+          美式8球
+        </view>
+        <view class="rule-item {{selectedRule === 'custom' ? 'active' : ''}}" data-rule="custom" bindtap="selectRule">
+          自定义规则
+        </view>
+      </view>
+      <textarea class="custom-rules {{selectedRule === 'custom' ? 'show' : ''}}" name="customRules" placeholder="请输入自定义比赛规则..." placeholder-class="placeholder" maxlength="500" show-confirm-bar="{{false}}"></textarea>
+      <input name="rules" value="{{rules}}" style="display:none;" />
+    </view>
+
+    <!-- 比赛奖金 -->
+    <view class="form-item">
+      <text class="label">比赛奖金</text>
+      <view class="prize-container">
+        <view class="prize-item">
+          <text class="prize-rank">冠军</text>
+          <view class="prize-input-container">
+            <text class="currency-symbol">¥</text>
+            <input class="prize-input" name="firstPrize" type="number" placeholder="0" placeholder-class="placeholder" value="{{prizes.first}}" bindinput="onPrizeInput" data-prize="first" />
+          </view>
+        </view>
+        <view class="prize-item">
+          <text class="prize-rank">亚军</text>
+          <view class="prize-input-container">
+            <text class="currency-symbol">¥</text>
+            <input class="prize-input" name="secondPrize" type="number" placeholder="0" placeholder-class="placeholder" value="{{prizes.second}}" bindinput="onPrizeInput" data-prize="second" />
+          </view>
+        </view>
+        <view class="prize-item">
+          <text class="prize-rank">季军</text>
+          <view class="prize-input-container">
+            <text class="currency-symbol">¥</text>
+            <input class="prize-input" name="thirdPrize" type="number" placeholder="0" placeholder-class="placeholder" value="{{prizes.third}}" bindinput="onPrizeInput" data-prize="third" />
+          </view>
+        </view>
+      </view>
+      <view class="total-prize">
+        总奖金：¥{{totalPrize}}
+      </view>
+    </view>
+    <!-- 报名费用 -->
+    <view class="form-item">
+      <text class="label">报名费用</text>
+      <view class="prize-container">
+        <view class="prize-item">
+          <text class="prize-rank">首报费用</text>
+          <view class="prize-input-container">
+            <text class="currency-symbol">¥</text>
+            <input class="prize-input" name="entryFee" type="number" placeholder="0" placeholder-class="placeholder" value="{{entryFee}}" bindinput="onEntryFee" data-prize="first" />
+          </view>
+        </view>
+        <view class="prize-item">
+          <text class="prize-rank">二报费用</text>
+          <view class="prize-input-container">
+            <text class="currency-symbol">¥</text>
+            <input class="prize-input" name="sEntryfee" type="number" placeholder="0" placeholder-class="placeholder" value="{{sEntryFee}}" bindinput="onEntryFee" data-prize="second" />
+          </view>
+        </view>
+      </view>
+    </view>
+    <!-- 比赛状态 -->
+    <view class="form-item">
+      <text class="label">比赛状态</text>
+      <view class="status-selector">
+        <view class="status-item {{status === 0 ? 'active' : ''}}" data-status="0" bindtap="selectStatus">
+          报名中
+        </view>
+        <view class="status-item {{status === 1 ? 'active' : ''}}" data-status="1" bindtap="selectStatus">
+          进行中
+        </view>
+        <view class="status-item {{status === 2 ? 'active' : ''}}" data-status="2" bindtap="selectStatus">
+          已结束
+        </view>
+      </view>
+      <input type="number" name="status" value="{{status}}" style="display:none;" />
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="submit-btn-container">
+      <button class="submit-btn" form-type="submit">发起比赛</button>
+    </view>
+  </form>
+</view>

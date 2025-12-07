@@ -112,7 +112,7 @@ async function getCode(item) {
       placeholderText: '请输入团购券码',
     })
     console.log(res)
-    if (!res.confirm) {
+    if (!res.confirm || !res.content) {
       throw '取消-输入团购券码---ERROR'
     }
     return res.content

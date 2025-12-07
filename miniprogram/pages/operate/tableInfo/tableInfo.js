@@ -1,10 +1,6 @@
-const utils = require('../../../utils/light');
 import Dialog from '../../../miniprogram_npm/@vant/weapp/dialog/dialog';
 const app = getApp();
 const appData = getApp().globalData;
-import {
-  Base64
-} from 'js-base64';
 Page({
   /**
    * 页面的初始数据

@@ -39,6 +39,14 @@ Page({
       case 'recuit':
         itemName = '店铺招聘'
         break
+      case 'competition_manager':
+        itemType = 'operate'
+        itemName = '赛事管理'
+        break
+      case 'shop_camera':
+        itemType = 'operate'
+        itemName = '店铺监控'
+        break
     }
     if (!itemName) { //不鉴别权限的项目
 
@@ -70,8 +78,12 @@ Page({
         appData.malltype = 'official'
         url = './mallManage/mallManage?mallType=official'
       }
-    } else if(e.mark.item === 'firendCircle_manager'){//球友圈管理
+    } else if (e.mark.item === 'firendCircle_manager') {//球友圈管理
       url = './firendCircle_manager/firendCircle_manager'
+    } else if (e.mark.item === 'competition_manager') {//赛事管理
+      url = './competition_manager/competition_manager'
+    }else if (e.mark.item === 'shop_camera') {//赛事管理
+      url = './shop_camera/shop_camera'
     }
     wx.navigateTo({
       url: url,

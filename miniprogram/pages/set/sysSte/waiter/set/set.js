@@ -52,7 +52,9 @@ Page({
         '盘点时不允许修改库存': { descripsion: '必须盘点单开关打开方可生效', value: false },
         '跨天退货': { descripsion: '退非本日的商品', value: false },
         '撤销美团券核销': { descripsion: '允许10分钟内撤销美团券核销', value: false },
-        '核验团购券':{descripsion: '核销团购券,重核选顾客的团购套餐', value: false}
+        '核验团购券':{descripsion: '核销团购券,重核选顾客的团购套餐', value: false},
+        '赛事管理':{descripsion: '开启新的赛事,管理及设置赛事信息.', value: false},
+        '店铺监控':{descripsion: '店铺监控预览及回放', value: false}
       },
       set: {
         '店铺设置': { descripsion: '设置店铺信息,设置后用户端自动显示', value: false },

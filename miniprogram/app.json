@@ -94,7 +94,14 @@
     "pages/set/sysSte/deviceManage/shopSmartDisplay/shopSmartDisplay",
     "pages/tools/firendCircle_manager/firendCircle_manager",
     "pages/statement/giftCoupon/giftCoupon",
-    "components/pie-chart/pie-chart"
+    "components/pie-chart/pie-chart",
+    "pages/tools/competition_manager/competition_manager",
+    "pages/tools/competition_manager/newCompetition/newCompetiton",
+    "pages/tools/competition_manager/competitionDetail/competitionDetail",
+    "pages/tools/competition_manager/competitionDetail/tree/tree",
+    "components/menu-modal/menu-modal",
+    "pages/tools/competition_manager/competitionDetail/list/list",
+    "pages/tools/shop_camera/shop_camera"
   ],
   "usingComponents": {
     "van-icon": "@vant/weapp/icon/index",
@@ -154,6 +161,10 @@
     "kdPlugin": {
       "version": "1.1.2",
       "provider": "wx6885acbedba59c14"
+    },
+    "ezplayer": {
+      "version": "latest",
+      "provider": "wxf2b3a0262975d8c2"
     }
   },
   "permission": {

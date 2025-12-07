@@ -1,0 +1,73 @@
+<!--pages/tools/competition_manager/competition_manager.wxml-->
+<!-- 页面头 -->
+<wxs src="../../../utils/tool.wxs" module="tool" />
+<view class="page-header" style="height: 8vh;">
+  <view class="header-title">赛事管理</view>
+  <view class="header-intro">创建赛事,管理赛事进度及数据修改.</view>
+</view>
+<!-- pages/competition-list/competition-list.wxml -->
+<view class="container">
+  <!-- 比赛列表 -->
+  <scroll-view class="competition-list" scroll-y>
+    <view class="competition-card" wx:for="{{competitionList}}" wx:key="id" bindtap="navigateToDetail" bindlongpress="showDeleteConfirm" data-competition="{{item}}" data-index="{{index}}">
+      <!-- 比赛状态标签 -->
+      <view class="status-badge {{item.status === 0 ? 'status-signing' : item.status === 1 ? 'status-ongoing' : 'status-ended'}}">
+        {{item.status === 0 ? '报名中' : item.status === 1 ? '进行中' : '已结束'}}
+      </view>
+      <!-- 比赛基本信息 -->
+      <view class="card-header">
+        <text class="competition-name">{{item.competitionName}}</text>
+        <text class="competition-location" bind:tap="openMap" mark:index="{{index}}">地址 : {{item.location.name}}</text>
+      </view>
+      <!--  比赛阶段和奖金 -->
+      <view class="competition-details">
+        <view class="detail-item">
+          <text class="detail-label">报名人数:</text>
+          <text class="detail-value">{{item.nowPlayerSum}} / {{item.playerMaxSum}} 人</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">报名时间:</text>
+          <text class="detail-value">{{tool.timeStampToStr(item.start_time,'ymd')}} - {{tool.timeStampToStr(item.play_time,'ymd')}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">赛事状态:</text>
+          <text class="detail-value">{{item.status === 0 ? '未开始' : item.status === 1 ? '进行中': item.status === 2 ?'暂停中' : '已结束' }}</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">赛事进程:</text>
+          <text class="detail-value">{{item.round === 0 ? '报名中' : item.round === 1 ? '预选赛': item.round === 2 ?'双败赛' :'已结束' }}</text>
+        </view>
+        <view class="detail-item" wx:if="{{item.totalPrize > 0}}">
+          <text class="detail-label">总奖金:</text>
+          <text class="prize-amount">¥{{item.totalPrize}}</text>
+        </view>
+      </view>
+      <!-- 操作按钮 -->
+      <view class="action-buttons">
+        <view class="action-btn view-detail" bindtap="navigateToDetail" data-index="{{index}}">
+          查看详情
+        </view>
+        <view class="action-btn delete-btn" catch:tap="showDeleteConfirm" data-competition="{{item}}" data-index="{{index}}">
+          删除
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{competitionList.length === 0}}">
+      <text class="empty-text">暂无比赛数据</text>
+      <text class="empty-subtext">点击下方按钮创建第一个比赛</text>
+      <view class="create-btn" bind:tap="goto" mark:item="newCompetition">
+        创建比赛
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-actions">
+    <view class="create-competition-btn" bind:tap="goto" mark:item="newCompetition">
+      <text class="btn-icon">+</text>
+      <text class="btn-text">创建新比赛</text>
+    </view>
+  </view>
+</view>

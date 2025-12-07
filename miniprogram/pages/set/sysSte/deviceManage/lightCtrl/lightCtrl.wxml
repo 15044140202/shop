@@ -64,7 +64,7 @@
             >
               <text class="time-text">每天--{{shop_device.shopLightSet[index].closeTime  === undefined ? '00:00' : shop_device.shopLightSet[index].closeTime}}  关</text>
             </picker>
-            <switch 
+            <switch  
               checked="{{switchStatus[index]}}"
               bindchange="switchChange"
               mark:item="lightChange"

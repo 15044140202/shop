@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "van-icon": "@vant/weapp/icon/index",
+    "menu-modal": "/components/menu-modal/menu-modal"
+  },
+  "navigationBarTitleText": "比赛对战图",
+  "enablePullDownRefresh": false,
+  "disableScroll": true
+}

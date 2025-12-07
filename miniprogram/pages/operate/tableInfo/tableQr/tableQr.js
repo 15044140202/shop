@@ -157,11 +157,19 @@ Page({
         shopId: appData.shop_account._id,
         tableNum: this.data.optNum
       }
-    }else{//桌台码
+    }else if(this.data.item === 'cupboardNum'){//杆柜码
       upData = {
         qrData:'0',
         using: 1,
-        item: 'table',
+        item: 'cupboard',
+        cupboardNum:this.data.optNum,
+        shopId: appData.shop_account._id,
+      }
+    }else if(this.data.item === 'tableNum'){//桌台码
+      upData = {
+        qrData:'0',
+        using: 1,
+        item: 'cupboard',
         shopId: appData.shop_account._id,
         tableNum: this.data.optNum
       }

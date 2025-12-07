@@ -532,7 +532,7 @@ Page({
         const payRes = await this.sanCodePay(pledge, orderNum)
         if (!payRes) { //支付失败
           app.showToast('支付失败!', 'error')
-          await app.repealOrder(orderNum, tableNum, appData.shop_account._id)
+          await app.repealOrder(orderNum, tableNum, appData.shop_account._id,appData.shop_account.proceedAccount)
           return;
         }
         console.log('支付成功!')

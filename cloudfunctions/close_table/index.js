@@ -217,7 +217,7 @@ async function orderRefund(transaction, task, overOrder, sub_mchid) {
   if (overOrder.payFor) {
     await transaction.collection('refund_order').add({
       data: {
-        orderNum: overOrder.refundOrder,
+        orderNum: overOrder.refundOrder || 'reFund' + overOrder.orderNum,
         originalOrderNum: overOrder.orderNum,
         originalTotalCost: overOrder.cashPledge,
         refundCost: overOrder.cashPledge,
@@ -330,9 +330,12 @@ exports.main = async (event, context) => {
           data: vipAmountChangeOrder
         })
       }
-      await transaction.collection('vip_list').doc(overOrder.userVipId).update({
-        data: upData
-      })
+      if (!overOrder.payFor) {
+        await transaction.collection('vip_list').doc(overOrder.userVipId).update({
+          data: upData
+        })
+      }
+
     }
     console.log('检测是否代付')
     //代付 使用会员卡代付的

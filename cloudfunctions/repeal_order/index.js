@@ -90,7 +90,7 @@ exports.main = async (event, context) => {
   }
   const transaction = await db.startTransaction()
   try {
-    //取消支付订单
+    //取消支付订单 
     if (sub_mchid) {
       const res = await closePayOrder(sub_mchid, orderNum)
       console.log(res)

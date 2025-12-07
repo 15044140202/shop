@@ -38,6 +38,45 @@ Page({
       searchValue: e.detail.value,
     });
   },
+  /**
+   * @description 深度搜索会员信息, 搜索此电话号码的用户  根据用户openid搜索会员
+   * @param {Text} telNum 会员电话号码
+   */
+  async deepSearch(telNum,shopId){
+    const userInfoRes = await app.callFunction({
+      name:'getData_where',
+      data:{
+        collection:'user_info',
+        query:{['userInfo.telephone']:telNum}
+      }
+    })
+    console.log(userInfoRes)
+    if (!userInfoRes.success) {
+      app.showModal('无此会员')
+      throw 'error 无此会员'
+    }
+
+    const openidArr = userInfoRes.data.map(item => item._openid)
+    const res = await app.callFunction({
+      name: 'getData_where',
+      data: {
+        collection: 'vip_list',
+        query: {
+          shopId: shopId,
+        },
+        _in:{
+          record:'userOpenid',
+          value:openidArr
+        }
+      }
+    })
+    if (res.success) {
+      return res.data
+    } else {
+      app.showModal('提示', 'error')
+      return []
+    }
+  },
   async getOneVipInfo(shopId, telephone) {
     const res = await app.callFunction({
       name: 'getData_where',
@@ -47,11 +86,14 @@ Page({
           shopId: shopId,
           telephone: telephone,
         }
-
       }
     })
     if (res.success) {
-      return res.data
+      if (res.data.length) {
+        return res.data
+      }
+      //深度搜索
+      return await this.deepSearch(telephone,shopId)
     } else {
       app.showModal('提示', 'error')
       return []

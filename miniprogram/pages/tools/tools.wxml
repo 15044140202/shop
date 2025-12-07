@@ -71,4 +71,14 @@
     <van-icon name="wechat-moments" size="48rpx" color="#0097ff" class="card-icon" />
     <text class="card-title">球友圈管理</text>
   </view>
+  <!-- 赛事管理 -->
+  <view class="menu-card" hover-class="card-hover" bind:tap="goto" mark:item="competition_manager">
+    <van-icon name="award-o" size="48rpx" color="#0097ff" class="card-icon" />
+    <text class="card-title">赛事管理</text>
+  </view>
+    <!-- 店铺摄像机 -->
+    <view class="menu-card" hover-class="card-hover" bind:tap="goto" mark:item="shop_camera">
+    <van-icon name="tv-o" size="48rpx" color="#0097ff" class="card-icon" />
+    <text class="card-title">店铺监控</text>
+  </view>
 </view>

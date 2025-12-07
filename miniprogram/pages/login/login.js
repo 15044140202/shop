@@ -1,7 +1,6 @@
 // pages/login/login.js
-const utils = require('../../utils/light');
+const utils = require('../../utils/zx');
 const dataMode = require('../../utils/dataMode')
-const cloudServer = require("../../utils/cloudServer")
 const app = getApp();
 const appData = getApp().globalData;
 

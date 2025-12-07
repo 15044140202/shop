@@ -11,14 +11,14 @@ Page({
     lightStatus: undefined,
     switchStatus: [0, 0, 0, 0, 0]
   },
-  async lightTest(){
+  async lightTest() {
     this.setData({
       lightStatus: await app.getLightStatus(this.data.shop_device.lightCtrl)
     })
     if (this.data.lightStatus.code === 404) {
       app.showModal('提示', '设备不在线!')
       return
-    }else{
+    } else {
       app.showModal('提示', '设备在线!')
       return
     }
@@ -67,11 +67,13 @@ Page({
           this.setData({
             [`lightStatus.data`]: res.lightStatus
           })
-          this.refirshlightStatus(this.data.lightStatus)
         } else if (res.msg === '设备不在线') {
           app.showModal('提示', '设备不在线!')
+        }else if (res.msg === '操作失败'){
+          app.showModal('提示', '操作失败!')
         }
         wx.hideLoading()
+        this.refirshlightStatus(this.data.lightStatus)
         return
       } else {
         app.showModal('提示', '请先绑定灯控器通道!')
@@ -189,7 +191,7 @@ Page({
     for (let index = 0; index < this.data.switchStatus.length; index++) {
       if (this.data.shop_device.shopLightSet[index].lightId > 0) {
         this.setData({
-          [`switchStatus[${index}]`]: lightStatus.data[`A${this.data.shop_device.shopLightSet[index].lightId.padStart(2,'0')}`]
+          [`switchStatus[${index}]`]: lightStatus.data[`A${this.data.shop_device.shopLightSet[index].lightId.padStart(2, '0')}`]
         })
       }
     }

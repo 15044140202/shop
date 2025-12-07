@@ -12,7 +12,7 @@ Page({
     TodayDataObj: app.TodayDataObj,
     TodayTurnover: 0,
     cWidth: 750,
-    cHeight: 500,
+    cHeight: 500, 
 
     hidden: true,
 
@@ -21,12 +21,13 @@ Page({
 
   },
   async getOrder(date) {
-    const now = new Date().getTime();
+    const now = new Date()
     //获取七日营业数据
     const task = []
     for (let index = 0; index < 7; index++) {
-      const date = app.getNowTime(new Date(now - index * 24 * 60 * 60 * 1000))
-      task.push(app.getOrderData(date, date))
+      let date = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()
+      date -= index * 24*60*60*1000
+      task.push(app.getOrderData(date, date + 24*60*60*1000))
     }
     const res = await Promise.all(task)
     for (let index = 0; index < res.length; index++) {

@@ -1,0 +1,264 @@
+/* pages/tools/competition_manager/competitionDetail/list/list.wxss */
+/* 选项卡容器 */
+.tab-container {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 选项卡按钮组 */
+.tab-buttons {
+  display: flex;
+  background: #f8f9fa;
+  border-radius: 25rpx;
+  padding: 8rpx;
+  position: relative;
+}
+/* 单个选项卡按钮 */
+.tab-button {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25rpx 0;
+  border-radius: 20rpx;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.tab-button.active {
+  background: white;
+  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.1);
+}
+
+.tab-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.tab-button.active .tab-text {
+  color: #007AFF;
+  font-weight: 700;
+}
+
+/* 选项卡指示器 */
+.tab-indicator {
+  width: 6rpx;
+  height: 6rpx;
+  border-radius: 50%;
+  background: transparent;
+  margin-top: 8rpx;
+  transition: all 0.3s ease;
+}
+
+.tab-button.active .tab-indicator {
+  background: #007AFF;
+  width: 24rpx;
+  border-radius: 3rpx;
+}
+
+/* 选项卡内容区域 */
+.tab-content {
+  padding: 0 30rpx 30rpx;
+}
+.tab-panel {
+  background: white;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+  border: 1rpx solid #f0f0f0;
+}
+/* 选项卡按钮的悬停效果 */
+.tab-button:not(.active):active {
+  background: rgba(0, 122, 255, 0.1);
+  transform: scale(0.98);
+}
+
+/* 响应式设计 */
+@media (max-width: 750rpx) {
+  .tab-buttons {
+    margin: 20rpx;
+    padding: 6rpx;
+  }
+  
+  .tab-button {
+    padding: 20rpx 0;
+  }
+  
+  .tab-text {
+    font-size: 26rpx;
+  }
+  
+  .tab-content {
+    padding: 0 20rpx 20rpx;
+  }
+  
+  .tab-panel {
+    padding: 30rpx;
+  }
+  
+  .panel-title {
+    font-size: 30rpx;
+    margin-bottom: 20rpx;
+  }
+  
+  .panel-content {
+    font-size: 26rpx;
+  }
+}
+
+/* 选项卡入场动画 */
+.tab-panel {
+  animation: tabFadeIn 0.3s ease;
+}
+/* 列表 */
+/* pages/index/competition/my/my.wxss */
+.list_board {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 20rpx;
+  width: 92vw;
+  margin: 20rpx auto;
+  min-height: 80rpx;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+  box-shadow: 0 8rpx 30rpx rgba(0, 148, 255, 0.15);
+  padding: 2vw;
+  border: 2rpx solid #e8f4ff;
+  transition: all 0.3s ease;
+}
+
+.list_board:active {
+  transform: translateY(2rpx);
+  box-shadow: 0 4rpx 15rpx rgba(0, 148, 255, 0.1);
+}
+
+.card-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.competition-name {
+  color: #333;
+  font-size: 34rpx;
+  font-weight: 600;
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+
+.comInfo-board {
+  margin: 20rpx 0;
+  padding: 25rpx;
+  background: #f8fbff;
+  border-radius: 15rpx;
+  border: 1rpx solid #e1f0ff;
+}
+
+.record-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25rpx;
+}
+
+.record-item {
+  background: white;
+  padding: 25rpx;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 148, 255, 0.08);
+  border-left: 6rpx solid #0094ff;
+}
+
+.match-level {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding-bottom: 15rpx;
+  border-bottom: 1rpx solid #f0f7ff;
+}
+
+.match-type {
+  color: #0094ff;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+.badge {
+  background: linear-gradient(135deg, #3aa9f8 0%, #0094ff 100%);
+  padding: 8rpx 20rpx;
+  border-radius: 30rpx;
+}
+.badge-text {
+  color: white;
+  font-size: 35rpx;
+  font-weight: 500;
+  text-align: center;
+
+}
+.vs-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.player-name {
+  font-size: 26rpx;
+  color: #333;
+  margin-bottom: 8rpx;
+  font-weight: 500;
+  text-align: center;
+}
+
+.player-name.winner {
+  color: #0094ff;
+  font-weight: 600;
+}
+
+.player-score {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #666;
+  background: #f5f5f5;
+  padding: 8rpx 16rpx;
+  border-radius: 10rpx;
+  min-width: 60rpx;
+  text-align: center;
+}
+
+.player-score.winner-score {
+  background: #0094ff;
+  color: white;
+}
+
+.vs-text {
+  color: #999;
+  font-size: 24rpx;
+  font-weight: 500;
+  margin: 0 20rpx;
+  background: #f8f8f8;
+  padding: 8rpx 16rpx;
+  border-radius: 8rpx;
+}
+
+
+/* 空状态样式 */
+.record-item:empty::before {
+  content: "暂无比赛记录";
+  color: #999;
+  font-size: 28rpx;
+  text-align: center;
+  display: block;
+  padding: 40rpx;
+}

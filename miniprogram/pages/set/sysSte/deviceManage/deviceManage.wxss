@@ -1,8 +1,43 @@
-@import '../../../../template/SetMenu/SetMenu.wxss';
-
-page{
-  background-color: #fff;
+/* 工具菜单容器 */
+.menu-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180rpx, 1fr));
+  gap: 24rpx;
+  padding: 32rpx;
+  background: var(--bg-color);
 }
+/* 工具卡片样式 */
+.menu-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 32rpx 16rpx;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4rpx 12rpx rgba(0, 151, 255, 0.08);
+}
+/* 卡片悬停效果 */
+.card-hover {
+  transform: translateY(-4rpx);
+  box-shadow: 0 8rpx 16rpx rgba(0, 151, 255, 0.15);
+}
+ 
+/* 卡片图标样式 */
+.card-icon {
+  margin-bottom: 24rpx;
+  filter: drop-shadow(0 2rpx 4rpx rgba(0, 151, 255, 0.2));
+}
+ 
+/* 卡片标题样式 */
+.card-title {
+  display: block;
+  font-size: 26rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.4;
+} 
+
+
 .deviceBorder{
   display: grid;                  /* 块级网格容器 */
   grid-template-columns: 29vw 29vw 29vw; /* 三列：固定30vw */

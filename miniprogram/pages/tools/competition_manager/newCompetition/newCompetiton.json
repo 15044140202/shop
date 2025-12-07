@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "van-icon": "@vant/weapp/icon/index"
+  },
+    "navigationBarTitleText": "发起台球比赛",
+    "navigationBarBackgroundColor": "#0094ff",
+    "navigationBarTextStyle": "white"
+}

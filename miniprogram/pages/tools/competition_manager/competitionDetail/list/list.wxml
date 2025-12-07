@@ -1,0 +1,65 @@
+<!--pages/tools/competition_manager/competitionDetail/list/list.wxml-->
+<!-- 胜组败组选项卡 -->
+<view class="tab-container">
+  <view class="tab-buttons">
+    <view class="tab-button {{winOrLow === 'win' ? 'active' : ''}}" bindtap="switchTab" data-tab="win">
+      <text class="tab-text">胜者组</text>
+      <view class="tab-indicator"></view>
+    </view>
+    <view class="tab-button {{winOrLow === 'low' ? 'active' : ''}}" bindtap="switchTab" data-tab="low">
+      <text class="tab-text">败者组</text>
+      <view class="tab-indicator"></view>
+    </view>
+    <view class="tab-button {{winOrLow === 'final' ? 'active' : ''}}" bindtap="switchTab" data-tab="final">
+      <text class="tab-text">总决赛</text>
+      <view class="tab-indicator"></view>
+    </view>
+  </view>
+</view>
+<view class="list_board" wx:for="{{pyramidLayers}}" wx:key="index" bind:longpress="longTap" mark:index="{{index}}">
+  <view class="card-header space-between">
+    <text class="competition-name">{{item.width === 1 ? '冠军' : item.width + ' 强'}}</text>
+    <view class="flod-board" bind:tap="displayComInfo" mark:index="{{index}}">
+      <van-icon name="{{infoIndex === index ? 'arrow-down' : 'arrow'}}" color="#0094ff" size="45rpx"></van-icon>
+    </view>
+  </view>
+  <view class="comInfo-board" wx:if="{{index === infoIndex}}">
+    <view class="record-list">
+      <block wx:if="{{item.nodes.length === 1}}">
+        <view class="record-item" wx:for="{{item.nodes}}" wx:key="index" wx:for-item="item_info" wx:for-index="index_info">
+          <view class="match-level">
+            <text class="match-type">签号 : {{item.nodes[index_info].competitionNum}} </text>
+          </view>
+          <view class="vs-section">
+            <view class="player-info">
+              <text class="player-name winner" style="font-size: 50rpx; color: orange;">{{item_info.playerName}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="record-item" wx:for="{{item.nodes}}" wx:key="index" wx:for-item="item_info" wx:for-index="index_info" wx:if="{{index_info % 2 !== 0 && index_info > 0}}">
+          <view class="match-level">
+            <text class="match-type">签号 : {{item.nodes[index_info - 1].competitionNum}} </text>
+            <view class="badge" bind:tap="upDateTbaleNum" mark:index="{{index_info}}">
+              <text class="badge-text">桌台号: {{item_info.tableNum}}</text>
+            </view>
+            <text class="match-type">签号 : {{item_info.competitionNum}}</text>
+          </view>
+          <view class="vs-section">
+            <view class="player-info"  bind:tap="upDateScore" mark:index="{{index_info - 1}}">
+              <text class="player-name winner">{{item.nodes[index_info - 1].playerName}}</text>
+              <text  class="player-score {{item.nodes[index_info - 1].score >= 0 ? 'winner-score' : ''}}">{{item.nodes[index_info - 1].score}}</text>
+            </view>
+            <text class="vs-text">VS</text>
+            <view class="player-info" bind:tap="upDateScore" mark:index="{{index_info}}">
+              <text class="player-name winner">{{item_info.playerName}}</text>
+              <text class="player-score {{item.nodes[index_info - 1].score >= 0 ? 'winner-score' : ''}}">{{item_info.score}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+
+    </view>
+  </view>
+</view>

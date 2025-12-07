@@ -1,0 +1,27 @@
+<view class="modal-mask" wx:if="{{show}}" bindtap="onCancelTap">
+  <view class="modal-container" bindtap="preventDefault">
+    <!-- 标题 -->
+    <view class="modal-header" style="color: {{themeColor}}">
+      {{title}}
+    </view>
+    
+    <!-- 菜单项列表 -->
+    <view class="menu-list">
+      <view 
+        wx:for="{{menuItems}}" 
+        wx:key="index" 
+        class="menu-item" 
+        data-index="{{index}}"
+        bindtap="onMenuItemTap"
+      >
+        <text class="menu-text">{{item}}</text>
+        <view class="menu-divider" wx:if="{{index < menuItems.length - 1}}"></view>
+      </view>
+    </view>
+    
+    <!-- 取消按钮 -->
+    <view class="cancel-btn" bindtap="onCancelTap">
+      取消
+    </view>
+  </view>
+</view>

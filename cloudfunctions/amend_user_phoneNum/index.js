@@ -6,7 +6,7 @@ const db = cloud.database()
 const _ = db.command
 // 云函数入口函数
 exports.main = async (event, context) => {
-  const { userOpenid, shopId, phoneNum, userName, headImage ,birthday} = event
+  const { userOpenid, shopId, phoneNum, userName, headImage ,birthday,gender} = event
   const task = []
   //修改用户手机号码
   const userData = {}
@@ -14,6 +14,7 @@ exports.main = async (event, context) => {
   if (userName) userData[`userInfo.name`] = userName
   if (headImage) userData['userInfo.headImage'] = headImage
   if (birthday) userData['userInfo.birthday'] = birthday
+  if (gender) userData['userInfo.gender'] = gender
   task.push(
     db.collection('user_info').where({
       _openid: userOpenid
@@ -26,8 +27,8 @@ exports.main = async (event, context) => {
   if (phoneNum) vipData.telephone = phoneNum
   if (userName) vipData.name = userName
   if (headImage) vipData.headImage = headImage
-  if (headImage) vipData.headImage = headImage
   if (birthday) vipData.birthday = birthday
+  if (gender) vipData.gender = gender
   task.push(
     db.collection('vip_list').where({
       userOpenid: userOpenid
@@ -47,7 +48,6 @@ exports.main = async (event, context) => {
       })
     )
   }
-
   const res = await Promise.all(task)
   return {
     success: true,
