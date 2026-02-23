@@ -38,7 +38,11 @@
     <van-icon name="bill" size="48rpx" color="#0097ff" class="card-icon" />
     <text class="card-title">缴费记录</text>
   </view>
-
+ <!-- 店铺宣传资料 -->
+ <view class="menu-card" hover-class="card-hover" bind:tap="goto" mark:item="shop_publicity">
+    <van-icon name="newspaper-o" size="48rpx" color="#0097ff" class="card-icon" />
+    <text class="card-title">宣传资料</text>
+  </view>
   <!-- 短信群发 -->
   <view class="menu-card" hover-class="card-hover" bind:tap="goto" mark:item="shortMassageSend">
     <van-icon name="comment" size="48rpx" color="#0097ff" class="card-icon" />

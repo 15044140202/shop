@@ -1,0 +1,104 @@
+/* pages/tools/shop_camera/shop_camera.wxss */
+/* 外层容器 - 固定高度60vh，超出滚动 */
+.channel-list-container {
+  height: 60vh; /* 固定高度60%视口高度 */
+  overflow-y: auto; /* 垂直方向超出时显示滚动条 */
+  padding: 12rpx;
+  box-sizing: border-box;
+  background-color: #fafafa; /* 背景色，与卡片区分 */
+}
+
+/* 通道列表容器 - 一行3个，自适应布局 */
+.channel-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx; /* 卡片间距 */
+}
+
+/* 通道卡片样式 */
+.channel-card {
+  width: calc((100% - 32rpx) / 3); /* 3个卡片 + 2个间距，总间距32rpx */
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 12rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+  margin-bottom: 8rpx; /* 上下卡片额外间距，优化滚动体验 */
+}
+.channel-card-selected{
+  border-bottom: #0094ff 1rpx solid;
+}
+
+/* 16:9比例容器 */
+.preview-container {
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 = 9/16 = 0.5625 */
+  position: relative;
+  background-color: #f5f5f5;
+}
+
+/* 预览图样式 */
+.preview-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 占位图样式 */
+.placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 通道名称样式 */
+.channel-name {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 12rpx;
+  font-size: 26rpx;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: #fff;
+}
+
+/* 优化滚动条样式（可选，提升视觉体验） */
+.channel-list-container::-webkit-scrollbar {
+  width: 6rpx;
+}
+.channel-list-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3rpx;
+}
+.channel-list-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3rpx;
+}
+.channel-list-container::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+/* 回放按钮 */
+.video-button{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100rpx;
+  height: 100rpx;
+  position:absolute;
+  right:10rpx;
+  bottom: 20rpx;
+  border-radius: 50%;
+  background-color: #0094ff;
+}

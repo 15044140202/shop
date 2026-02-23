@@ -54,7 +54,8 @@ Page({
         '撤销美团券核销': { descripsion: '允许10分钟内撤销美团券核销', value: false },
         '核验团购券':{descripsion: '核销团购券,重核选顾客的团购套餐', value: false},
         '赛事管理':{descripsion: '开启新的赛事,管理及设置赛事信息.', value: false},
-        '店铺监控':{descripsion: '店铺监控预览及回放', value: false}
+        '店铺监控':{descripsion: '店铺监控预览及回放', value: false},
+        '宣传资料':{descripsion: '店铺营销及各种活动海报下载', value: false}
       },
       set: {
         '店铺设置': { descripsion: '设置店铺信息,设置后用户端自动显示', value: false },

@@ -3,7 +3,6 @@ const app = getApp()
 const appData = app.globalData;
 
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -12,6 +11,34 @@ Page({
     newVipDataHeadImage: [],
     orderForm: [],
     get_item: ''
+  },
+  async showQr(e) {
+    console.log(e)
+    const order = this.data.orderForm[e.mark.index]
+    const qrData = {
+      item:'tableOrderInfo',
+      using:1,
+      orderNum:order.orderNum
+    }
+    const res = await app.getAndupDateQr(qrData)
+    console.log(res)
+    const qrcodeModal = this.selectComponent('#qrcodeModal');
+    qrcodeModal.show({
+      imageData:res.picData,
+      title: '订单分享码',
+      desc: '微信扫描,用户可添加此订单,调取精彩秀视频.',
+      size: 1000,
+      showSaveBtn: true
+    });
+  },
+  playback(e) {
+    console.log(e)
+    const startTime = this.data.orderForm[e.mark.index].time
+    const startTimeStamp = new Date(startTime).getTime()
+    const endTimeStatmp = this.data.orderForm.endTime === '未结账' ? new Date().getTime() : new Date(this.data.orderForm[e.mark.index].endTime).getTime()
+    wx.navigateTo({
+      url: `../../../packageA/tools/shop_camera/shop_camera?startTime=${startTimeStamp}&endTime=${endTimeStatmp}&tableNum=${this.data.orderForm[e.mark.index].tableNum}&orderNum=${this.data.orderForm[e.mark.index].orderNum}`,
+    })
   },
   goto(e) {
     if (e.mark.item === '新增会员') {
@@ -47,20 +74,26 @@ Page({
         element.time = app.getNowTime(new Date(element.time))
         this.data.orderForm.push(element)
       }
-      if (options.item === '微信退款明细') {//微信退款
+      if (options.item === '微信退款明细') { //微信退款
         const newOrder = this.data.orderForm.reduce((acc, order) => {
           if ((order?.log || []).some(item => item.includes('退款'))) {
-            acc.push({ ...order, disPlay: true })
+            acc.push({
+              ...order,
+              disPlay: true
+            })
           } else {
             acc.push(order)
           }
           return acc
         }, [])
         this.data.orderForm = newOrder
-      }else if (options.item === '微信收支明细') {//微信退款
+      } else if (options.item === '微信收支明细') { //微信退款
         const newOrder = this.data.orderForm.reduce((acc, order) => {
-          if (['微信','微信&代金券'].includes(order.payMode) ) {
-            acc.push({ ...order, disPlay: true })
+          if (['微信', '微信&代金券'].includes(order.payMode)) {
+            acc.push({
+              ...order,
+              disPlay: true
+            })
           } else {
             acc.push(order)
           }
@@ -72,7 +105,9 @@ Page({
         orderForm: this.data.orderForm,
         get_item: options.item
       })
-      console.log({ "账单信息:": this.data.orderForm })
+      console.log({
+        "账单信息:": this.data.orderForm
+      })
       console.log(this.data.get_item)
     }
 

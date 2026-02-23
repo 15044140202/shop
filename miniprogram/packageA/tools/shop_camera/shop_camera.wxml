@@ -1,0 +1,36 @@
+<!--pages/tools/shop_camera/shop_camera.wxml-->
+<ezplayer id="ezplayer" accessToken="{{ezplayer.token}}" url="{{ezplayer.url}}" plugins="talk,voice,ptz,privacy,mirror"
+  recPlayTime="{{ezplayer.recPlayTime}}" theme="{{ { showCapture: true, showDatePicker: true, showTypeSwitch: true } }}"
+  bind:handleError="handleError" bind:onControlEvent="onControlEvent"  />
+<!-- 通道预览列表 --> 
+<!-- 通道预览列表 -->
+<view class="channel-list-container">
+  <view class="channel-list">
+    <block wx:for="{{cameraInfo.channel}}" wx:key="channelId" wx:for-item="channel">
+      <!-- 通道预览卡片 -->
+      <view   class="channel-card {{nowIndex === index ? 'channel-card-selected' : ''}}" mark:index="{{index}}" bindtap="handleChannelTap">
+        <!-- 16:9比例预览图容器 -->
+        <view class="preview-container">
+          <!-- 预览图（可替换为实际视频流或封面图） -->
+          <image class="preview-img"
+            src="{{channel.image ?channel.image :'cloud://billiards-0g53628z5ae826bc.6269-billiards-0g53628z5ae826bc-1326882458/素材/模糊视频.png' }}"
+            mode="aspectFill" />
+          <!-- 占位图提示（可选） -->
+          <view class="placeholder" wx:if="{{!channel.coverUrl}}">
+            <icon type="video" size="40" color="#ccc" />
+          </view>
+        </view>
+        <!-- 通道名称 -->
+        <view class="channel-name" catch:tap="changeName" mark:index="{{index}}">
+          {{channel.channelName ? channel.channelName : '通道' + index}}
+          <van-icon name="edit" size="35rpx"></van-icon>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+<!-- 回放按钮 -->
+<view class="video-button" bind:tap="playBack">
+  <van-icon name="video-o" size="50rpx" color="#fff"></van-icon>
+  <text style="font-size: 25rpx; color: aliceblue;">{{isLive ? '回放' : '实时'}}</text>
+</view>

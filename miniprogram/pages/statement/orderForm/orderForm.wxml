@@ -1,15 +1,23 @@
 <!--pages/statement/orderForm/orderForm.wxml-->
 <import src="../../../template/noData/noData.wxml" />
 <template is="noData" data="{{switch:orderForm.length ||newVipData.length}}" />
+<!-- 二维码弹窗组件 -->
+<qrcode-modal id="qrcodeModal" bind:show="onQRCodeShow" />
 <block wx:if="{{get_item === '未结单据'}}">
-  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{(item.orderName  === '店员开台订单' || item.orderName  === '自助开台订单' || item.orderName  === '自助套餐订单') && (item.endTime  === '未结账' || item.endTime  === '')}}" bind:tap="goto" mark:index='{{index}}'>
+  <view class="card-item" wx:for="{{orderForm}}" wx:key="index"
+    wx:if="{{(item.orderName  === '店员开台订单' || item.orderName  === '自助开台订单' || item.orderName  === '自助套餐订单') && (item.endTime  === '未结账' || item.endTime  === '')}}"
+    bind:tap="goto" mark:index='{{index}}'>
     <view class="content-left">
       <view class="header">
         <text class="table-num">{{item.tableNum}} 号台</text>
         <text class="divider">|</text>
         <text class="user-name">{{item.userName}}</text>
       </view>
-      <text class="time-text">{{item.startTime}}</text>
+      <!-- 视频调取 -->
+      <view class="header">
+        <text class="time-text">{{item.startTime}}</text>
+        <van-icon name="video"></van-icon>
+      </view>
     </view>
     <view class="content-right">
       <view class="amount-text">¥{{item.cashPledge}}</view>
@@ -19,14 +27,21 @@
 </block>
 
 <block wx:elif="{{get_item === '已结单据'}}">
-  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{(item.orderName  === '店员开台订单' || item.orderName  === '自助开台订单' || item.orderName  === '自助套餐订单') &&  item.endTime  !== '未结账'}}" bind:tap="goto" mark:index='{{index}}'>
+  <view class="card-item" wx:for="{{orderForm}}" wx:key="index"
+    wx:if="{{(item.orderName  === '店员开台订单' || item.orderName  === '自助开台订单' || item.orderName  === '自助套餐订单') &&  item.endTime  !== '未结账'}}"
+    bind:tap="goto" mark:index='{{index}}'>
     <view class="content-left">
       <view class="header">
         <text class="table-num">{{item.tableNum}} 号台</text>
         <text class="divider">|</text>
         <text class="user-name">{{item.userName}}</text>
       </view>
-      <text class="time-text">{{item.time}}</text>
+      <!-- 视频调取 -->
+      <view class="time-video">
+        <text class="time-text">{{item.time}}</text>
+        <van-icon name="video" color="#0094ff" size="55rpx" catch:tap="playback" mark:index="{{index}}"></van-icon>
+        <van-icon name="qr" color="#0094ff" size="55rpx" catch:tap="showQr" mark:index="{{index}}"></van-icon>
+      </view>
     </view>
     <view class="content-right">
       <view class="amount-text">
@@ -38,7 +53,8 @@
 </block>
 
 <block wx:elif="{{get_item === '商品销售报表'}}">
-  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName  === '商品单'}}" bind:tap="goto" mark:index='{{index}}'>
+  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName  === '商品单'}}" bind:tap="goto"
+    mark:index='{{index}}'>
     <view class="content-left">
       <view class="header">
         <text class="table-num">商品单</text>
@@ -49,7 +65,9 @@
       <text class="time-text">{{item.time}}</text>
     </view>
     <view class="content-right">
-      <view class="amount-text" wx:if="{{item.payState !== 1}}" style="font-size:28rpx; color: red;">{{item.payState === 0 ? '未支付' : item.payState === 2 ? '已取消' : '已退款'}}</view>
+      <view class="amount-text" wx:if="{{item.payState !== 1}}" style="font-size:28rpx; color: red;">
+        {{item.payState === 0 ? '未支付' : item.payState === 2 ? '已取消' : '已退款'}}
+      </view>
       <view class="amount-text">¥{{item.commotidyCost}}</view>
       <van-icon name="arrow" color="#9AA4B6" size="36rpx" />
     </view>
@@ -57,7 +75,8 @@
 </block>
 
 <block wx:elif="{{get_item === '会员储值'}}">
-  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName  === '储值单'}}" bind:tap="goto" mark:index='{{index}}'>
+  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName  === '储值单'}}" bind:tap="goto"
+    mark:index='{{index}}'>
     <view class="content-left">
       <view class="header">
         <text class="table-num">储值单</text>
@@ -76,7 +95,8 @@
 </block>
 
 <block wx:elif="{{get_item === '商品入库报表'}}">
-  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName  === '进货单'}}" bind:tap="goto" mark:index='{{index}}'>
+  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName  === '进货单'}}" bind:tap="goto"
+    mark:index='{{index}}'>
     <view class="content-left">
       <view class="header">
         <text class="table-num">进货单</text>
@@ -93,7 +113,9 @@
 </block>
 
 <block wx:elif="{{get_item === '收取员工现金记录'}}">
-  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName  === '店员开台订单' &&( item.payMode  === 'cash' ||item.payMode  === '现金')}}" bind:tap="goto" mark:index='{{index}}'>
+  <view class="card-item" wx:for="{{orderForm}}" wx:key="index"
+    wx:if="{{item.orderName  === '店员开台订单' &&( item.payMode  === 'cash' ||item.payMode  === '现金')}}" bind:tap="goto"
+    mark:index='{{index}}'>
     <view class="content-left">
       <view class="header">
         <text class="table-num">{{item.tableNum}} 号台</text>
@@ -108,7 +130,9 @@
     </view>
   </view>
 
-  <view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.orderName  === '商品单' &&( item.payMode  === 'cash'  || item.payMode  === '现金')}}" bind:tap="goto" mark:index='{{index}}'>
+  <view class="card-item" wx:for="{{orderForm}}" wx:key="index"
+    wx:if="{{item.orderName  === '商品单' &&( item.payMode  === 'cash'  || item.payMode  === '现金')}}" bind:tap="goto"
+    mark:index='{{index}}'>
     <view class="content-left">
       <view class="header">
         <text class="table-num">商品单</text>
@@ -139,7 +163,8 @@
   </view>
 </block>
 
-<view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.disPlay}}" bind:tap="goto" mark:index='{{index}}'>
+<view class="card-item" wx:for="{{orderForm}}" wx:key="index" wx:if="{{item.disPlay}}" bind:tap="goto"
+  mark:index='{{index}}'>
   <view class="content-left">
     <view class="header">
       <text wx:if="{{item.tableNum}}" class="table-num">{{item.tableNum}} 号台</text>

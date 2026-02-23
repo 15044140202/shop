@@ -1,0 +1,49 @@
+<!-- 遮罩层 -->
+<view class="qrcode-mask" wx:if="{{visible}}" catchtap="onClose">
+  <!-- 弹窗内容 -->
+  <view class="qrcode-container" catchtap="stopPropagation">
+
+    <!-- 标题栏 -->
+    <view class="qrcode-header">
+      <text class="qrcode-title">{{title}}</text>
+      <view class="qrcode-close" catchtap="onClose">
+        <text class="close-icon">×</text>
+      </view>
+    </view>
+
+    <!-- 二维码图片区域 -->
+    <view class="qrcode-content">
+      <view class="image-wrapper">
+        <image class="qrcode-image" src="{{imageData}}" mode="aspectFit" wx:if="{{imageData}}" show-menu-by-longpress
+          binderror="onImageError" />
+
+        <!-- 空状态提示 -->
+        <view class="empty-tips" wx:if="{{!imageData}}">
+          <text class="empty-icon">📷</text>
+          <text class="empty-text">暂无二维码图片</text>
+        </view>
+
+        <!-- 加载状态 -->
+        <view class="loading" wx:if="{{loading}}">
+          <view class="loading-spinner"></view>
+          <text class="loading-text">加载中...</text>
+        </view>
+
+        <!-- 错误状态 -->
+        <view class="error-tips" wx:if="{{errorMsg}}">
+          <text class="error-icon">❌</text>
+          <text class="error-text">{{errorMsg}}</text>
+        </view>
+      </view>
+
+      <!-- 描述信息 -->
+      <text class="qrcode-desc" wx:if="{{desc}}">{{desc}}</text>
+
+      <!-- 提示信息 -->
+      <view class="hint-tips">
+        <text class="hint-icon">💡</text>
+        <text class="hint-text">长按图片可以保存到相册</text>
+      </view>
+    </view>
+  </view>
+</view>

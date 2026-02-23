@@ -3,7 +3,14 @@
 page {
   background: #F8FAFC;
 }
-
+/* 时间和录像 */
+.time-video{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+}
 /* 通用卡片样式 */
 .card-item {
   display: flex;

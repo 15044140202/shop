@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "ezplayer": "plugin://ezplayer/ezplayer",
+    "van-icon": "@vant/weapp/icon/index"
+  },
+  "navigationBarTitleText": "店铺监控"
+}

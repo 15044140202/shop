@@ -47,43 +47,51 @@ Page({
         itemType = 'operate'
         itemName = '店铺监控'
         break
+      case 'shop_publicity':
+        itemType = 'operate'
+        itemName = '宣传资料'
+        break
     }
     if (!itemName) { //不鉴别权限的项目
 
     } else {
-      console.log({ [itemType]: itemName })
+      console.log({
+        [itemType]: itemName
+      })
       if (!await app.power(itemType, itemName)) {
         app.showToast('没有权限', 'error');
         return;
       }
     }
     let url
-    if (['amountBook', 'shortMassageSend', 'vipManage'].includes(e.mark.item)) {//账本  短信 会员管理
+    if (['amountBook', 'shortMassageSend', 'vipManage'].includes(e.mark.item)) { //账本  短信 会员管理
       url = `../set/${e.mark.item}/${e.mark.item}`
-    } else if (['tableManage'].includes(e.mark.item)) {//桌台管理
+    } else if (['tableManage'].includes(e.mark.item)) { //桌台管理
       url = `../operate/manager/manager`
-    } else if (['orderList'].includes(e.mark.item)) {//缴费记录
-      url = `./orderList/orderList`
-    } else if (e.mark.item === 'shop_power') {//电源管理
+    } else if (['orderList'].includes(e.mark.item)) { //缴费记录
+      url = `../../packageA/tools/orderList/orderList`
+    } else if (e.mark.item === 'shop_power') { //电源管理
       url = '../set/sysSte/deviceManage/lightCtrl/lightCtrl'
-    } else if (e.mark.item === 'recuit') {//招聘
-      url = './recruit/recruit'
-    } else if (e.mark.item === 'mall') {//店铺商城
+    } else if (e.mark.item === 'recuit') { //招聘
+      url = '../../packageA/tools/recruit/recruit'
+    } else if (e.mark.item === 'mall') { //店铺商城
       appData.malltype = 'shop'
-      url = './mallManage/mallManage?mallType=shop'
-    } else if (e.mark.item === 'officialMall') {//官方商城
-      if (e.mark.mallType === 'mall') {//官方商城
-        url = './mall/mall?mallType=official'
-      } else {//官方商城管理
+      url = '../../packageA/tools/mallManage/mallManage?mallType=shop'
+    } else if (e.mark.item === 'officialMall') { //官方商城
+      if (e.mark.mallType === 'mall') { //官方商城
+        url = '../../packageA/tools/mall/mall?mallType=official'
+      } else { //官方商城管理
         appData.malltype = 'official'
-        url = './mallManage/mallManage?mallType=official'
+        url = '../../packageA/tools/mallManage/mallManage?mallType=official'
       }
-    } else if (e.mark.item === 'firendCircle_manager') {//球友圈管理
-      url = './firendCircle_manager/firendCircle_manager'
-    } else if (e.mark.item === 'competition_manager') {//赛事管理
-      url = './competition_manager/competition_manager'
-    }else if (e.mark.item === 'shop_camera') {//赛事管理
-      url = './shop_camera/shop_camera'
+    } else if (e.mark.item === 'firendCircle_manager') { //球友圈管理
+      url = '../../packageA/tools/firendCircle_manager/firendCircle_manager'
+    } else if (e.mark.item === 'competition_manager') { //赛事管理
+      url = '../../packageA/tools/competition_manager/competition_manager'
+    } else if (e.mark.item === 'shop_camera') { //店铺监控
+      url = '../../packageA/tools/shop_camera/shop_camera'
+    }else if (e.mark.item === 'shop_publicity') { //宣传资料
+      url = '../operate/tableInfo/tableQr/tableQr'
     }
     wx.navigateTo({
       url: url,
@@ -139,9 +147,15 @@ Page({
     //官方商城
     const manager1 = prmires[0].data[0] ?? {}
     if ('manager' in manager1) {
-      manager1.manager.push({ name: '管理员', userOpenid: 'oEIwT7UsIyN5FPHry3F6jUBXAm1A' })
+      manager1.manager.push({
+        name: '管理员',
+        userOpenid: 'oEIwT7UsIyN5FPHry3F6jUBXAm1A'
+      })
     } else {
-      manager1.manager = [{ name: '管理员', userOpenid: 'oEIwT7UsIyN5FPHry3F6jUBXAm1A' }]
+      manager1.manager = [{
+        name: '管理员',
+        userOpenid: 'oEIwT7UsIyN5FPHry3F6jUBXAm1A'
+      }]
     }
     //官方商城信息整理
     appData.officialMallManager = manager1
@@ -151,7 +165,7 @@ Page({
         this.data.officialMallManagerOpenid.push(item.userOpenid)
       })
     }
-    if (this.data.officialMallManagerOpenid.includes(appData.merchant_info._openid)) {//官方商城
+    if (this.data.officialMallManagerOpenid.includes(appData.merchant_info._openid)) { //官方商城
       this.setData({
         isofficialMallManager: true
       })
@@ -161,9 +175,15 @@ Page({
     const manager = prmires[1].data[0] ?? {}
     console.log(manager)
     if ('manager' in manager) {
-      manager.manager.push({ name: '老板', userOpenid: appData.shop_account._openid })
+      manager.manager.push({
+        name: '老板',
+        userOpenid: appData.shop_account._openid
+      })
     } else {
-      manager.manager = [{ name: '老板', userOpenid: appData.shop_account._openid }]
+      manager.manager = [{
+        name: '老板',
+        userOpenid: appData.shop_account._openid
+      }]
     }
     appData.shopMallManager = manager
     for (const key in manager) {
@@ -174,7 +194,7 @@ Page({
     }
     //记录里面没有老板的  openid 的话 则添加
     if (!this.data.shopMallManagerOpenid.includes(appData.shop_account._openid)) {
-      this.data.shopMallManagerOpenid.push(appData.shop_account._openid)//店铺商城
+      this.data.shopMallManagerOpenid.push(appData.shop_account._openid) //店铺商城
     }
 
     const shopMallManagerOpenid = this.data.shopMallManagerOpenid

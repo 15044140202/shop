@@ -1,7 +1,0 @@
-<!--pages/tools/shop_camera/shop_camera.wxml-->
-<ezplayer id="ezplayer" accessToken="{{ezplayer.token}}" url="{{ezplayer.url}}" plugins="talk,voice,ptz,privacy,mirror" recPlayTime="{{ezplayer.recPlayTime}}" theme="{{ { showCapture: true, showBottomBar: true, showDatePicker: true, showTypeSwitch: true } }}" bind:handleError="handleError" bind:onControlEvent="onControlEvent" />
-
-<!-- 通道预览列表 -->
-<view>
-
-</view>
